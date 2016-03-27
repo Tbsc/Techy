@@ -1,6 +1,6 @@
 package tbsc.techy.api;
 
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 
 /**
  * This interface is used by the Techy wrench to detect whether blocks are wrenchable, and
@@ -18,7 +18,7 @@ public interface ITechyWrenchable {
      * @param simulate should actually dismantle
      * @return successful
      */
-    boolean dismantleBlock(BlockState block, boolean simulate);
+    boolean dismantleBlock(IBlockState block, boolean simulate);
 
     /**
      * The block needs to return whether it can be dismantled ATM and return accordingly.
@@ -26,6 +26,6 @@ public interface ITechyWrenchable {
      * @param block The block in question
      * @return Whether it can be dismantled
      */
-    boolean canDismantle(BlockState block);
+    boolean canDismantle(IBlockState block);
 
 }

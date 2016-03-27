@@ -1,6 +1,7 @@
 package tbsc.techy.item;
 
 import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -20,7 +21,7 @@ public class ItemWrench extends ItemBase {
 
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ) {
-        BlockState hitBlock = (BlockState) worldIn.getBlockState(pos); // Get the block that was hit
+        IBlockState hitBlock = worldIn.getBlockState(pos); // Get the block that was hit
         if (playerIn.isSneaking()) { // If player is sneaking, dismantle instead of rotate
             if (hitBlock.getBlock() instanceof ITechyWrenchable) { // Check if wrenchable
                 ITechyWrenchable wrenchBlock = (ITechyWrenchable) hitBlock.getBlock(); // Get the interface

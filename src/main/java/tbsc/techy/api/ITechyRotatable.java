@@ -1,6 +1,6 @@
 package tbsc.techy.api;
 
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 
 /**
@@ -19,7 +19,7 @@ public interface ITechyRotatable {
      * @param simulate whether to simulate the action
      * @return if rotation was successful
      */
-    boolean rotateBlock(BlockState block, EnumFacing rotateTo, boolean simulate);
+    boolean rotateBlock(IBlockState block, EnumFacing rotateTo, boolean simulate);
 
     /**
      * Checks if the block can be rotated.
@@ -28,6 +28,6 @@ public interface ITechyRotatable {
      * @param rotateTo The new front to rotate to
      * @return If can rotate
      */
-    boolean canRotate(BlockState block, EnumFacing rotateTo);
+    boolean canRotate(IBlockState block, EnumFacing rotateTo);
 
 }
