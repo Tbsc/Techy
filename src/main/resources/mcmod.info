@@ -1,0 +1,16 @@
+[
+{
+  "modid": "Techy",
+  "name": "Techy",
+  "description": "",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Tbsc"],
+  "credits": "Tbsc for coding",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
