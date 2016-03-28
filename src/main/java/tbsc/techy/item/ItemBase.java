@@ -14,7 +14,8 @@ public class ItemBase extends Item {
 
     public ItemBase(String unlocalizedName) {
         setCreativeTab(Techy.tabTechyItems);
-        setRegistryName(Techy.MODID + ":" + unlocalizedName);
+        setRegistryName(unlocalizedName);
+        setUnlocalizedName(Techy.MODID + ":" + unlocalizedName);
     }
 
     @SideOnly(Side.CLIENT)

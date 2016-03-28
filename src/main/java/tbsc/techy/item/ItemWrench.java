@@ -32,9 +32,7 @@ public class ItemWrench extends ItemBase {
         } else { // Rotate, not sneaking
             if (hitBlock.getBlock() instanceof ITechyRotatable) { // If block is rotatable
                 ITechyRotatable wrenchBlock = (ITechyRotatable) hitBlock.getBlock(); // Get the interface
-                if (wrenchBlock.canRotate(hitBlock, side)) { // Make sure it can be rotated
-                    wrenchBlock.rotateBlock(hitBlock, side, false); // Rotate
-                }
+                wrenchBlock.rotateBlock(hitBlock, worldIn, pos, side, playerIn, false); // Rotate
             }
         }
         return super.onItemUse(stack, playerIn, worldIn, pos, side, hitX, hitY, hitZ);
