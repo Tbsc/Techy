@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "Techy:blocks/blockPoweredFurnace",
+    "down": "Techy:blocks/blockPoweredFurnace",
+    "up": "Techy:blocks/blockPoweredFurnace",
+    "east": "Techy:blocks/blockPoweredFurnace",
+    "west": "Techy:blocks/blockPoweredFurnace",
+    "north": "Techy:blocks/blockPoweredFurnaceFront",
+    "south": "Techy:blocks/blockPoweredFurnace"
+  }
+}

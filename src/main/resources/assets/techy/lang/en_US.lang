@@ -1,4 +1,9 @@
 # Creative Tabs
-techy.tab.items=Techy Items
+itemGroup.techy.items=Techy Items
+itemGroup.techy.machines=Techy Machines
 
 # Items
+item.Techy:itemWrench=Wrench
+
+# Blocks
+tile.Techy:blockPoweredFurnace=Powered Furnace
