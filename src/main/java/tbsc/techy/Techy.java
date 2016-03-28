@@ -30,10 +30,17 @@ public class Techy {
 
     public static Configuration config;
 
-    public static CreativeTabs tabTechyItems = new CreativeTabs(StatCollector.translateToLocal("techy.tab.items")) {
+    public static CreativeTabs tabTechyItems = new CreativeTabs("techy.items") {
         @Override
         public Item getTabIconItem() {
             return ItemInit.itemWrench;
+        }
+    };
+
+    public static CreativeTabs tabTechyMachines = new CreativeTabs("techy.machines") {
+        @Override
+        public Item getTabIconItem() {
+            return Item.getItemFromBlock(BlockInit.blockPoweredFurnace);
         }
     };
     
