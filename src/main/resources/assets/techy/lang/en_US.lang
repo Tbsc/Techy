@@ -3,7 +3,7 @@ itemGroup.techy.items=Techy Items
 itemGroup.techy.machines=Techy Machines
 
 # Items
-item.Techy:itemWrench=Wrench
+item.Techy:itemWrench.name=Wrench
 
 # Blocks
-tile.Techy:blockPoweredFurnace=Powered Furnace
+tile.Techy:blockPoweredFurnace.name=Powered Furnace
