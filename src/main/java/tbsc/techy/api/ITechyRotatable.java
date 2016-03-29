@@ -21,10 +21,9 @@ public interface ITechyRotatable {
      * @param world the world in which this is happening
      * @param pos Position of the block
      * @param rotateTo What direction to rotate the block to (This direction is the new FRONT of the block!)
-     * @param placedBy the placer of the block
-     * @param simulate whether to simulate the action
+     * @param rotatedBy the placer of the block
      * @return if rotation was successful
      */
-    void rotateBlock(IBlockState block, World world, BlockPos pos, EnumFacing rotateTo, EntityLivingBase placedBy, boolean simulate);
+    void rotateBlock(IBlockState block, World world, BlockPos pos, EnumFacing rotateTo, EntityLivingBase rotatedBy);
 
 }
