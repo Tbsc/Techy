@@ -11,4 +11,14 @@ public class TilePoweredFurnace extends TileMachineBase {
         super(30000, 2000);
     }
 
+    @Override
+    public void doOperation() {
+        
+    }
+
+    @Override
+    public boolean canOperate() {
+        return false;
+    }
+
 }

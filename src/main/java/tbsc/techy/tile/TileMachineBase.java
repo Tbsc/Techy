@@ -3,16 +3,35 @@ package tbsc.techy.tile;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.util.EnumFacing;
+import tbsc.techy.api.IOperator;
 
 /**
+ * The base TileEntity class for machines, adds support for energy receiving (if
+ * support for extracting energy is needed, just implement {@link IEnergyReceiver}.
+ * Also adds support for operations, and is abstract as machines need to implement
+ * it themselves (mostly, {@code IOperator.canOperate()} is provided by
+ * {@link TileMachineBase} already in the form of a boolean field called {@code isRunning}).
+ *
  * Created by tbsc on 3/27/16.
  */
-public class TileMachineBase extends TileBase implements IEnergyReceiver {
+public abstract class TileMachineBase extends TileBase implements IEnergyReceiver, IOperator {
 
     protected EnergyStorage energyStorage;
+    protected boolean isRunning;
+    protected boolean shouldRun;
 
     public TileMachineBase(int capacity, int maxReceive) {
         this.energyStorage = new EnergyStorage(capacity, maxReceive);
+    }
+
+    @Override
+    public void update() {
+        if (canOperate() && shouldOperate()) { // It needs to be able to run and should run to work
+            doOperation();
+            isRunning = true;
+        } else {
+            isRunning = false;
+        }
     }
 
     // Getter methods
@@ -43,6 +62,21 @@ public class TileMachineBase extends TileBase implements IEnergyReceiver {
     @Override
     public boolean canConnectEnergy(EnumFacing from) {
         return true; // TODO Change to be reconfigurable
+    }
+
+    @Override
+    public boolean shouldOperate() {
+        return shouldRun;
+    }
+
+    @Override
+    public void setOperationStatus(boolean isRunning) {
+        this.isRunning = isRunning;
+    }
+
+    @Override
+    public boolean isOperating() {
+        return isRunning;
     }
 
 }
