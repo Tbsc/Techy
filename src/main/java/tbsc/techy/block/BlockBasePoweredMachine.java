@@ -7,8 +7,8 @@ import net.minecraft.block.material.Material;
  */
 public abstract class BlockBasePoweredMachine extends BlockBaseFacingMachine {
 
-    public BlockBasePoweredMachine(Material material, String registryName) {
-        super(material, registryName);
+    public BlockBasePoweredMachine(Material material, String registryName, int tileInvSize) {
+        super(material, registryName, tileInvSize);
     }
 
 }

@@ -16,8 +16,11 @@ import javax.annotation.Nonnull;
  */
 public abstract class BlockBaseMachine extends BlockBase implements ITileEntityProvider, ITechyWrenchable {
 
-    public BlockBaseMachine(Material material, String registryName) {
+    public static int tileInvSize;
+
+    public BlockBaseMachine(Material material, String registryName, int tileInvSize) {
         super(material, registryName);
+        BlockBaseMachine.tileInvSize = tileInvSize;
     }
 
     protected TileBase getTileBase(World world, BlockPos pos) {
