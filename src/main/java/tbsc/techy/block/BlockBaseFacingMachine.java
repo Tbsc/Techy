@@ -27,11 +27,11 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
 
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        rotateBlock(state, worldIn, pos, placer.getHorizontalFacing().getOpposite(), placer, false); // Rotate the block to the correct rotation on place
+        rotateBlock(state, worldIn, pos, placer.getHorizontalFacing().getOpposite(), placer); // Rotate the block to the correct rotation on place
     }
 
     @Override
-    public void rotateBlock(IBlockState blockState, World world, BlockPos pos, EnumFacing rotateTo, EntityLivingBase placedBy, boolean simulate) {
+    public void rotateBlock(IBlockState blockState, World world, BlockPos pos, EnumFacing rotateTo, EntityLivingBase rotatedBy) {
         if (EnumFacing.Plane.HORIZONTAL.apply(rotateTo)) // Is this EnumFacing rotation valid for the horizontal plane
             world.setBlockState(pos, blockState.withProperty(FACING, rotateTo), 2); // Change rotation
     }

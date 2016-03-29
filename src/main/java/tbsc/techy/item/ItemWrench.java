@@ -24,14 +24,14 @@ public class ItemWrench extends ItemBase {
         if (playerIn.isSneaking()) { // If player is sneaking, dismantle instead of rotate
             if (hitBlock.getBlock() instanceof ITechyWrenchable) { // Check if wrenchable
                 ITechyWrenchable wrenchBlock = (ITechyWrenchable) hitBlock.getBlock(); // Get the interface
-                if (wrenchBlock.canDismantle(hitBlock)) { // Make sure it can be dismantled
-                    wrenchBlock.dismantleBlock(hitBlock, false); // Dismantle
+                if (wrenchBlock.canDismantle(hitBlock, worldIn, pos, playerIn)) { // Make sure it can be dismantled
+                    wrenchBlock.dismantleBlock(hitBlock, worldIn, pos, playerIn); // Dismantle
                 }
             }
         } else { // Rotate, not sneaking
             if (hitBlock.getBlock() instanceof ITechyRotatable) { // If block is rotatable
                 ITechyRotatable wrenchBlock = (ITechyRotatable) hitBlock.getBlock(); // Get the interface
-                wrenchBlock.rotateBlock(hitBlock, worldIn, pos, side, playerIn, false); // Rotate
+                wrenchBlock.rotateBlock(hitBlock, worldIn, pos, side, playerIn); // Rotate
             }
         }
         return super.onItemUse(stack, playerIn, worldIn, pos, side, hitX, hitY, hitZ);
