@@ -19,8 +19,10 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     protected EnergyStorage energyStorage;
     protected boolean isRunning;
     protected boolean shouldRun;
+    protected int operationTotalTime = 0;
+    protected int operationTimeLeft = 0;
 
-    public TileMachineBase(int capacity, int maxReceive) {
+    protected TileMachineBase(int capacity, int maxReceive) {
         this.energyStorage = new EnergyStorage(capacity, maxReceive);
     }
 
