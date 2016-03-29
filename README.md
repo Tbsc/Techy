@@ -1,4 +1,4 @@
 # Techy
 GUI-less tech mod for 1.8.9
 
-Right now has nothing (I'll probably forget to fix this when it actually has content, so remind me about it if you notice it).
+License: GPLv3. TL;DR: You can copy, distribute and modify the software as long as you track changes in source files. Any modifications to or software including (via compiler) my code must also be made available under the GPL license too.
