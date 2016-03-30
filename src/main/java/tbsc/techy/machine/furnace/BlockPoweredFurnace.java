@@ -7,6 +7,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+import tbsc.techy.Techy;
 import tbsc.techy.block.BlockBasePoweredMachine;
 
 /**
@@ -28,7 +29,7 @@ public class BlockPoweredFurnace extends BlockBasePoweredMachine {
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!worldIn.isRemote) {
-            // playerIn.openGui(Techy.instance, Techy.POWERED_FURNACE_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
+            playerIn.openGui(Techy.instance, Techy.POWERED_FURNACE_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
             // TODO Uncomment when GUIs are fixed
         }
         return true;

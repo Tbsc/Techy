@@ -26,7 +26,6 @@ public class BlockBase extends Block {
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        // TODO When inventory is added, drop what it holds
         super.breakBlock(worldIn, pos, state);
         worldIn.destroyBlock(pos, true);
     }

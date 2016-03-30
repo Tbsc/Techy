@@ -22,7 +22,8 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     protected int operationTotalTime = 0;
     protected int operationTimeLeft = 0;
 
-    protected TileMachineBase(int capacity, int maxReceive) {
+    protected TileMachineBase(int capacity, int maxReceive, int invSize) {
+        super(invSize);
         this.energyStorage = new EnergyStorage(capacity, maxReceive);
     }
 
@@ -35,6 +36,8 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
             isRunning = false;
         }
     }
+
+    // TODO ISidedInventory
 
     // Getter methods
     public EnergyStorage getEnergyStorage() { return energyStorage; }
