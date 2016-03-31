@@ -11,36 +11,50 @@ import tbsc.techy.tile.TileBase;
 /**
  * Created by tbsc on 3/29/16.
  */
-public class ContainerBase extends Container {
+public abstract class ContainerBase extends Container {
 
-    protected IInventory playerInv;
-    protected TileBase tileBase;
+    public IInventory playerInv;
+    public TileBase tileBase;
     protected int tileInvSize;
+    private int nextAvailableSlot = 0;
 
     public ContainerBase(IInventory playerInv, TileBase tileBase, int tileInvSize) {
         this.playerInv = playerInv;
         this.tileBase = tileBase;
         this.tileInvSize = tileInvSize;
 
-        // Tile Entity, Slot 0-8, Slot IDs 0-8
-        for (int y = 0; y < 3; ++y) {
-            for (int x = 0; x < 3; ++x) {
-                this.addSlotToContainer(new Slot(tileBase, x + y * 3, 62 + x * 18, 17 + y * 18));
-            }
-        }
+        addBlockSlots();
 
-        // Player Inventory, Slot 9-35, Slot IDs 9-35
+        // Player Inventory, Slot 9-35, Slot IDs are dynamic
         for (int y = 0; y < 3; ++y) {
             for (int x = 0; x < 9; ++x) {
                 this.addSlotToContainer(new Slot(playerInv, x + y * 9 + 9, 8 + x * 18, 84 + y * 18));
             }
         }
 
-        // Player Inventory, Slot 0-8, Slot IDs 36-44
+        // Player Inventory, Slot 0-8, Slot IDs are dynamic
         for (int x = 0; x < 9; ++x) {
             this.addSlotToContainer(new Slot(playerInv, x, 8 + x * 18, 142));
         }
     }
+
+    /**
+     * Solves a lot of problems with slot ID assignment, as it will make one every time (and the
+     * same one!)
+     * @return the next available slot
+     */
+    protected int getNextAvailableSlot() {
+        int slotToReturn = nextAvailableSlot;
+        ++nextAvailableSlot;
+        return slotToReturn;
+    }
+
+    /**
+     * Needs to be implemented then any slots that the machine itself needs to add, it
+     * adds there. Slot IDs are handled by the {@code getNextAvailableSlot()} method,
+     * which will give a slot that you can use.
+     */
+    protected abstract void addBlockSlots();
 
     @Override
     public boolean canInteractWith(EntityPlayer playerIn) {

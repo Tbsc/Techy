@@ -14,9 +14,11 @@ public abstract class GuiMachineBase extends GuiContainer {
 
     public int tileInvSize;
     protected ResourceLocation guiTexture;
+    protected ContainerBase container;
 
     public GuiMachineBase(ContainerBase containerBase, int tileInvSize, ResourceLocation guiTexture) {
         super(containerBase);
+        this.container = containerBase;
         this.tileInvSize = tileInvSize;
         this.guiTexture = guiTexture;
     }
@@ -56,8 +58,26 @@ public abstract class GuiMachineBase extends GuiContainer {
         }
     }
 
+    /**
+     *
+     * @param xGuiStart Pixel on screen on which GUI starts rendering on the x axis
+     * @param yGuiStart same as {@code xGuiStart}, just on the y axis
+     */
+    protected abstract void renderProgressBar(int xGuiStart, int yGuiStart);
+
     protected int getStringWidth(String text) {
         return fontRendererObj.getStringWidth(text);
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        this.mc.getTextureManager().bindTexture(guiTexture);
+        int i = (this.width - this.xSize) / 2;
+        int j = (this.height - this.ySize) / 2;
+        fontRendererObj.drawString("Inventory", 8, this.ySize - 94, 404040);
+        fontRendererObj.drawString(container.tileBase.getName(), 6, 6, 404040);
     }
 
     @Override
@@ -65,7 +85,9 @@ public abstract class GuiMachineBase extends GuiContainer {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         this.mc.getTextureManager().bindTexture(guiTexture);
-        this.drawTexturedModalRect(0, 0, 0, 0, this.xSize, this.ySize);
+        int i = (this.width - this.xSize) / 2;
+        int j = (this.height - this.ySize) / 2;
+        this.drawTexturedModalRect(i, j, 0, 0, this.xSize, this.ySize);
     }
 
 }
