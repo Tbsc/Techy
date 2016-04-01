@@ -76,8 +76,8 @@ public abstract class GuiMachineBase extends GuiContainer {
         this.mc.getTextureManager().bindTexture(guiTexture);
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
-        fontRendererObj.drawString("Inventory", 8, this.ySize - 94, 404040);
-        fontRendererObj.drawString(container.tileBase.getName(), 6, 6, 404040);
+        fontRendererObj.drawString("Inventory", 8, this.ySize - 94, 4210752);
+        fontRendererObj.drawString(container.tileBase.getName(), 6, 6, 4210752);
     }
 
     @Override

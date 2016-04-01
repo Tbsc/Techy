@@ -8,12 +8,12 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import tbsc.techy.Techy;
-import tbsc.techy.block.BlockBasePoweredMachine;
+import tbsc.techy.block.BlockBaseFacingMachine;
 
 /**
  * Created by tbsc on 3/27/16.
  */
-public class BlockPoweredFurnace extends BlockBasePoweredMachine {
+public class BlockPoweredFurnace extends BlockBaseFacingMachine {
 
     public static int tileInvSize;
 

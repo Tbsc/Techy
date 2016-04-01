@@ -3,7 +3,7 @@ package tbsc.techy.init;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tbsc.techy.block.BlockBasePoweredMachine;
+import tbsc.techy.block.BlockBaseFacingMachine;
 import tbsc.techy.machine.furnace.BlockPoweredFurnace;
 import tbsc.techy.machine.furnace.TilePoweredFurnace;
 
@@ -12,7 +12,7 @@ import tbsc.techy.machine.furnace.TilePoweredFurnace;
  */
 public class BlockInit {
 
-    public static BlockBasePoweredMachine blockPoweredFurnace;
+    public static BlockBaseFacingMachine blockPoweredFurnace;
 
     public static void init() {
         blockPoweredFurnace = new BlockPoweredFurnace();
