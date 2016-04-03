@@ -3,6 +3,7 @@ package tbsc.techy;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -61,7 +62,12 @@ public class Techy {
             config.load();
 
             // Config properties
-
+            Property furnaceDefaultCookTime = config.get("Powered Furnace", "DefaultCookTime", 200,
+                    "Define (in ticks) the processing time for vanilla recipes in the powered furnace.", 1, Integer.MAX_VALUE);
+            Property furnaceDefaultEnergyUsage = config.get("Powered Furnace", "DefaultEnergyUsage", 4000,
+                    "Amount of energy consumed when vanilla recipes are processed in the powered furnace", 0, Integer.MAX_VALUE);
+            ConfigData.furnaceDefaultCookTime = furnaceDefaultCookTime.getInt();
+            ConfigData.furnaceDefaultEnergyUsage = furnaceDefaultEnergyUsage.getInt();
         } catch (Exception e) {
             // Fails loading
         } finally {
