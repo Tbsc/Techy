@@ -71,8 +71,8 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
 
     @Override
     public boolean shouldOperate() {
-        return shouldRun;
-    }
+        return true;
+    } // TODO Add redstone control
 
     @Override
     public void setOperationStatus(boolean isRunning) {
