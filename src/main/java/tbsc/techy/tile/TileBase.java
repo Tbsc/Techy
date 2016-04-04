@@ -15,7 +15,7 @@ import net.minecraft.tileentity.TileEntity;
  */
 public abstract class TileBase extends TileEntity implements IInventory {
 
-    private ItemStack[] inventory;
+    public ItemStack[] inventory;
     protected int inventorySize;
 
     public TileBase(int invSize) {
