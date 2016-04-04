@@ -7,6 +7,7 @@ import net.minecraftforge.common.config.Property;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.init.ItemInit;
@@ -54,6 +55,11 @@ public class Techy {
 
         config = new Configuration(event.getSuggestedConfigurationFile());
         syncConfig();
+    }
+
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        MiscInit.postInit();
     }
 
     public void syncConfig() {

@@ -4,6 +4,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.StatCollector;
+import tbsc.techy.recipe.MachineRecipes;
 import tbsc.techy.tile.TileMachineBase;
 
 /**
@@ -20,17 +21,49 @@ public class TilePoweredFurnace extends TileMachineBase {
 
     @Override
     public void doOperation() {
-        
+        ItemStack itemstack = MachineRecipes.getOutputStack(MachineRecipes.RecipeMachineType.POWERED_FURNACE, this.inventory[0]);
+
+        if (this.inventory[1] == null) {
+            this.inventory[1] = itemstack.copy();
+        } else if (this.inventory[1].getItem() == itemstack.getItem()) {
+            this.inventory[1].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
+        }
+
+        --this.inventory[0].stackSize;
+
+        if (this.inventory[0].stackSize <= 0) {
+            this.inventory[0] = null;
+        }
     }
 
     @Override
     public boolean canOperate() {
-        return false;
+        ItemStack input = inventory[0];
+        ItemStack outputSlotStack = inventory[1];
+        ItemStack recipeOutput = MachineRecipes.getOutputStack(MachineRecipes.RecipeMachineType.POWERED_FURNACE, input);
+        if (input == null) {
+            return false;
+        } else {
+            if (recipeOutput == null) {
+                return false;
+            }
+            if (outputSlotStack == null || (outputSlotStack.isItemEqual(recipeOutput) && (outputSlotStack.stackSize + recipeOutput.stackSize <= outputSlotStack.stackSize || outputSlotStack.stackSize + recipeOutput.stackSize <= getInventoryStackLimit()))) {
+                return true;
+            }
+            if (!outputSlotStack.isItemEqual(input)) {
+                return false;
+            }
+            int result = outputSlotStack.stackSize + recipeOutput.stackSize;
+            return result <= getInventoryStackLimit() && result <= outputSlotStack.getMaxStackSize(); //Forge BugFix: Make it respect stack sizes properly.
+        }
     }
 
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
-        return true; // TODO Input slot should only accept items in the registry
+        if (index == 0) {
+            return MachineRecipes.getOutputStack(MachineRecipes.RecipeMachineType.POWERED_FURNACE, stack) != null;
+        }
+        return index != 1;
     }
 
     @Override
