@@ -72,7 +72,7 @@ public abstract class ContainerBase extends Container {
 
             if (index < tileInvSize) {
                 // From TE Inventory to Player Inventory
-                if (!this.mergeItemStack(current, tileInvSize, tileInvSize + 45, true))
+                if (!this.mergeItemStack(current, tileInvSize, tileInvSize + 36, true))
                     return null;
             } else {
                 // From Player Inventory to TE Inventory
