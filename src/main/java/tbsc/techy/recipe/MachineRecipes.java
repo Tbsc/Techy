@@ -20,7 +20,7 @@ public abstract class MachineRecipes {
 
     public static void loadVanillaRecipes() {
         for (Map.Entry<ItemStack, ItemStack> entry : FurnaceRecipes.instance().getSmeltingList().entrySet()) {
-            addRecipe(RecipeMachineType.POWERED_FURNACE, entry.getKey(), entry.getValue(), ConfigData.furnaceDefaultCookTime,
+            addRecipe(RecipeMachineType.POWERED_FURNACE, entry.getKey(), entry.getValue(), 40,
                     FurnaceRecipes.instance().getSmeltingExperience(entry.getKey()), ConfigData.furnaceDefaultEnergyUsage);
         }
 
@@ -38,6 +38,18 @@ public abstract class MachineRecipes {
             }
         }
         return null; // Nothing found
+    }
+
+    public static int getCookTime(RecipeMachineType machineType, ItemStack input) {
+        if (input == null) return 0; // No item in input slot
+        for (RecipeProperty dataKey : recipeItemsMap.keySet()) {
+            if (dataKey.machineType == machineType) {
+                if (compareItemStacks(dataKey.inputStack, input)) {
+                    return recipeCookTimeMap.get(dataKey);
+                }
+            }
+        }
+        return 0; // Nothing found
     }
 
     public static void addRecipe(RecipeMachineType machineType, ItemStack input, ItemStack output, int cookTime, float experiencePoints, int energyUsage) {
