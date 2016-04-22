@@ -1,12 +1,12 @@
 {
   "parent": "block/cube",
   "textures": {
-    "particle": "Techy:blocks/blockPoweredFurnace",
-    "down": "Techy:blocks/blockPoweredFurnace",
-    "up": "Techy:blocks/blockPoweredFurnace",
-    "east": "Techy:blocks/blockPoweredFurnace",
-    "west": "Techy:blocks/blockPoweredFurnace",
+    "particle": "Techy:blocks/blockPoweredFurnaceTop",
+    "down": "Techy:blocks/blockPoweredFurnaceTop",
+    "up": "Techy:blocks/blockPoweredFurnaceTop",
+    "east": "Techy:blocks/blockPoweredFurnaceSide",
+    "west": "Techy:blocks/blockPoweredFurnaceSide",
     "north": "Techy:blocks/blockPoweredFurnaceFront",
-    "south": "Techy:blocks/blockPoweredFurnace"
+    "south": "Techy:blocks/blockPoweredFurnaceSide"
   }
 }
