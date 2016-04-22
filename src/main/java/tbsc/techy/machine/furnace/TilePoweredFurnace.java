@@ -18,7 +18,7 @@ public class TilePoweredFurnace extends TileMachineBase {
     private boolean isRunning;
     private boolean shouldRun = true;
 
-    protected TilePoweredFurnace() {
+    public TilePoweredFurnace() {
         super(40000, 640, 2);
     }
 
