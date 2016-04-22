@@ -6,7 +6,7 @@
     "up": "Techy:blocks/blockPoweredFurnaceTop",
     "east": "Techy:blocks/blockPoweredFurnaceSide",
     "west": "Techy:blocks/blockPoweredFurnaceSide",
-    "north": "Techy:blocks/blockPoweredFurnaceFront",
+    "north": "#front",
     "south": "Techy:blocks/blockPoweredFurnaceSide"
   }
 }

@@ -1,6 +1,7 @@
 package tbsc.techy.block;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
@@ -23,9 +24,15 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
      * The direction the block is facing
      */
     public static PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+    public static PropertyBool WORKING = PropertyBool.create("working");
 
     public BlockBaseFacingMachine(Material material, String registryName, int tileInvSize) {
         super(material, registryName, tileInvSize);
+    }
+
+    public static void setState(boolean active, World worldIn, BlockPos pos) {
+        IBlockState iblockstate = worldIn.getBlockState(pos);
+        worldIn.setBlockState(pos, iblockstate.withProperty(WORKING, active));
     }
 
     /**
@@ -62,7 +69,9 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
      */
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(FACING, EnumFacing.getFront((meta & 3) + 2));
+        return getDefaultState()
+                .withProperty(FACING, EnumFacing.getFront((meta & 3) + 2))
+                .withProperty(WORKING, (meta & 8) != 0);
     }
 
     /**
@@ -72,7 +81,7 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
      */
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING).getIndex()-2;
+        return state.getValue(FACING).getIndex() + (state.getValue(WORKING) ? 8 : 0);
     }
 
     /**
@@ -82,7 +91,7 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
      */
     @Override
     protected BlockState createBlockState() {
-        return new BlockState(this, FACING);
+        return new BlockState(this, FACING, WORKING);
     }
 
 }

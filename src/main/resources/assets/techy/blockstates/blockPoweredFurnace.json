@@ -1,7 +1,10 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "Techy:blockPoweredFurnace"
+    "model": "Techy:blockPoweredFurnace",
+    "textures": {
+      "front": "Techy:blocks/blockPoweredFurnaceFront"
+    }
   },
   "variants": {
     "normal": [{}],
@@ -11,6 +14,14 @@
       "south": {"y": 180},
       "west": {"y": 270},
       "east": {"y": 90}
+    },
+    "working": {
+      "false": {},
+      "true": {
+        "textures": {
+          "front": "Techy:blocks/blockPoweredFurnaceFrontWorking"
+        }
+      }
     }
   }
 }
