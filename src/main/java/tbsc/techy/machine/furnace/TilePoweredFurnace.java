@@ -16,7 +16,7 @@ import tbsc.techy.tile.TileMachineBase;
 public class TilePoweredFurnace extends TileMachineBase {
 
     private boolean isRunning;
-    private boolean shouldRun = true;
+    private boolean shouldRun;
 
     public TilePoweredFurnace() {
         super(40000, 640, 2);
@@ -29,7 +29,14 @@ public class TilePoweredFurnace extends TileMachineBase {
      */
     @Override
     public void update() {
+        // If receiving redstone signal, then prevent machine from operating
+        shouldRun = worldObj.isBlockIndirectlyGettingPowered(pos) <= 0;
 
+        if (isRunning) { // If machine is running, then change the front of the machine to "working" state
+            BlockPoweredFurnace.setState(true, worldObj, pos);
+        } else {
+            BlockPoweredFurnace.setState(false, worldObj, pos);
+        }
     }
 
     /**
