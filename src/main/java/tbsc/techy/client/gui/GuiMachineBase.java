@@ -23,6 +23,27 @@ public abstract class GuiMachineBase extends GuiContainer {
         this.guiTexture = guiTexture;
     }
 
+    /////////////////
+    // Abstraction //
+    /////////////////
+
+    /**
+     *
+     * @param xGuiStart Pixel on screen on which GUI starts rendering on the x axis
+     * @param yGuiStart same as {@code xGuiStart}, just on the y axis
+     */
+    protected abstract void renderProgressBar(int xGuiStart, int yGuiStart);
+
+    ///////////
+    // Utils //
+    ///////////
+
+    /**
+     * Renders a vanilla looking tooltip based on the values given.
+     * @param msg The text to be displayed inside the tooltip.
+     * @param x Position of the tooltip on the x-axis, can be mouseX
+     * @param y Position of the tooltip on the y-axis, can be mouseY
+     */
     protected void renderMouseTooltip(String msg, int x, int y) {
         if(msg != null) {
             int index = 0;
@@ -59,27 +80,31 @@ public abstract class GuiMachineBase extends GuiContainer {
     }
 
     /**
-     *
-     * @param xGuiStart Pixel on screen on which GUI starts rendering on the x axis
-     * @param yGuiStart same as {@code xGuiStart}, just on the y axis
+     * @param text Text to be checked
+     * @return The width of the text in pixels
      */
-    protected abstract void renderProgressBar(int xGuiStart, int yGuiStart);
-
     protected int getStringWidth(String text) {
         return fontRendererObj.getStringWidth(text);
     }
 
+    /**
+     * Renders basic GUI stuff, such as text for "Inventory" and machine name.
+     * @param mouseX Position of the mouse pointer on the x-axis
+     * @param mouseY Position of the mouse pointer on the y-axis
+     */
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(guiTexture);
-        int i = (this.width - this.xSize) / 2;
-        int j = (this.height - this.ySize) / 2;
         fontRendererObj.drawString("Inventory", 8, this.ySize - 94, 4210752);
         fontRendererObj.drawString(container.tileBase.getName(), 6, 6, 4210752);
     }
 
+    /**
+     * Renders the GUI itself.
+     * @param partialTicks
+     * @param mouseX Position of the mouse pointer on the x-axis.
+     * @param mouseY Position of the mouse pointer on the y-axis.
+     */
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);

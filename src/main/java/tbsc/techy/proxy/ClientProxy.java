@@ -6,10 +6,15 @@ import tbsc.techy.init.BlockInit;
 import tbsc.techy.init.ItemInit;
 
 /**
+ * Anything run here will work only client-side
+ *
  * Created by tbsc on 3/27/16.
  */
 public class ClientProxy extends CommonProxy {
 
+    /**
+     * Loads models
+     */
     @Override
     @SideOnly(Side.CLIENT)
     public void initModels() {

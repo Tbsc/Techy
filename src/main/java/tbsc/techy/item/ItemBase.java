@@ -8,6 +8,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import tbsc.techy.Techy;
 
 /**
+ * Basic item class.
+ * Contains basic model rendering, creative tab and names.
+ *
  * Created by tbsc on 3/27/16.
  */
 public class ItemBase extends Item {

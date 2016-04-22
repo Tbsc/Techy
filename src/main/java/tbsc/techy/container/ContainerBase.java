@@ -9,6 +9,11 @@ import net.minecraft.item.ItemStack;
 import tbsc.techy.tile.TileBase;
 
 /**
+ * Basic container that can be used for almost any purpose.
+ * Adding slots is done though the {@code addBlockSlots} method,
+ * IDs for slots are gotten using the {@code getNextAvailableSlot} method, and
+ * everything else is done automatically.
+ *
  * Created by tbsc on 3/29/16.
  */
 public abstract class ContainerBase extends Container {
@@ -56,11 +61,26 @@ public abstract class ContainerBase extends Container {
      */
     protected abstract void addBlockSlots();
 
+    /**
+     * Returns if the player can interact with the container.
+     * As I've implemented this, it just checks with the TileEntity.
+     * @param playerIn The player to be checked
+     * @return if the player can interact with the container
+     */
     @Override
     public boolean canInteractWith(EntityPlayer playerIn) {
         return this.tileBase.isUseableByPlayer(playerIn);
     }
 
+    /**
+     * Transfers {@link ItemStack} in slot
+     *
+     * (tbh i don't understand this very much)
+     *
+     * @param playerIn The player
+     * @param index slot
+     * @return output
+     */
     @Override
     public ItemStack transferStackInSlot(EntityPlayer playerIn, int index) {
         ItemStack previous = null;

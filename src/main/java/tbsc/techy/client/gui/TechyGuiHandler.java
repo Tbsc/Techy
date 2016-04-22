@@ -15,6 +15,16 @@ import tbsc.techy.machine.furnace.TilePoweredFurnace;
  */
 public class TechyGuiHandler implements IGuiHandler {
 
+    /**
+     * Returns a container based on GUI id
+     * @param ID ID for the GUI
+     * @param player the player who opened the GUI
+     * @param world the world it happened in
+     * @param x x pos
+     * @param y y pos
+     * @param z z pos
+     * @return Container relevant to the GUI
+     */
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         if (ID == Techy.POWERED_FURNACE_GUI_ID) {
@@ -23,6 +33,16 @@ public class TechyGuiHandler implements IGuiHandler {
         return null;
     }
 
+    /**
+     * Returns a GUI based on GUI id
+     * @param ID ID for the GUI
+     * @param player the player who opened the GUI
+     * @param world the world it happened in
+     * @param x x pos
+     * @param y y pos
+     * @param z z pos
+     * @return GUI
+     */
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         if (ID == Techy.POWERED_FURNACE_GUI_ID) {

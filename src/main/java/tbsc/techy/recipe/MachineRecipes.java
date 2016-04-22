@@ -30,7 +30,7 @@ public abstract class MachineRecipes {
      */
     public static void loadVanillaRecipes() {
         for (Map.Entry<ItemStack, ItemStack> entry : FurnaceRecipes.instance().getSmeltingList().entrySet()) {
-            addRecipe(RecipeMachineType.POWERED_FURNACE, entry.getKey(), entry.getValue(), 40,
+            addRecipe(RecipeMachineType.POWERED_FURNACE, entry.getKey(), entry.getValue(), ConfigData.furnaceDefaultCookTime,
                     FurnaceRecipes.instance().getSmeltingExperience(entry.getKey()), ConfigData.furnaceDefaultEnergyUsage);
         }
 

@@ -8,16 +8,24 @@ import tbsc.techy.event.GeneralEventHandler;
 import tbsc.techy.recipe.MachineRecipes;
 
 /**
+ * Anything that isn't a block/tile/item and that it needs to get loaded on startup goes here.
+ *
  * Created by tbsc on 3/26/16.
  */
 public class MiscInit {
 
+    /**
+     * Loads everything needed to be run. (Such as events and GUI handlers)
+     */
     public static void init() {
         MinecraftForge.EVENT_BUS.register(new GeneralEventHandler());
         NetworkRegistry.INSTANCE.registerGuiHandler(Techy.instance, new TechyGuiHandler());
     }
 
-    public static void postInit() {
+    /**
+     * Everything that needs to be run late.
+     */
+    public static void loadComplete() {
         MachineRecipes.loadVanillaRecipes();
     }
 
