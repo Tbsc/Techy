@@ -25,6 +25,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -239,7 +240,7 @@ public abstract class GuiBase extends GuiContainer {
 	}
 
 	@Override
-	protected void mouseMovedOrUp(int mX, int mY, int mouseButton) {
+	protected void mouseReleased(int mX, int mY, int mouseButton) {
 
 		mX -= guiLeft;
 		mY -= guiTop;
@@ -258,7 +259,7 @@ public abstract class GuiBase extends GuiContainer {
 		mX += guiLeft;
 		mY += guiTop;
 
-		super.mouseMovedOrUp(mX, mY, mouseButton);
+		super.mouseReleased(mX, mY, mouseButton);
 	}
 
 	@Override
@@ -267,7 +268,7 @@ public abstract class GuiBase extends GuiContainer {
 		Slot slot = getSlotAtPosition(mX, mY);
 		ItemStack itemstack = this.mc.thePlayer.inventory.getItemStack();
 
-		if (this.field_147007_t && slot != null && itemstack != null && slot instanceof SlotFalseCopy) {
+		if (this.dragSplitting && slot != null && itemstack != null && slot instanceof SlotFalseCopy) {
 			if (lastIndex != slot.slotNumber) {
 				lastIndex = slot.slotNumber;
 				this.handleMouseClick(slot, slot.slotNumber, 0, 0);
@@ -292,7 +293,7 @@ public abstract class GuiBase extends GuiContainer {
 
 	public boolean isMouseOverSlot(Slot theSlot, int xCoord, int yCoord) {
 
-		return this.func_146978_c(theSlot.xDisplayPosition, theSlot.yDisplayPosition, 16, 16, xCoord, yCoord);
+		return this.isPointInRegion(theSlot.xDisplayPosition, theSlot.yDisplayPosition, 16, 16, xCoord, yCoord);
 	}
 
 	/**
@@ -522,7 +523,16 @@ public abstract class GuiBase extends GuiContainer {
 		itemRender.renderItemAndEffectIntoGUI(stack, x, y);
 
 		if (drawOverlay) {
-			itemRender.renderItemOverlayIntoGUI(font, stack, x, y - (this.draggedStack == null ? 0 : 8), overlayTxt);
+			Class clazz = this.getClass();
+			try {
+				Field draggedStackField = clazz.getDeclaredField("draggedStack");
+				draggedStackField.setAccessible(true);
+				ItemStack draggedStack = (ItemStack) draggedStackField.get(this);
+				draggedStackField.setAccessible(false);
+				itemRender.renderItemOverlayIntoGUI(font, stack, x, y - (draggedStack == null ? 0 : 8), overlayTxt);
+			} catch (NoSuchFieldException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
 
 		this.zLevel = 0.0F;
@@ -542,7 +552,7 @@ public abstract class GuiBase extends GuiContainer {
 		RenderHelper.setBlockTextureSheet();
 		RenderHelper.setColor3ub(fluid.getFluid().getColor(fluid));
 
-		drawTiledTexture(x, y, fluid.getFluid().getIcon(fluid), width, height);
+		drawTiledTexture(x, y, mc.getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill().toString()), width, height);
 	}
 
 	public void drawTiledTexture(int x, int y, TextureAtlasSprite icon, int width, int height) {

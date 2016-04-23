@@ -1,7 +1,6 @@
 package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
-import cofh.lib.util.helpers.FluidHelper;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 
@@ -22,7 +21,7 @@ public class ElementFluid extends ElementBase {
 
 	public ElementFluid setFluid(Fluid fluid) {
 
-		this.fluid = new FluidStack(fluid, FluidHelper.BUCKET_VOLUME);
+		this.fluid = new FluidStack(fluid, 1000); // Why is a field for bucket volume needed? It's always 1000mb
 		return this;
 	}
 

@@ -42,11 +42,6 @@ public class EntityHelper {
 		}
 	}
 
-	public static ForgeDirection getEntityFacingForgeDirection(EntityLivingBase living) {
-
-		return ForgeDirection.VALID_DIRECTIONS[getEntityFacingCardinal(living)];
-	}
-
 	public static void transferEntityToDimension(Entity entity, int dimension, ServerConfigurationManager manager) {
 
 		if (entity instanceof EntityPlayerMP) {
@@ -96,7 +91,7 @@ public class EntityHelper {
 		WorldServer worldserver = manager.getServerInstance().worldServerForDimension(player.dimension);
 		player.dimension = dimension;
 		WorldServer worldserver1 = manager.getServerInstance().worldServerForDimension(player.dimension);
-		player.playerNetServerHandler.sendPacket(new S07PacketRespawn(player.dimension, player.worldObj.difficultySetting, player.worldObj.getWorldInfo()
+		player.playerNetServerHandler.sendPacket(new S07PacketRespawn(player.dimension, player.worldObj.getDifficulty(), player.worldObj.getWorldInfo()
 				.getTerrainType(), player.theItemInWorldManager.getGameType()));
 		worldserver.removePlayerEntityDangerously(player);
 		if (player.riddenByEntity != null) {
@@ -107,7 +102,7 @@ public class EntityHelper {
 		}
 		player.isDead = false;
 		transferEntityToWorld(player, worldserver, worldserver1);
-		manager.func_72375_a(player, worldserver);
+		manager.updateTimeAndWeatherForPlayer(player, worldserver);
 		player.playerNetServerHandler.setPlayerLocation(player.posX, player.posY, player.posZ, player.rotationYaw, player.rotationPitch);
 		player.theItemInWorldManager.setWorld(worldserver1);
 		manager.updateTimeAndWeatherForPlayer(player, worldserver1);

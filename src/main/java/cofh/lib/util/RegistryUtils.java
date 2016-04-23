@@ -6,6 +6,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
+import net.minecraft.util.ObjectIntIdentityMap;
 import net.minecraft.util.RegistryNamespaced;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
@@ -14,10 +15,12 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.RegistryDelegate;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Field;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -38,10 +41,24 @@ public class RegistryUtils {
 		private static void overwrite_do(RegistryNamespaced registry, String name, Object object, Object oldThing) {
 
 			int id = registry.getIDForObject(oldThing);
-			BiMap map = ((BiMap) registry.registryObjects);
-			registry.underlyingIntegerMap.func_148746_a(object, id);
-			map.remove(name);
-			map.forcePut(name, object);
+			// Messy reflection hacky stuff, but at least it works (at least it should)
+			Class clazz = RegistryNamespaced.class;
+			try {
+				Field registryObjectsField = clazz.getDeclaredField("registryObjects");
+				Field underlyingIntegerMapField = clazz.getDeclaredField("underlyingIntegerMap");
+				registryObjectsField.setAccessible(true);
+				underlyingIntegerMapField.setAccessible(true);
+				Map registryObjects = (Map) registryObjectsField.get(registry);
+				ObjectIntIdentityMap underlyingIntegerMap = (ObjectIntIdentityMap) underlyingIntegerMapField.get(registry);
+				BiMap map = ((BiMap) registryObjects);
+				underlyingIntegerMap.put(object, id);
+				map.remove(name);
+				map.forcePut(name, object);
+				registryObjectsField.set(registry, map);
+				underlyingIntegerMapField.set(registry, underlyingIntegerMap);
+			} catch (NoSuchFieldException | IllegalAccessException e) {
+				e.printStackTrace();
+			}
 		}
 
 		private static void alterDelegateChain(RegistryNamespaced registry, String id, Object object) {
@@ -61,7 +78,7 @@ public class RegistryUtils {
 			if (obj instanceof Item) {
 				RegistryDelegate<Item> delegate = ((Item) obj).delegate;
 				ReflectionHelper.setPrivateValue(DelegateClass, delegate, repl, "referant");
-				ReflectionHelper.setPrivateValue(DelegateClass, ((Item) repl).delegate, delegate.name(), "name");
+				ReflectionHelper.setPrivateValue(DelegateClass, ((Item) repl).delegate, delegate.getResourceName(), "name");
 			}
 		}
 
@@ -78,7 +95,7 @@ public class RegistryUtils {
 	}
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
-	public void _(WorldEvent.Load event) {
+	public void worldLoadEvent(WorldEvent.Load event) {
 
 		if (Repl.replacements.size() < 1) {
 			return;

@@ -5,6 +5,8 @@ import cofh.lib.util.helpers.ItemHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import java.util.Arrays;
+
 /**
  * This class allows for OreDictionary-compatible ItemStack comparisons and Integer-based Hashes without collisions.
  *
@@ -21,7 +23,7 @@ public class ComparableItemStack extends ComparableItem {
 	}
 
 	public int stackSize = -1;
-	public int oreID = -1;
+	public int oreID[] = new int[] {};
 
 	protected static ItemStack getOre(String oreName) {
 
@@ -41,7 +43,7 @@ public class ComparableItemStack extends ComparableItem {
 		super(stack);
 		if (stack != null) {
 			stackSize = stack.stackSize;
-			oreID = ItemHelper.oreProxy.getOreID(stack);
+			oreID = ItemHelper.oreProxy.getOreIDs(stack);
 		}
 	}
 
@@ -49,7 +51,7 @@ public class ComparableItemStack extends ComparableItem {
 
 		super(item, damage);
 		this.stackSize = stackSize;
-		this.oreID = ItemHelper.oreProxy.getOreID(this.toItemStack());
+		this.oreID = ItemHelper.oreProxy.getOreIDs(this.toItemStack());
 	}
 
 	public ComparableItemStack(ComparableItemStack stack) {
@@ -66,12 +68,12 @@ public class ComparableItemStack extends ComparableItem {
 			item = stack.getItem();
 			metadata = ItemHelper.getItemDamage(stack);
 			stackSize = stack.stackSize;
-			oreID = ItemHelper.oreProxy.getOreID(stack);
+			oreID = ItemHelper.oreProxy.getOreIDs(stack);
 		} else {
 			item = null;
 			metadata = -1;
 			stackSize = -1;
-			oreID = -1;
+			oreID = new int[] {};
 		}
 		return this;
 	}
@@ -87,14 +89,14 @@ public class ComparableItemStack extends ComparableItem {
 			item = null;
 			metadata = -1;
 			stackSize = -1;
-			oreID = -1;
+			oreID = new int[] {};
 		}
 		return this;
 	}
 
 	public boolean isItemEqual(ComparableItemStack other) {
 
-		return other != null && (oreID != -1 && oreID == other.oreID || isEqual(other));
+		return other != null && (oreID != new int[] {} && oreID == other.oreID || isEqual(other));
 	}
 
 	public boolean isStackEqual(ComparableItemStack other) {
@@ -121,7 +123,7 @@ public class ComparableItemStack extends ComparableItem {
 	@Override
 	public int hashCode() {
 
-		return oreID != -1 ? oreID : super.hashCode();
+		return oreID != new int[] {} ? Arrays.hashCode(oreID) : super.hashCode();
 	}
 
 	@Override

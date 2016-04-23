@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -313,9 +314,13 @@ public final class ItemHelper {
 		return oreProxy.getOre(oreName);
 	}
 
-	public static String getOreName(ItemStack stack) {
+	public static List<String> getOreNames(ItemStack stack) {
 
-		return oreProxy.getOreName(stack);
+		return oreProxy.getOreNames(stack);
+	}
+
+	public static String getFirstOreName(ItemStack stack) {
+		return getOreNames(stack).get(0);
 	}
 
 	public static boolean isOreIDEqual(ItemStack stack, int oreID) {
@@ -335,37 +340,37 @@ public final class ItemHelper {
 
 	public static boolean hasOreName(ItemStack stack) {
 
-		return !getOreName(stack).equals("Unknown");
+		return !getOreNames(stack).contains("Unknown");
 	}
 
 	public static boolean isBlock(ItemStack stack) {
 
-		return getOreName(stack).startsWith(BLOCK);
+		return oreProxy.containsOreNameStartWith(stack, BLOCK);
 	}
 
 	public static boolean isOre(ItemStack stack) {
 
-		return getOreName(stack).startsWith(ORE);
+		return oreProxy.containsOreNameStartWith(stack, ORE);
 	}
 
 	public static boolean isDust(ItemStack stack) {
 
-		return getOreName(stack).startsWith(DUST);
+		return oreProxy.containsOreNameStartWith(stack, DUST);
 	}
 
 	public static boolean isIngot(ItemStack stack) {
 
-		return getOreName(stack).startsWith(INGOT);
+		return oreProxy.containsOreNameStartWith(stack, INGOT);
 	}
 
 	public static boolean isNugget(ItemStack stack) {
 
-		return getOreName(stack).startsWith(NUGGET);
+		return oreProxy.containsOreNameStartWith(stack, NUGGET);
 	}
 
 	public static boolean isLog(ItemStack stack) {
 
-		return getOreName(stack).startsWith(LOG);
+		return oreProxy.containsOreNameStartWith(stack, LOG);
 	}
 
 	/* CREATING ItemStacks */
@@ -940,7 +945,7 @@ public final class ItemHelper {
 
 	public static final boolean isPlayerHoldingFluidContainerItem(EntityPlayer player) {
 
-		return FluidHelper.isPlayerHoldingFluidContainerItem(player);
+		return player.getHeldItem().getItem() instanceof IFluidContainerItem;
 	}
 
 	public static final boolean isPlayerHoldingEnergyContainerItem(EntityPlayer player) {
@@ -1068,14 +1073,22 @@ public final class ItemHelper {
 		} else if (oreDict == null || oreDict.equals("Unknown")) {
 			return false;
 		} else {
-			return getOreName(checked).equalsIgnoreCase(oreDict);
+			return getFirstOreName(checked).equalsIgnoreCase(oreDict);
 		}
 	}
 
 	public static boolean doOreIDsMatch(ItemStack stackA, ItemStack stackB) {
-
-		int id = oreProxy.getOreID(stackA);
-		return id >= 0 && id == oreProxy.getOreID(stackB);
+		int[] idsA = OreDictionary.getOreIDs(stackA);
+		int[] idsB = OreDictionary.getOreIDs(stackB);
+		boolean matchFound = false;
+		for (int idA : idsA) {
+			for (int idB : idsB) {
+				if (idA == idB) {
+					matchFound = true;
+				}
+			}
+		}
+		return matchFound;
 	}
 
 	public static boolean isBlacklist(ItemStack output) {
