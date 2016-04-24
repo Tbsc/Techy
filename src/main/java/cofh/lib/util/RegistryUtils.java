@@ -41,7 +41,9 @@ public class RegistryUtils {
 		private static void overwrite_do(RegistryNamespaced registry, String name, Object object, Object oldThing) {
 
 			int id = registry.getIDForObject(oldThing);
-			// Messy reflection hacky stuff, but at least it works (at least it should)
+
+			// Messy reflection hacky stuff, but at least it works (it should)
+
 			Class clazz = RegistryNamespaced.class;
 			try {
 				Field registryObjectsField = clazz.getDeclaredField("registryObjects");
@@ -57,6 +59,7 @@ public class RegistryUtils {
 				registryObjectsField.set(registry, map);
 				underlyingIntegerMapField.set(registry, underlyingIntegerMap);
 			} catch (NoSuchFieldException | IllegalAccessException e) {
+				// NoSuchFieldException would never happen, the field is there
 				e.printStackTrace();
 			}
 		}

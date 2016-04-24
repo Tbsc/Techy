@@ -14,12 +14,14 @@ import java.util.List;
  * As Team CoFH (more specifically KingLemming) has specified, you should NOT initiate this
  * class or use it directly. Use {@link cofh.lib.util.helpers.ItemHelper} instead.
  *
+ * NOTE: MOST OF THIS IS MY CODE.
+ * I rewrote this instead of attempting to port KingLemming's code to work on 1.8.9.
+ *
  * Created by tbsc on 4/23/16.
  */
 public class OreDictionaryProxy {
 
 	public ItemStack getOre(String oreName) {
-
 		if (!oreNameExists(oreName)) {
 			return null;
 		}
