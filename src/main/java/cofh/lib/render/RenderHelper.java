@@ -1,8 +1,13 @@
 package cofh.lib.render;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
 import org.lwjgl.opengl.GL11;
 
 /**
@@ -29,6 +34,11 @@ public final class RenderHelper {
 		return Minecraft.getMinecraft().renderEngine;
 	}
 
+	public static final Tessellator tessellator() {
+
+		return Tessellator.getInstance();
+	}
+
 	public static void setColor3ub(int color) {
 
 		GL11.glColor3ub((byte) (color >> 16 & 0xFF), (byte) (color >> 8 & 0xFF), (byte) (color & 0xFF));
@@ -42,6 +52,22 @@ public final class RenderHelper {
 	public static void resetColor() {
 
 		GL11.glColor4f(1F, 1F, 1F, 1F);
+	}
+
+	public static final TextureAtlasSprite getFluidTexture(Fluid fluid) {
+
+		if (fluid == null) {
+			return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(FluidRegistry.LAVA.getStill().toString());
+		}
+		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getStill().toString());
+	}
+
+	public static final TextureAtlasSprite getFluidTexture(FluidStack fluid) {
+
+		if (fluid == null || fluid.getFluid() == null || fluid.getFluid().getStill() == null) {
+			return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(FluidRegistry.LAVA.getStill().toString());
+		}
+		return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(fluid.getFluid().getStill().toString());
 	}
 
 	public static final void bindTexture(ResourceLocation texture) {
