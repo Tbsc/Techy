@@ -1,23 +1,23 @@
 package tbsc.techy.client.gui;
 
-import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
+import cofh.lib.gui.GuiBase;
 import net.minecraft.util.ResourceLocation;
 import tbsc.techy.container.ContainerBase;
 
 /**
  * Machine GUI base class.
+ * Most of the rendering (such as rendering the GUI itself) is done by {@link GuiBase}.
  *
  * Created by tbsc on 3/28/16.
  */
-public abstract class GuiMachineBase extends GuiContainer {
+public abstract class GuiMachineBase extends GuiBase {
 
     public int tileInvSize;
     protected ResourceLocation guiTexture;
     protected ContainerBase container;
 
     public GuiMachineBase(ContainerBase containerBase, int tileInvSize, ResourceLocation guiTexture) {
-        super(containerBase);
+        super(containerBase, guiTexture);
         this.container = containerBase;
         this.tileInvSize = tileInvSize;
         this.guiTexture = guiTexture;
@@ -40,11 +40,12 @@ public abstract class GuiMachineBase extends GuiContainer {
 
     /**
      * Renders a vanilla looking tooltip based on the values given.
+     * Unlike {@code renderToolTip}, this draws text while renderToolTip draws {@link net.minecraft.item.ItemStack}s.
      * @param msg The text to be displayed inside the tooltip.
      * @param x Position of the tooltip on the x-axis, can be mouseX
      * @param y Position of the tooltip on the y-axis, can be mouseY
      */
-    protected void renderMouseTooltip(String msg, int x, int y) {
+    protected void renderTextTooltip(String msg, int x, int y) {
         if(msg != null) {
             int index = 0;
             int width = 0;
@@ -88,31 +89,14 @@ public abstract class GuiMachineBase extends GuiContainer {
     }
 
     /**
-     * Renders basic GUI stuff, such as text for "Inventory" and machine name.
+     * Renders basic GUI stuff, such as machine name.
      * @param mouseX Position of the mouse pointer on the x-axis
      * @param mouseY Position of the mouse pointer on the y-axis
      */
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRendererObj.drawString("Inventory", 8, this.ySize - 94, 4210752);
         fontRendererObj.drawString(container.tileBase.getName(), 6, 6, 4210752);
-    }
-
-    /**
-     * Renders the GUI itself.
-     * @param partialTicks
-     * @param mouseX Position of the mouse pointer on the x-axis.
-     * @param mouseY Position of the mouse pointer on the y-axis.
-     */
-    @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        this.mc.getTextureManager().bindTexture(guiTexture);
-        int i = (this.width - this.xSize) / 2;
-        int j = (this.height - this.ySize) / 2;
-        this.drawTexturedModalRect(i, j, 0, 0, this.xSize, this.ySize);
     }
 
 }
