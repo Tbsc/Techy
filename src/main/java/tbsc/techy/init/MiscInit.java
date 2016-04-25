@@ -5,7 +5,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import tbsc.techy.Techy;
 import tbsc.techy.client.gui.TechyGuiHandler;
 import tbsc.techy.event.GeneralEventHandler;
-import tbsc.techy.recipe.MachineRecipes;
+import tbsc.techy.recipe.PoweredFurnaceRecipes;
 
 /**
  * Anything that isn't a block/tile/item and that it needs to get loaded on startup goes here.
@@ -26,7 +26,7 @@ public class MiscInit {
      * Everything that needs to be run late.
      */
     public static void postInit() {
-        MachineRecipes.loadVanillaRecipes();
+        PoweredFurnaceRecipes.init();
     }
 
 }

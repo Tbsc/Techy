@@ -30,7 +30,7 @@ public class RecipeInput {
 
     public static RecipeInput createItemStackInput(ItemStack input) {
         if (input == null) return null;
-        return new RecipeInput(input);
+        return new RecipeInput(new ItemStack(input.getItem(), input.stackSize, input.getMetadata()));
     }
 
 }
