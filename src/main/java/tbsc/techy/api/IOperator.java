@@ -51,8 +51,18 @@ public interface IOperator extends ITickable {
     boolean shouldOperate();
 
     /**
-     *
-     *
+     * Operations have progress, and this method returns the progress the machine has done.
+     * @return progress (starting from 0) of operation
+     */
+    int getOperationProgress();
+
+    /**
+     * The total amount of time in ticks this operation should take.
+     * @return current operation total time
+     */
+    int getOperationTotalProgress();
+
+    /**
      * @param isRunning the new status
      */
     void setOperationStatus(boolean isRunning);
