@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLLoadCompleteEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.init.ItemInit;
@@ -88,14 +88,14 @@ public class Techy {
     }
 
     /**
-     * Load complete stage, ATM used to load vanilla furnace recipes because on loadComplete
+     * Post init stage, ATM used to load vanilla furnace recipes because on post init
      * stage I can be sure that all mods have added their recipes and that I can put them on my
      * own furnace.
      * @param event
      */
     @EventHandler
-    public void loadComplete(FMLLoadCompleteEvent event) {
-        MiscInit.loadComplete();
+    public void postInit(FMLPostInitializationEvent event) {
+        MiscInit.postInit();
     }
 
     /**

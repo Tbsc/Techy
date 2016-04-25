@@ -25,7 +25,7 @@ public class MiscInit {
     /**
      * Everything that needs to be run late.
      */
-    public static void loadComplete() {
+    public static void postInit() {
         MachineRecipes.loadVanillaRecipes();
     }
 
