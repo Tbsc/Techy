@@ -7,6 +7,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import tbsc.techy.api.IOperator;
 
+import javax.annotation.Nonnull;
+
 /**
  * Basic class for machine tile entities.
  * Adds support for energy consumption and operations.
@@ -18,6 +20,8 @@ import tbsc.techy.api.IOperator;
 public abstract class TileMachineBase extends TileBase implements IEnergyReceiver, IOperator {
 
     public EnergyStorage energyStorage;
+    protected boolean isRunning;
+    protected boolean shouldRun;
 
     protected TileMachineBase(int capacity, int maxReceive, int invSize) {
         super(invSize);
@@ -29,9 +33,74 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
      */
     @Override
     public void update() {
-        if (inventory[2] != null) {
-            receiveEnergy(EnumFacing.NORTH, EnergyHelper.extractEnergyFromContainer(inventory[2], energyStorage.getMaxReceive(), false), false);
+        // If receiving redstone signal, then prevent machine from operating
+        shouldRun = worldObj.isBlockIndirectlyGettingPowered(pos) <= 0;
+
+        if (getEnergySlot().length >= 1) {
+            for (int i : getEnergySlot()) {
+                if (inventory[getEnergySlot()[i]] != null) {
+                    receiveEnergy(EnumFacing.NORTH, EnergyHelper.extractEnergyFromContainer(inventory[getEnergySlot()[i]], energyStorage.getMaxReceive(), false), false);
+                }
+            }
         }
+    }
+
+    /**
+     * Returns the slot ID array of the energy container slot
+     * It needs to return an array in case there is no energy slot, therefore it should
+     * return an empty array.
+     * @return energy container slot ID array
+     */
+    @Nonnull
+    public abstract int[] getEnergySlot();
+
+    /**
+     * Returns the ID(s) of the input slot(s). If none, then return an empty int array.
+     * @return input slot IDs array (can be empty, but not null!)
+     */
+    @Nonnull
+    public abstract int[] getInputSlot();
+
+    /**
+     * Returns the ID(s) of the output slot(s). If none, then return an empty int array.
+     * @return output slot IDs array (can be empty, but not null!)
+     */
+    @Nonnull
+    public abstract int[] getOutputSlot();
+
+    /**
+     * Booster items are upgrades for the machine.
+     * This method should return an array of the slot IDs in which you should
+     * @return booster slot IDs array (can be empty, but not null!)
+     */
+    @Nonnull
+    public abstract int[] getBoosterSlots();
+
+    /**
+     * Should the tile operate right now
+     * @return should operate
+     */
+    @Override
+    public boolean shouldOperate() {
+        return shouldRun;
+    }
+
+    /**
+     * Change the field that stores the operation state
+     * @param isRunning the new status
+     */
+    @Override
+    public void setOperationStatus(boolean isRunning) {
+        this.isRunning = isRunning;
+    }
+
+    /**
+     * Returns the value of the {@code isRunning} field
+     * @return is it running
+     */
+    @Override
+    public boolean isOperating() {
+        return isRunning;
     }
 
     /**
@@ -71,6 +140,10 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
         return energyStorage.receiveEnergy(maxReceive, simulate);
+    }
+
+    public void setEnergyStored(int energy) {
+        energyStorage.setEnergyStored(energy);
     }
 
     /**
