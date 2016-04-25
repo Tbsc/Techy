@@ -1,8 +1,10 @@
 package tbsc.techy.client.gui;
 
 import cofh.lib.gui.GuiBase;
+import cofh.lib.gui.element.ElementEnergyStored;
 import net.minecraft.util.ResourceLocation;
 import tbsc.techy.container.ContainerBase;
+import tbsc.techy.tile.TileMachineBase;
 
 /**
  * Machine GUI base class.
@@ -21,6 +23,12 @@ public abstract class GuiMachineBase extends GuiBase {
         this.container = containerBase;
         this.tileInvSize = tileInvSize;
         this.guiTexture = guiTexture;
+    }
+
+    @Override
+    public void initGui() {
+        super.initGui();
+        addElement(new ElementEnergyStored(this, xSize - 24, 12, ((TileMachineBase) container.tileBase).energyStorage));
     }
 
     /////////////////
@@ -96,7 +104,7 @@ public abstract class GuiMachineBase extends GuiBase {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRendererObj.drawString(container.tileBase.getName(), 6, 6, 4210752);
+        fontRendererObj.drawString(container.tileBase.getName(), 8, 6, 0x404040);
     }
 
 }

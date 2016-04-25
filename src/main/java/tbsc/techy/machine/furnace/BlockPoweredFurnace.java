@@ -19,9 +19,11 @@ public class BlockPoweredFurnace extends BlockBaseFacingMachine {
 
     /**
      * Size of the inventory.
-     * First slot is input, and second slot is output
+     * Slot 1 - Input
+     * Slot 2 - Output
+     * Slot 3 - Energy Input
      */
-    public static int tileInvSize = 2;
+    public static int tileInvSize = 3;
 
     public BlockPoweredFurnace() {
         super(Material.iron, "blockPoweredFurnace", tileInvSize); // TODO Change size when needed

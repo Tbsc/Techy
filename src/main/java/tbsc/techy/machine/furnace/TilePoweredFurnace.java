@@ -19,7 +19,7 @@ public class TilePoweredFurnace extends TileMachineBase {
     private boolean shouldRun;
 
     public TilePoweredFurnace() {
-        super(40000, 640, 2);
+        super(40000, 640, BlockPoweredFurnace.tileInvSize);
     }
 
     /**
