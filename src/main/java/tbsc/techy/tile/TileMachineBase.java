@@ -2,6 +2,7 @@ package tbsc.techy.tile;
 
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
+import cofh.lib.util.helpers.EnergyHelper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import tbsc.techy.api.IOperator;
@@ -21,6 +22,16 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     protected TileMachineBase(int capacity, int maxReceive, int invSize) {
         super(invSize);
         this.energyStorage = new EnergyStorage(capacity, maxReceive);
+    }
+
+    /**
+     * Runs every tick, and ATM receives energy from energy container items every tick.
+     */
+    @Override
+    public void update() {
+        if (inventory[2] != null) {
+            receiveEnergy(EnumFacing.NORTH, EnergyHelper.extractEnergyFromContainer(inventory[2], energyStorage.getMaxReceive(), false), false);
+        }
     }
 
     /**
@@ -63,9 +74,9 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     }
 
     /**
-     * Energy stored in a specific side (sides can be ignored).
-     * @param from Direction to check for energy, added for compatibility
-     * @return Amount of energy stored in the TileEntity/that specific side
+     * Energy stored.
+     * @param from Side energy is stored in
+     * @return Amount of energy stored in the TileEntity
      */
     @Override
     public int getEnergyStored(EnumFacing from) {
@@ -74,8 +85,8 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
 
     /**
      * The capacity of the machine.
-     * @param from Direction to check for capacity, added for compatibility
-     * @return Capacity of the TileEntity or of that side
+     * @param from Side max energy is in
+     * @return Capacity of the TileEntity
      */
     @Override
     public int getMaxEnergyStored(EnumFacing from) {
@@ -83,13 +94,13 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     }
 
     /**
-     * Can be used to configure sides, as it checks if you can connect energy from specific sides.
-     * @param from Direction from which energy *can* come
-     * @return Whether energy is allowed to come from that direction.
+     * Checks if energy can be received/extracted from a specific side of the block.
+     * @param from Side to be connected
+     * @return if it can be connected from that sides
      */
     @Override
     public boolean canConnectEnergy(EnumFacing from) {
-        return true; // TODO Reconfigurable sides
+        return true;
     }
 
 }
