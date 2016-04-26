@@ -7,6 +7,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import tbsc.techy.api.ITechyRotatable;
+import tbsc.techy.api.ITechyWrench;
 import tbsc.techy.api.ITechyWrenchable;
 
 /**
@@ -14,7 +15,7 @@ import tbsc.techy.api.ITechyWrenchable;
  *
  * Created by tbsc on 3/27/16.
  */
-public class ItemWrench extends ItemBase {
+public class ItemWrench extends ItemBase implements ITechyWrench {
 
     public ItemWrench() {
         super("itemWrench");
