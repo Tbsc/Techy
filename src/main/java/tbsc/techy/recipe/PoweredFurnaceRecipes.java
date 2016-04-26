@@ -1,117 +1,111 @@
 package tbsc.techy.recipe;
 
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
-import tbsc.techy.ConfigData;
-import tbsc.techy.api.IRecipes;
+import net.minecraftforge.fml.common.FMLLog;
 
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
-/**
- * Recipe registry class for the powered furnace block.
- * Imports values from vanilla furnace.
- * If any documentation is missing, that's because it's already in {@link IRecipes}
- *
- * Created by tbsc on 4/25/16.
- */
-public class PoweredFurnaceRecipes implements IRecipes {
+public class PoweredFurnaceRecipes {
 
-    public static PoweredFurnaceRecipes instance;
+    private static final PoweredFurnaceRecipes instance = new PoweredFurnaceRecipes();
+    private Map<ItemStack, ItemStack> recipeMap = new HashMap<>();
+    private Map<ItemStack, Float> experienceList = new HashMap<>();
 
-    private Map<RecipeInput, RecipeData> recipeMap;
-
-    public static void init() {
-        instance = new PoweredFurnaceRecipes();
-        instance.recipeMap = new HashMap<>();
-        instance.loadVanillaRecipes();
+    /**
+     * Used to get the instance of the class
+     */
+    public static PoweredFurnaceRecipes instance() {
+        return instance;
     }
 
-    private void loadVanillaRecipes() {
+    private PoweredFurnaceRecipes() {}
+
+    /**
+     * Loads all of the vanilla recipes.
+     */
+    public void loadVanillaRecipes() {
         for (ItemStack input : FurnaceRecipes.instance().getSmeltingList().keySet()) {
-            for (ItemStack output : FurnaceRecipes.instance().getSmeltingList().values()) {
-                addRecipe(RecipeInput.createItemStackInput(input.copy()), RecipeData.createRecipeData(output.copy(),
-                        ConfigData.furnaceDefaultEnergyUsage, ConfigData.furnaceDefaultCookTime));
+            addItemStackRecipe(input, FurnaceRecipes.instance().getSmeltingResult(input),
+                    FurnaceRecipes.instance().getSmeltingExperience(input));
+        }
+    }
+
+    /**
+     * Adds a recipe with a block as the input
+     */
+    public void addBlockRecipe(Block input, ItemStack stack, float experience) {
+        this.addItemRecipe(Item.getItemFromBlock(input), stack, experience);
+    }
+
+    /**
+     * Adds a recipe with an item as the input
+     */
+    public void addItemRecipe(Item input, ItemStack stack, float experience) {
+        this.addItemStackRecipe(new ItemStack(input, 1, 32767), stack, experience);
+    }
+
+    /**
+     * Adds a recipe with an ItemStack as the input
+     */
+    public void addItemStackRecipe(ItemStack input, ItemStack output, float experience) {
+        if (getSmeltingResult(input) != null) {
+            FMLLog.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
+            return;
+        }
+        this.recipeMap.put(input, output);
+        this.experienceList.put(output, experience);
+    }
+
+    /**
+     * Returns the smelting result of an item.
+     */
+    public ItemStack getSmeltingResult(ItemStack stack) {
+        for (Entry<ItemStack, ItemStack> entry : this.recipeMap.entrySet()) {
+            if (this.compareItemStacks(stack, entry.getKey())) {
+                return entry.getValue();
             }
         }
-    }
 
-    @Override
-    public void addRecipe(RecipeInput input, RecipeData data) {
-        recipeMap.put(input, data);
-    }
-
-    @Override
-    public Map<RecipeInput, RecipeData> getRecipeMap() {
-        return recipeMap;
-    }
-
-    @Nullable
-    @Override
-    public RecipeData getRecipeData(RecipeInput input) {
-        if (recipeMap.containsKey(input)) {
-            return recipeMap.get(input);
-        }
         return null;
     }
 
-    @Nullable
-    @Override
-    public RecipeData getRecipeData(ItemStack input) {
-        if (recipeMap.containsKey(RecipeInput.createItemStackInput(input))) {
-            return recipeMap.get(RecipeInput.createItemStackInput(input));
-        }
-        return null;
+    /**
+     * Checks if the two itemstacks are equal
+     */
+    private boolean compareItemStacks(ItemStack stack1, ItemStack stack2) {
+        return stack2.getItem() == stack1.getItem() && (stack2.getMetadata() == 32767 || stack2.getMetadata() == stack1.getMetadata());
     }
 
-    @Override
-    public ItemStack getOutputStack(RecipeInput input) {
-        if (recipeMap.containsKey(input)) {
-            return recipeMap.get(input).output;
-        }
-        return null;
+    /**
+     * Returns the recipe map
+     * @return recipe map instance
+     */
+    public Map<ItemStack, ItemStack> getRecipeMap() {
+        return this.recipeMap;
     }
 
-    @Nullable
-    @Override
-    public ItemStack getOutputStack(ItemStack input) {
-        if (recipeMap.containsKey(RecipeInput.createItemStackInput(input))) {
-            return recipeMap.get(RecipeInput.createItemStackInput(input)).output;
-        }
-        return null;
-    }
+    public Map<ItemStack, Float> getExperienceMap() { return this.experienceList; }
 
-    @Override
-    public int getEnergyUsage(RecipeInput input) {
-        if (recipeMap.containsKey(input)) {
-            return recipeMap.get(input).energyUsage;
-        }
-        return 0;
-    }
+    /**
+     * Returns the amount of experience that should be given upon smelting
+     * @param stack
+     * @return
+     */
+    public float getSmeltingExperience(ItemStack stack) {
+        float ret = stack.getItem().getSmeltingExperience(stack);
+        if (ret != -1) return ret;
 
-    @Override
-    public int getEnergyUsage(ItemStack input) {
-        if (recipeMap.containsKey(RecipeInput.createItemStackInput(input))) {
-            return recipeMap.get(RecipeInput.createItemStackInput(input)).energyUsage;
+        for (Entry<ItemStack, Float> entry : this.experienceList.entrySet()) {
+            if (this.compareItemStacks(stack, entry.getKey())) {
+                return entry.getValue();
+            }
         }
-        return 0;
-    }
 
-    @Override
-    public int getProcessTime(RecipeInput input) {
-        if (recipeMap.containsKey(input)) {
-            return recipeMap.get(input).processTime;
-        }
-        return 0;
+        return 0.0F;
     }
-
-    @Override
-    public int getProcessTime(ItemStack input) {
-        if (recipeMap.containsKey(RecipeInput.createItemStackInput(input))) {
-            return recipeMap.get(RecipeInput.createItemStackInput(input)).processTime;
-        }
-        return 0;
-    }
-
 }
