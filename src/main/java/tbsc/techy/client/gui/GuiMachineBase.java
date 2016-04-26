@@ -31,17 +31,6 @@ public abstract class GuiMachineBase extends GuiBase {
         addElement(new ElementEnergyStored(this, xSize - 24, 12, ((TileMachineBase) container.tileBase).energyStorage));
     }
 
-    /////////////////
-    // Abstraction //
-    /////////////////
-
-    /**
-     *
-     * @param xGuiStart Pixel on screen on which GUI starts rendering on the x axis
-     * @param yGuiStart same as {@code xGuiStart}, just on the y axis
-     */
-    protected abstract void renderProgressBar(int xGuiStart, int yGuiStart);
-
     ///////////
     // Utils //
     ///////////
