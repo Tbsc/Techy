@@ -58,8 +58,9 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
      */
     @Override
     public void rotateBlock(IBlockState block, World world, BlockPos pos, EnumFacing rotateTo, EntityLivingBase rotatedBy) {
-        if (EnumFacing.Plane.HORIZONTAL.apply(rotateTo)) // Is this EnumFacing rotation valid for the horizontal plane
+        if (EnumFacing.Plane.HORIZONTAL.apply(rotateTo)) { // Is this EnumFacing rotation valid for the horizontal plane
             world.setBlockState(pos, block.withProperty(FACING, rotateTo), 2); // Change rotation
+        }
     }
 
     /**
