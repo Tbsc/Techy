@@ -7,7 +7,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import tbsc.techy.tile.TileBase;
+import tbsc.techy.tile.TileMachineBase;
 
 /**
  * Basic container that can be used for almost any purpose.
@@ -20,11 +20,11 @@ import tbsc.techy.tile.TileBase;
 public abstract class ContainerBase extends Container {
 
     public IInventory playerInv;
-    public TileBase tileBase;
+    public TileMachineBase tileBase;
     protected int tileInvSize;
     private int nextAvailableSlot = 0;
 
-    public ContainerBase(IInventory playerInv, TileBase tileBase, int tileInvSize) {
+    public ContainerBase(IInventory playerInv, TileMachineBase tileBase, int tileInvSize) {
         this.playerInv = playerInv;
         this.tileBase = tileBase;
         this.tileInvSize = tileInvSize;
