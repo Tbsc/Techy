@@ -3,8 +3,10 @@ package tbsc.techy.tile;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import cofh.lib.util.helpers.EnergyHelper;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.MathHelper;
 import tbsc.techy.api.IOperator;
 
 import javax.annotation.Nonnull;
@@ -14,7 +16,7 @@ import javax.annotation.Nonnull;
  * Adds support for energy consumption and operations.
  * {@link net.minecraft.util.ITickable} is also implemented through
  * {@link IOperator}, because operations must run every tick.
- *
+ * <p>
  * Created by tbsc on 4/22/16.
  */
 public abstract class TileMachineBase extends TileBase implements IEnergyReceiver, IOperator {
@@ -45,10 +47,31 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
         }
     }
 
+    public void spawnXPOrb(int xpAmount, int stackSize) {
+        if (xpAmount == 0.0F) {
+            stackSize = 0;
+        } else if (xpAmount < 1.0F) {
+            int j = MathHelper.floor_float((float) stackSize * xpAmount);
+
+            if (j < MathHelper.ceiling_float_int((float) stackSize * xpAmount) && Math.random() < (double) ((float) stackSize * xpAmount - (float) j)) {
+                ++j;
+            }
+
+            stackSize = j;
+        }
+
+        while (stackSize > 0) {
+            int k = EntityXPOrb.getXPSplit(stackSize);
+            stackSize -= k;
+            worldObj.spawnEntityInWorld(new EntityXPOrb(worldObj, pos.getX(), pos.getY() + 0.5D, pos.getZ() + 0.5D, k));
+        }
+    }
+
     /**
      * Returns the slot ID array of the energy container slot
      * It needs to return an array in case there is no energy slot, therefore it should
      * return an empty array.
+     *
      * @return energy container slot ID array
      */
     @Nonnull
@@ -56,21 +79,24 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
 
     /**
      * Returns the ID(s) of the input slot(s). If none, then return an empty int array.
+     *
      * @return input slot IDs array (can be empty, but not null!)
      */
     @Nonnull
-    public abstract int[] getInputSlot();
+    public abstract int[] getInputSlots();
 
     /**
      * Returns the ID(s) of the output slot(s). If none, then return an empty int array.
+     *
      * @return output slot IDs array (can be empty, but not null!)
      */
     @Nonnull
-    public abstract int[] getOutputSlot();
+    public abstract int[] getOutputSlots();
 
     /**
      * Booster items are upgrades for the machine.
      * This method should return an array of the slot IDs in which you should
+     *
      * @return booster slot IDs array (can be empty, but not null!)
      */
     @Nonnull
@@ -78,6 +104,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
 
     /**
      * Should the tile operate right now
+     *
      * @return should operate
      */
     @Override
@@ -87,6 +114,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
 
     /**
      * Change the field that stores the operation state
+     *
      * @param isRunning the new status
      */
     @Override
@@ -96,6 +124,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
 
     /**
      * Returns the value of the {@code isRunning} field
+     *
      * @return is it running
      */
     @Override
@@ -105,6 +134,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
 
     /**
      * Reads data from NBT and also reads energy storage data
+     *
      * @param nbt The tag to be read from
      */
     @Override
@@ -115,6 +145,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
 
     /**
      * Writes data to NBT and also writes energy storage data
+     *
      * @param nbt The tag to be written to
      */
     @Override
@@ -126,15 +157,12 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     /**
      * Since receiving energy will be done exactly the same on all machines,
      * I'm doing it on the base class so it'll apply to all machines.
-     *
+     * <p>
      * All documentation from now on is made by Team CoFH.
      *
-     * @param from
-     *            Orientation the energy is received from.
-     * @param maxReceive
-     *            Maximum amount of energy to receive.
-     * @param simulate
-     *            If TRUE, the charge will only be simulated.
+     * @param from       Orientation the energy is received from.
+     * @param maxReceive Maximum amount of energy to receive.
+     * @param simulate   If TRUE, the charge will only be simulated.
      * @return Amount of energy that was (or would have been, if simulated) received.
      */
     @Override
@@ -148,6 +176,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
 
     /**
      * Energy stored.
+     *
      * @param from Side energy is stored in
      * @return Amount of energy stored in the TileEntity
      */
@@ -158,6 +187,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
 
     /**
      * The capacity of the machine.
+     *
      * @param from Side max energy is in
      * @return Capacity of the TileEntity
      */
@@ -168,6 +198,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
 
     /**
      * Checks if energy can be received/extracted from a specific side of the block.
+     *
      * @param from Side to be connected
      * @return if it can be connected from that sides
      */

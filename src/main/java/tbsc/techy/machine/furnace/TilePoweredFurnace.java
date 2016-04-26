@@ -1,6 +1,5 @@
 package tbsc.techy.machine.furnace;
 
-import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
@@ -84,19 +83,7 @@ public class TilePoweredFurnace extends TileMachineBase {
                 this.inventory[1].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
             }
 
-            switch (worldObj.getBlockState(pos).getValue(BlockPoweredFurnace.FACING)) {
-                case NORTH:
-                    worldObj.spawnEntityInWorld(new EntityXPOrb(worldObj, pos.getX(), pos.getY(), pos.getZ() - 0.8, (int) experience));
-                    break;
-                case SOUTH:
-                    worldObj.spawnEntityInWorld(new EntityXPOrb(worldObj, pos.getX(), pos.getY(), pos.getZ() + 0.8, (int) experience));
-                    break;
-                case WEST:
-                    worldObj.spawnEntityInWorld(new EntityXPOrb(worldObj, pos.getX() - 0.8, pos.getY(), pos.getZ(), (int) experience));
-                    break;
-                case EAST:
-                    worldObj.spawnEntityInWorld(new EntityXPOrb(worldObj, pos.getX() + 0.8, pos.getY(), pos.getZ(), (int) experience));
-            }
+            spawnXPOrb((int) experience, itemstack.stackSize);
 
 
             --this.inventory[0].stackSize;
@@ -240,7 +227,7 @@ public class TilePoweredFurnace extends TileMachineBase {
      */
     @Nonnull
     @Override
-    public int[] getInputSlot() {
+    public int[] getInputSlots() {
         return new int[]{
                 0
         };
@@ -253,7 +240,7 @@ public class TilePoweredFurnace extends TileMachineBase {
      */
     @Nonnull
     @Override
-    public int[] getOutputSlot() {
+    public int[] getOutputSlots() {
         return new int[]{
                 1
         };
@@ -310,4 +297,18 @@ public class TilePoweredFurnace extends TileMachineBase {
         return new ChatComponentText(BlockInit.blockPoweredFurnace.getLocalizedName());
     }
 
+    @Override
+    public int[] getSlotsForFace(EnumFacing side) {
+        return side == EnumFacing.UP ? getInputSlots() : (side == EnumFacing.DOWN ? getOutputSlots() : getEnergySlot());
+    }
+
+    @Override
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
+        return isItemValidForSlot(index, itemStackIn) && ;
+    }
+
+    @Override
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
+        return index != 0 && direction != EnumFacing.UP;
+    }
 }
