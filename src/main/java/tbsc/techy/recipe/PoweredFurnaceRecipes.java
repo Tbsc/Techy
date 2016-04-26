@@ -31,7 +31,7 @@ public class PoweredFurnaceRecipes implements IRecipes {
     private void loadVanillaRecipes() {
         for (ItemStack input : FurnaceRecipes.instance().getSmeltingList().keySet()) {
             for (ItemStack output : FurnaceRecipes.instance().getSmeltingList().values()) {
-                addRecipe(RecipeInput.createItemStackInput(input), RecipeData.createRecipeData(output,
+                addRecipe(RecipeInput.createItemStackInput(input.copy()), RecipeData.createRecipeData(output.copy(),
                         ConfigData.furnaceDefaultEnergyUsage, ConfigData.furnaceDefaultCookTime));
             }
         }
@@ -40,6 +40,11 @@ public class PoweredFurnaceRecipes implements IRecipes {
     @Override
     public void addRecipe(RecipeInput input, RecipeData data) {
         recipeMap.put(input, data);
+    }
+
+    @Override
+    public Map<RecipeInput, RecipeData> getRecipeMap() {
+        return recipeMap;
     }
 
     @Nullable

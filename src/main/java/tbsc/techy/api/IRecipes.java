@@ -5,6 +5,7 @@ import tbsc.techy.recipe.RecipeData;
 import tbsc.techy.recipe.RecipeInput;
 
 import javax.annotation.Nullable;
+import java.util.Map;
 
 /**
  * Implemented by classes that store recipe data.
@@ -19,6 +20,12 @@ public interface IRecipes {
      * @param data Data of the recipe, will be typically stored as a value in a map.
      */
     void addRecipe(RecipeInput input, RecipeData data);
+
+    /**
+     * Returns the recipe map that the class uses.
+     * @return recipe map
+     */
+    Map<RecipeInput, RecipeData> getRecipeMap();
 
     /**
      * Returns the recipe data of the specified recipe input.
