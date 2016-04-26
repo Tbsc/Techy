@@ -21,7 +21,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
 
     public EnergyStorage energyStorage;
     protected boolean isRunning;
-    protected boolean shouldRun;
+    protected boolean shouldRun = true;
 
     protected TileMachineBase(int capacity, int maxReceive, int invSize) {
         super(invSize);
@@ -34,7 +34,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     @Override
     public void update() {
         // If receiving redstone signal, then prevent machine from operating
-        shouldRun = worldObj.isBlockIndirectlyGettingPowered(pos) <= 0;
+        shouldRun = !(worldObj.isBlockIndirectlyGettingPowered(pos) > 0);
 
         if (getEnergySlot().length >= 1) {
             for (int i : getEnergySlot()) {
