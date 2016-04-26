@@ -83,7 +83,21 @@ public class TilePoweredFurnace extends TileMachineBase {
             } else if (this.inventory[1].getItem() == itemstack.getItem()) {
                 this.inventory[1].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
             }
-            worldObj.spawnEntityInWorld(new EntityXPOrb(worldObj, pos.getX(), pos.getY(), pos.getZ(), (int) experience));
+
+            switch (worldObj.getBlockState(pos).getValue(BlockPoweredFurnace.FACING)) {
+                case NORTH:
+                    worldObj.spawnEntityInWorld(new EntityXPOrb(worldObj, pos.getX(), pos.getY(), pos.getZ() - 0.8, (int) experience));
+                    break;
+                case SOUTH:
+                    worldObj.spawnEntityInWorld(new EntityXPOrb(worldObj, pos.getX(), pos.getY(), pos.getZ() + 0.8, (int) experience));
+                    break;
+                case WEST:
+                    worldObj.spawnEntityInWorld(new EntityXPOrb(worldObj, pos.getX() - 0.8, pos.getY(), pos.getZ(), (int) experience));
+                    break;
+                case EAST:
+                    worldObj.spawnEntityInWorld(new EntityXPOrb(worldObj, pos.getX() + 0.8, pos.getY(), pos.getZ(), (int) experience));
+            }
+
 
             --this.inventory[0].stackSize;
 
