@@ -107,9 +107,9 @@ public class Techy {
             config.load();
 
             // Config properties
-            ConfigData.furnaceDefaultCookTime = config.get("Powered Furnace", "DefaultCookTime", 200,
+            ConfigData.furnaceDefaultCookTime = config.get("Powered Furnace", "DefaultCookTime", ConfigData.furnaceDefaultCookTime,
                     "Define (in ticks) the processing time for vanilla recipes in the powered furnace.", 1, Integer.MAX_VALUE).getInt();
-            ConfigData.furnaceDefaultEnergyUsage = config.get("Powered Furnace", "DefaultEnergyUsage", 4000,
+            ConfigData.furnaceDefaultEnergyUsage = config.get("Powered Furnace", "DefaultEnergyUsage", ConfigData.furnaceDefaultEnergyUsage,
                     "Amount of energy consumed when vanilla recipes are processed in the powered furnace", 0, Integer.MAX_VALUE).getInt();
         } catch (Exception e) {
             e.printStackTrace();

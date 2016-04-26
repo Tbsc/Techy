@@ -8,7 +8,7 @@ package tbsc.techy;
  */
 public class ConfigData {
 
-    public static int furnaceDefaultCookTime = 200;
+    public static int furnaceDefaultCookTime = 120;
     public static int furnaceDefaultEnergyUsage = 4000;
 
 }
