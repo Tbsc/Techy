@@ -26,7 +26,7 @@ public class MiscInit {
      * Everything that needs to be run late.
      */
     public static void postInit() {
-        PoweredFurnaceRecipes.init();
+        PoweredFurnaceRecipes.instance().loadVanillaRecipes();
     }
 
 }
