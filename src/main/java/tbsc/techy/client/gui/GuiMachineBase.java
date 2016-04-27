@@ -3,8 +3,8 @@ package tbsc.techy.client.gui;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.ElementEnergyStored;
 import net.minecraft.util.ResourceLocation;
+import tbsc.techy.client.gui.element.TabSides;
 import tbsc.techy.container.ContainerBase;
-import tbsc.techy.tile.TileMachineBase;
 
 /**
  * Machine GUI base class.
@@ -28,7 +28,8 @@ public abstract class GuiMachineBase extends GuiBase {
     @Override
     public void initGui() {
         super.initGui();
-        addElement(new ElementEnergyStored(this, xSize - 24, 12, ((TileMachineBase) container.tileBase).energyStorage));
+        addElement(new ElementEnergyStored(this, xSize - 24, 12, container.tileBase.energyStorage));
+        addTab(new TabSides(this, xSize + 1, 0, 22 + 28, 22 + 28, container.tileBase));
     }
 
     ///////////
