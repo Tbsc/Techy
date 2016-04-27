@@ -1,16 +1,22 @@
 package tbsc.techy.machine.furnace;
 
+import cofh.api.energy.IEnergyContainerItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ResourceLocation;
+import org.apache.commons.lang3.ArrayUtils;
 import tbsc.techy.ConfigData;
+import tbsc.techy.api.SideConfiguration;
+import tbsc.techy.api.Sides;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.recipe.PoweredFurnaceRecipes;
 import tbsc.techy.tile.TileMachineBase;
 
 import javax.annotation.Nonnull;
+import java.util.EnumMap;
 
 /**
  * Slot 0 - Input
@@ -31,9 +37,17 @@ public class TilePoweredFurnace extends TileMachineBase {
     int progress = 0;
     int totalProgress = 0;
     // int energyConsumptionPerTick = 0;
+    public EnumMap<Sides, SideConfiguration> sideConfigMap = new EnumMap<>(Sides.class);
 
     public TilePoweredFurnace() {
         super(40000, 640, BlockPoweredFurnace.tileInvSize);
+
+        sideConfigMap.put(Sides.FRONT, SideConfiguration.INPUT);
+        sideConfigMap.put(Sides.BACK, SideConfiguration.INPUT);
+        sideConfigMap.put(Sides.LEFT, SideConfiguration.INPUT);
+        sideConfigMap.put(Sides.RIGHT, SideConfiguration.INPUT);
+        sideConfigMap.put(Sides.UP, SideConfiguration.INPUT);
+        sideConfigMap.put(Sides.DOWN, SideConfiguration.OUTPUT);
     }
 
     /**
@@ -85,7 +99,6 @@ public class TilePoweredFurnace extends TileMachineBase {
 
             spawnXPOrb((int) experience, itemstack.stackSize);
 
-
             --this.inventory[0].stackSize;
 
             if (this.inventory[0].stackSize <= 0) {
@@ -136,6 +149,13 @@ public class TilePoweredFurnace extends TileMachineBase {
         super.writeToNBT(nbt);
         nbt.setInteger("Progress", progress);
         nbt.setInteger("TotalProgress", totalProgress);
+
+        nbt.setInteger("SideConfigFront", getConfigurationForSide(Sides.FRONT).ordinal());
+        nbt.setInteger("SideConfigBack", getConfigurationForSide(Sides.BACK).ordinal());
+        nbt.setInteger("SideConfigLeft", getConfigurationForSide(Sides.LEFT).ordinal());
+        nbt.setInteger("SideConfigRight", getConfigurationForSide(Sides.RIGHT).ordinal());
+        nbt.setInteger("SideConfigUp", getConfigurationForSide(Sides.FRONT).ordinal());
+        nbt.setInteger("SideConfigDown", getConfigurationForSide(Sides.DOWN).ordinal());
     }
 
     @Override
@@ -143,6 +163,64 @@ public class TilePoweredFurnace extends TileMachineBase {
         super.readFromNBT(nbt);
         progress = nbt.getInteger("Progress");
         totalProgress = nbt.getInteger("TotalProgress");
+
+        setConfigurationForSide(Sides.FRONT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigFront")));
+        setConfigurationForSide(Sides.BACK, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigBack")));
+        setConfigurationForSide(Sides.LEFT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigLeft")));
+        setConfigurationForSide(Sides.RIGHT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigRight")));
+        setConfigurationForSide(Sides.UP, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigUp")));
+        setConfigurationForSide(Sides.DOWN, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigDown")));
+    }
+
+    /**
+     * Returns the side config for the side given.
+     * @param side the side to check
+     * @return config for the side
+     */
+    @Override
+    public SideConfiguration getConfigurationForSide(Sides side) {
+        return sideConfigMap.get(side);
+    }
+
+    /**
+     * Sets in the class the side config for the side given
+     * @param side to change
+     * @param sideConfig what to change
+     */
+    @Override
+    public void setConfigurationForSide(Sides side, SideConfiguration sideConfig) {
+        if (sideConfigMap.containsKey(side)) {
+            sideConfigMap.remove(side);
+        }
+        sideConfigMap.put(side, sideConfig);
+    }
+
+    /**
+     * For the configuration given, return the slots this configuration should access
+     * @param sideConfig configuration for side
+     * @return slots for configuration
+     */
+    @Override
+    public int[] getSlotsForConfiguration(SideConfiguration sideConfig) {
+        switch (sideConfig) {
+            case DISABLED:
+                return new int[0];
+            case INPUT:
+                return getInputSlots();
+            case OUTPUT:
+                return getOutputSlots();
+            case IO:
+                return ArrayUtils.addAll(getInputSlots(), getOutputSlots());
+            case UNKNOWN:
+                return null;
+            default:
+                return null;
+        }
+    }
+
+    @Override
+    public ResourceLocation getMachineFrontTexture() {
+        return new ResourceLocation("Techy:textures/blocks/blockPoweredFurnaceFront.png");
     }
 
     @Override
@@ -273,6 +351,8 @@ public class TilePoweredFurnace extends TileMachineBase {
                 return PoweredFurnaceRecipes.instance().getSmeltingResult(stack) != null;
             case 1:
                 return false;
+            case 2:
+                return stack.getItem() instanceof IEnergyContainerItem;
         }
         return false;
     }
@@ -299,16 +379,84 @@ public class TilePoweredFurnace extends TileMachineBase {
 
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
-        return side == EnumFacing.UP ? getInputSlots() : (side == EnumFacing.DOWN ? getOutputSlots() : getEnergySlot());
+        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockPoweredFurnace.FACING);
+        if (frontOfBlock == side) { // FRONT
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.FRONT));
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // LEFT
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.LEFT));
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // BACK
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.BACK));
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // RIGHT
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.RIGHT));
+        }
+        if (side == EnumFacing.UP) { // UP
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.UP));
+        }
+        if (side == EnumFacing.DOWN) { // DOWN
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.DOWN));
+        }
+        return new int[0];
     }
 
     @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-        return isItemValidForSlot(index, itemStackIn) && ;
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing side) {
+        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockPoweredFurnace.FACING);
+        boolean sideAllows = false;
+        if (frontOfBlock == side) { // FRONT
+            return getConfigurationForSide(Sides.FRONT).allowsInput();
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // LEFT
+            return getConfigurationForSide(Sides.LEFT).allowsInput();
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // BACK
+            return getConfigurationForSide(Sides.BACK).allowsInput();
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // RIGHT
+            return getConfigurationForSide(Sides.RIGHT).allowsInput();
+        }
+        if (side == EnumFacing.UP) { // UP
+            return getConfigurationForSide(Sides.UP).allowsInput();
+        }
+        if (side == EnumFacing.DOWN) { // DOWN
+            return getConfigurationForSide(Sides.DOWN).allowsInput();
+        }
+        return sideAllows && ArrayUtils.contains(getOutputSlots(), index);
     }
 
     @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing direction) {
-        return index != 0 && direction != EnumFacing.UP;
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing side) {
+        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockPoweredFurnace.FACING);
+        boolean sideAllows = false;
+        if (frontOfBlock == side) { // FRONT
+            sideAllows = getConfigurationForSide(Sides.FRONT).allowsOutput();
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // LEFT
+            sideAllows = getConfigurationForSide(Sides.LEFT).allowsOutput();
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // BACK
+            sideAllows = getConfigurationForSide(Sides.BACK).allowsOutput();
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // RIGHT
+            sideAllows = getConfigurationForSide(Sides.RIGHT).allowsOutput();
+        }
+        if (side == EnumFacing.UP) { // UP
+            sideAllows = getConfigurationForSide(Sides.UP).allowsOutput();
+        }
+        if (side == EnumFacing.DOWN) { // DOWN
+            sideAllows = getConfigurationForSide(Sides.DOWN).allowsOutput();
+        }
+        return sideAllows && ArrayUtils.contains(getOutputSlots(), index);
     }
 }
