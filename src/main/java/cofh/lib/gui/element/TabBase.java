@@ -91,6 +91,13 @@ public abstract class TabBase extends ElementBase {
 		return this;
 	}
 
+	@Override
+	public ElementBase setSize(int sizeX, int sizeY) {
+		this.maxWidth = sizeX;
+		this.maxHeight = sizeY;
+		return this;
+	}
+
 	protected void drawForeground() {
 
 		// TODO: this and drawBackground() need to be called after the matrix
