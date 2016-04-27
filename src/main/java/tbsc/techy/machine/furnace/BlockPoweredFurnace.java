@@ -3,6 +3,7 @@ package tbsc.techy.machine.furnace;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -10,6 +11,8 @@ import net.minecraft.world.World;
 import tbsc.techy.Techy;
 import tbsc.techy.api.ITechyWrench;
 import tbsc.techy.block.BlockBaseFacingMachine;
+
+import java.util.ArrayList;
 
 /**
  * Powered furnace block class.
@@ -63,4 +66,16 @@ public class BlockPoweredFurnace extends BlockBaseFacingMachine {
         }
         return true;
     }
+
+    @Override
+    public ArrayList<ItemStack> dismantleBlock(EntityPlayer player, World world, BlockPos pos, boolean returnDrops) {
+        dismantleBlock(world.getBlockState(pos), world, pos, player);
+        return null;
+    }
+
+    @Override
+    public boolean canDismantle(EntityPlayer player, World world, BlockPos pos) {
+        return canDismantle(world.getBlockState(pos), world, pos, player);
+    }
+
 }
