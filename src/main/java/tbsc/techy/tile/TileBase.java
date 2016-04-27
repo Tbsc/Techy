@@ -1,7 +1,7 @@
 package tbsc.techy.tile;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -9,13 +9,16 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import tbsc.techy.api.SideConfiguration;
+import tbsc.techy.api.Sides;
 
 /**
  * Basic TileEntity class, adds support for inventories and basic data saving.
  *
  * Created by tbsc on 3/27/16.
  */
-public abstract class TileBase extends TileEntity implements IInventory {
+public abstract class TileBase extends TileEntity implements ISidedInventory {
 
     public ItemStack[] inventory;
     protected int inventorySize;
@@ -64,6 +67,14 @@ public abstract class TileBase extends TileEntity implements IInventory {
             this.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(stackTag));
         }
     }
+
+    public abstract SideConfiguration getConfigurationForSide(Sides side);
+
+    public abstract void setConfigurationForSide(Sides side, SideConfiguration sideConfig);
+
+    public abstract int[] getSlotsForConfiguration(SideConfiguration sideConfig);
+
+    public abstract ResourceLocation getMachineFrontTexture();
 
     /**
      * When TileEntity update packet {@link S35PacketUpdateTileEntity} is received, read the data
