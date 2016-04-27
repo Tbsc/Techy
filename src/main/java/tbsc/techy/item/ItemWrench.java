@@ -1,6 +1,8 @@
 package tbsc.techy.item;
 
+import cofh.api.block.IDismantleable;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -53,6 +55,18 @@ public class ItemWrench extends ItemBase implements ITechyWrench {
             }
         }
         return super.onItemUse(stack, playerIn, worldIn, pos, side, hitX, hitY, hitZ);
+    }
+
+    @Override
+    public boolean isUsable(ItemStack item, EntityLivingBase user, BlockPos pos) {
+        return true;
+    }
+
+    @Override
+    public void toolUsed(ItemStack item, EntityLivingBase user, BlockPos pos) {
+        if (user.worldObj.getBlockState(pos).getBlock() instanceof IDismantleable) {
+            ((IDismantleable) user.worldObj.getBlockState(pos).getBlock()).dismantleBlock((EntityPlayer) user, user.worldObj, pos, false);
+        }
     }
 
 }

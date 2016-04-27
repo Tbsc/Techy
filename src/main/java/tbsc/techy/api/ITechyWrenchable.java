@@ -1,5 +1,6 @@
 package tbsc.techy.api;
 
+import cofh.api.block.IDismantleable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.BlockPos;
@@ -12,7 +13,7 @@ import net.minecraft.world.World;
  *
  * Created by tbsc on 3/27/16.
  */
-public interface ITechyWrenchable {
+public interface ITechyWrenchable extends IDismantleable {
 
     /**
      * The block needs to implement this method in order for the block to be wrenchable.
