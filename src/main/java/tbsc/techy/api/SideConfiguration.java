@@ -24,6 +24,21 @@ public enum SideConfiguration {
         }
     }
 
+    public SideConfiguration cycleBackward() {
+        switch (this) {
+            case DISABLED:
+                return IO;
+            case INPUT:
+                return DISABLED;
+            case OUTPUT:
+                return INPUT;
+            case IO:
+                return OUTPUT;
+            default:
+                return UNKNOWN;
+        }
+    }
+
     public static SideConfiguration fromString(String value) {
         if (value.equals(DISABLED.name())) return DISABLED;
         if (value.equals(INPUT.name())) return INPUT;
@@ -39,6 +54,21 @@ public enum SideConfiguration {
         if (ordinal == IO.ordinal()) return IO;
         if (ordinal == UNKNOWN.ordinal()) return UNKNOWN;
         return UNKNOWN;
+    }
+
+    public String toString() {
+        switch (this) {
+            case DISABLED:
+                return "Disabled";
+            case INPUT:
+                return "Input";
+            case OUTPUT:
+                return "Output";
+            case IO:
+                return "Input/Output";
+            default:
+                return "Unknown?";
+        }
     }
 
     public boolean allowsInput() {
