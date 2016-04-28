@@ -20,7 +20,7 @@ import java.util.List;
  */
 public abstract class TabBase extends ElementBase {
 
-	public static int tabExpandSpeed = 8;
+	public static int tabExpandSpeed = 3;
 
 	public static final int LEFT = 0;
 	public static final int RIGHT = 1;
