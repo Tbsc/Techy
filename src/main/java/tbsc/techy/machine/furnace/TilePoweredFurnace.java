@@ -7,6 +7,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.FMLLog;
 import org.apache.commons.lang3.ArrayUtils;
 import tbsc.techy.ConfigData;
 import tbsc.techy.api.SideConfiguration;
@@ -150,11 +151,17 @@ public class TilePoweredFurnace extends TileMachineBase {
         nbt.setInteger("Progress", progress);
         nbt.setInteger("TotalProgress", totalProgress);
 
+        FMLLog.info(getConfigurationForSide(Sides.FRONT).toString());
         nbt.setInteger("SideConfigFront", getConfigurationForSide(Sides.FRONT).ordinal());
+        FMLLog.info(getConfigurationForSide(Sides.BACK).toString());
         nbt.setInteger("SideConfigBack", getConfigurationForSide(Sides.BACK).ordinal());
+        FMLLog.info(getConfigurationForSide(Sides.LEFT).toString());
         nbt.setInteger("SideConfigLeft", getConfigurationForSide(Sides.LEFT).ordinal());
+        FMLLog.info(getConfigurationForSide(Sides.RIGHT).toString());
         nbt.setInteger("SideConfigRight", getConfigurationForSide(Sides.RIGHT).ordinal());
-        nbt.setInteger("SideConfigUp", getConfigurationForSide(Sides.FRONT).ordinal());
+        FMLLog.info(getConfigurationForSide(Sides.UP).toString());
+        nbt.setInteger("SideConfigUp", getConfigurationForSide(Sides.UP).ordinal());
+        FMLLog.info(getConfigurationForSide(Sides.DOWN).toString());
         nbt.setInteger("SideConfigDown", getConfigurationForSide(Sides.DOWN).ordinal());
     }
 
@@ -164,11 +171,17 @@ public class TilePoweredFurnace extends TileMachineBase {
         progress = nbt.getInteger("Progress");
         totalProgress = nbt.getInteger("TotalProgress");
 
+        FMLLog.info(SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigFront")).toString());
         setConfigurationForSide(Sides.FRONT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigFront")));
+        FMLLog.info(SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigBack")).toString());
         setConfigurationForSide(Sides.BACK, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigBack")));
+        FMLLog.info(SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigLeft")).toString());
         setConfigurationForSide(Sides.LEFT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigLeft")));
+        FMLLog.info(SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigRight")).toString());
         setConfigurationForSide(Sides.RIGHT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigRight")));
+        FMLLog.info(SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigUp")).toString());
         setConfigurationForSide(Sides.UP, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigUp")));
+        FMLLog.info(SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigDown")).toString());
         setConfigurationForSide(Sides.DOWN, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigDown")));
     }
 
@@ -189,9 +202,6 @@ public class TilePoweredFurnace extends TileMachineBase {
      */
     @Override
     public void setConfigurationForSide(Sides side, SideConfiguration sideConfig) {
-        if (sideConfigMap.containsKey(side)) {
-            sideConfigMap.remove(side);
-        }
         sideConfigMap.put(side, sideConfig);
     }
 
