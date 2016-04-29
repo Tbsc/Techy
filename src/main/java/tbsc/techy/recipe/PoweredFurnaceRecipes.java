@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.fml.common.FMLLog;
+import tbsc.techy.ConfigData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +15,8 @@ public class PoweredFurnaceRecipes {
 
     private static final PoweredFurnaceRecipes instance = new PoweredFurnaceRecipes();
     private Map<ItemStack, ItemStack> recipeMap = new HashMap<>();
-    private Map<ItemStack, Float> experienceList = new HashMap<>();
+    private Map<ItemStack, Float> experienceMap = new HashMap<>();
+    private Map<ItemStack, Integer> energyMap = new HashMap<>();
 
     /**
      * Used to get the instance of the class
@@ -31,34 +33,35 @@ public class PoweredFurnaceRecipes {
     public void loadVanillaRecipes() {
         for (ItemStack input : FurnaceRecipes.instance().getSmeltingList().keySet()) {
             addItemStackRecipe(input, FurnaceRecipes.instance().getSmeltingResult(input),
-                    FurnaceRecipes.instance().getSmeltingExperience(input));
+                    FurnaceRecipes.instance().getSmeltingExperience(input), ConfigData.furnaceDefaultEnergyUsage);
         }
     }
 
     /**
      * Adds a recipe with a block as the input
      */
-    public void addBlockRecipe(Block input, ItemStack stack, float experience) {
-        this.addItemRecipe(Item.getItemFromBlock(input), stack, experience);
+    public void addBlockRecipe(Block input, ItemStack stack, float experience, int energyUsage) {
+        this.addItemRecipe(Item.getItemFromBlock(input), stack, experience, energyUsage);
     }
 
     /**
      * Adds a recipe with an item as the input
      */
-    public void addItemRecipe(Item input, ItemStack stack, float experience) {
-        this.addItemStackRecipe(new ItemStack(input, 1, 32767), stack, experience);
+    public void addItemRecipe(Item input, ItemStack stack, float experience, int energyUsage) {
+        this.addItemStackRecipe(new ItemStack(input, 1, 32767), stack, experience, energyUsage);
     }
 
     /**
      * Adds a recipe with an ItemStack as the input
      */
-    public void addItemStackRecipe(ItemStack input, ItemStack output, float experience) {
+    public void addItemStackRecipe(ItemStack input, ItemStack output, float experience, int energyUsage) {
         if (getSmeltingResult(input) != null) {
             FMLLog.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
             return;
         }
         this.recipeMap.put(input, output);
-        this.experienceList.put(output, experience);
+        this.experienceMap.put(output, experience);
+        this.energyMap.put(input, energyUsage);
     }
 
     /**
@@ -89,23 +92,47 @@ public class PoweredFurnaceRecipes {
         return this.recipeMap;
     }
 
-    public Map<ItemStack, Float> getExperienceMap() { return this.experienceList; }
+    /**
+     * Returns the Input --> Experience float map
+     * @return experience map instance
+     */
+    public Map<ItemStack, Float> getExperienceMap() { return this.experienceMap; }
+
+    /**
+     * Returns the Input --> energy usage integer map
+     * @return energy usage map instance
+     */
+    public Map<ItemStack, Integer> getEnergyMap() { return this.energyMap; }
 
     /**
      * Returns the amount of experience that should be given upon smelting
-     * @param stack
-     * @return
+     * @param stack Input item
+     * @return how much experience is given upon operation completion
      */
     public float getSmeltingExperience(ItemStack stack) {
         float ret = stack.getItem().getSmeltingExperience(stack);
         if (ret != -1) return ret;
 
-        for (Entry<ItemStack, Float> entry : this.experienceList.entrySet()) {
+        for (Entry<ItemStack, Float> entry : this.experienceMap.entrySet()) {
             if (this.compareItemStacks(stack, entry.getKey())) {
                 return entry.getValue();
             }
         }
 
         return 0.0F;
+    }
+
+    /**
+     * Returns the amount of energy that should be consumed upon doing this recipe.
+     * @param stack Input item
+     * @return energy usage for recipe
+     */
+    public int getSmeltingEnergy(ItemStack stack) {
+        for (Entry<ItemStack, Integer> entry : this.energyMap.entrySet()) {
+            if (this.compareItemStacks(stack, entry.getKey())) {
+                return entry.getValue();
+            }
+        }
+        return 0;
     }
 }
