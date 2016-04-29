@@ -64,9 +64,11 @@ public class TilePoweredFurnace extends TileMachineBase {
             if (PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]) != null && canOperate() && shouldOperate()) {
                 if (!isRunning) {
                     totalProgress = ConfigData.furnaceDefaultCookTime;
+                    // energyConsumptionPerTick = Math.floor(totalProgress / PoweredFurnaceRecipes.instance().getSmeltingEnergy(inventory[0]);
                     setOperationStatus(true);
                 }
                 ++progress;
+                // setEnergyStored(getEnergyStored() - energyConsumptionPerTick);
                 if (progress >= totalProgress) {
                     progress = totalProgress = 0;
                     doOperation();
@@ -126,7 +128,7 @@ public class TilePoweredFurnace extends TileMachineBase {
             // There is a recipe, then store the output in a variable
             ItemStack recipeOutput = PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]);
             // Not enough energy stored in tile
-            // if (ConfigData.furnaceDefaultEnergyUsage < getEnergyStored(EnumFacing.DOWN)) {
+            // if (PoweredFurnaceRecipes.instance().getSmeltingEnergy(inventory[0]) < getEnergyStored(EnumFacing.DOWN)) {
                 // FMLLog.info("Not enough energy");
                 // return false;
             // }
@@ -419,25 +421,25 @@ public class TilePoweredFurnace extends TileMachineBase {
         EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockPoweredFurnace.FACING);
         boolean sideAllows = false;
         if (frontOfBlock == side) { // FRONT
-            return getConfigurationForSide(Sides.FRONT).allowsInput();
+            sideAllows = getConfigurationForSide(Sides.FRONT).allowsInput();
         }
         frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
         if (frontOfBlock == side) { // LEFT
-            return getConfigurationForSide(Sides.LEFT).allowsInput();
+            sideAllows = getConfigurationForSide(Sides.LEFT).allowsInput();
         }
         frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
         if (frontOfBlock == side) { // BACK
-            return getConfigurationForSide(Sides.BACK).allowsInput();
+            sideAllows = getConfigurationForSide(Sides.BACK).allowsInput();
         }
         frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
         if (frontOfBlock == side) { // RIGHT
-            return getConfigurationForSide(Sides.RIGHT).allowsInput();
+            sideAllows = getConfigurationForSide(Sides.RIGHT).allowsInput();
         }
         if (side == EnumFacing.UP) { // UP
-            return getConfigurationForSide(Sides.UP).allowsInput();
+            sideAllows = getConfigurationForSide(Sides.UP).allowsInput();
         }
         if (side == EnumFacing.DOWN) { // DOWN
-            return getConfigurationForSide(Sides.DOWN).allowsInput();
+            sideAllows = getConfigurationForSide(Sides.DOWN).allowsInput();
         }
         return sideAllows && ArrayUtils.contains(getOutputSlots(), index);
     }
