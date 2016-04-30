@@ -61,15 +61,15 @@ public class PoweredFurnaceRecipes {
         }
         this.recipeMap.put(input, output);
         this.experienceMap.put(output, experience);
-        this.energyMap.put(input, energyUsage);
+        this.energyMap.put(output, energyUsage);
     }
 
     /**
      * Returns the smelting result of an item.
      */
-    public ItemStack getSmeltingResult(ItemStack stack) {
+    public ItemStack getSmeltingResult(ItemStack input) {
         for (Entry<ItemStack, ItemStack> entry : this.recipeMap.entrySet()) {
-            if (this.compareItemStacks(stack, entry.getKey())) {
+            if (this.compareItemStacks(input, entry.getKey())) {
                 return entry.getValue();
             }
         }
@@ -106,15 +106,15 @@ public class PoweredFurnaceRecipes {
 
     /**
      * Returns the amount of experience that should be given upon smelting
-     * @param stack Input item
+     * @param output ***OUTPUT*** item
      * @return how much experience is given upon operation completion
      */
-    public float getSmeltingExperience(ItemStack stack) {
-        float ret = stack.getItem().getSmeltingExperience(stack);
+    public float getSmeltingExperience(ItemStack output) {
+        float ret = output.getItem().getSmeltingExperience(output);
         if (ret != -1) return ret;
 
         for (Entry<ItemStack, Float> entry : this.experienceMap.entrySet()) {
-            if (this.compareItemStacks(stack, entry.getKey())) {
+            if (this.compareItemStacks(output, entry.getKey())) {
                 return entry.getValue();
             }
         }
@@ -124,15 +124,16 @@ public class PoweredFurnaceRecipes {
 
     /**
      * Returns the amount of energy that should be consumed upon doing this recipe.
-     * @param stack Input item
+     * @param output ***OUTPUT*** item
      * @return energy usage for recipe
      */
-    public int getSmeltingEnergy(ItemStack stack) {
+    public int getSmeltingEnergy(ItemStack output) {
         for (Entry<ItemStack, Integer> entry : this.energyMap.entrySet()) {
-            if (this.compareItemStacks(stack, entry.getKey())) {
+            if (this.compareItemStacks(output, entry.getKey())) {
                 return entry.getValue();
             }
         }
-        return 0;
+
+        return ConfigData.furnaceDefaultEnergyUsage; // Default value, if nothing is found
     }
 }
