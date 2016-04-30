@@ -40,15 +40,15 @@ public class PoweredFurnaceRecipes {
     /**
      * Adds a recipe with a block as the input
      */
-    public void addBlockRecipe(Block input, ItemStack stack, float experience, int energyUsage) {
-        this.addItemRecipe(Item.getItemFromBlock(input), stack, experience, energyUsage);
+    public void addBlockRecipe(Block input, ItemStack output, float experience, int energyUsage) {
+        this.addItemRecipe(Item.getItemFromBlock(input), output, experience, energyUsage);
     }
 
     /**
      * Adds a recipe with an item as the input
      */
-    public void addItemRecipe(Item input, ItemStack stack, float experience, int energyUsage) {
-        this.addItemStackRecipe(new ItemStack(input, 1, 32767), stack, experience, energyUsage);
+    public void addItemRecipe(Item input, ItemStack output, float experience, int energyUsage) {
+        this.addItemStackRecipe(new ItemStack(input, 1, 32767), output, experience, energyUsage);
     }
 
     /**
