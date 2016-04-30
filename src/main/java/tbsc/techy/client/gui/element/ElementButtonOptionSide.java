@@ -4,7 +4,6 @@ import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.ElementButtonManaged;
 import cofh.lib.render.RenderHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.FMLLog;
 import tbsc.techy.api.SideConfiguration;
 import tbsc.techy.api.Sides;
 import tbsc.techy.tile.TileBase;
@@ -27,7 +26,6 @@ public class ElementButtonOptionSide extends ElementButtonManaged {
 
     public ElementButtonOptionSide(GuiBase containerScreen, int x, int y, int width, int height, TileBase tile, Sides side, SideConfiguration currentConfig) {
         super(containerScreen, x, y, width, height, "");
-        FMLLog.info("Side option button added! Side: " + side.name() + ", Config: " + currentConfig.toString());
         this.tile = tile;
         this.side = side;
         this.currentConfig = currentConfig;
