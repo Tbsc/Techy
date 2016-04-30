@@ -7,12 +7,14 @@ import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.init.ItemInit;
 import tbsc.techy.init.MiscInit;
 import tbsc.techy.proxy.IProxy;
+import tbsc.techy.recipe.IMCRecipeHandler;
 
 /**
  * Main mod class.
@@ -96,6 +98,15 @@ public class Techy {
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
         MiscInit.postInit();
+    }
+
+    /**
+     * When an IMC message is received, let the handler do its thing with the messages
+     * @param event IMC event instance
+     */
+    @EventHandler
+    public void imcMessage(FMLInterModComms.IMCEvent event) {
+        IMCRecipeHandler.imcMessageReceived(event.getMessages());
     }
 
     /**
