@@ -9,7 +9,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
 import tbsc.techy.api.SideConfiguration;
 import tbsc.techy.api.Sides;
 
@@ -73,8 +72,6 @@ public abstract class TileBase extends TileEntity implements ISidedInventory {
     public abstract void setConfigurationForSide(Sides side, SideConfiguration sideConfig);
 
     public abstract int[] getSlotsForConfiguration(SideConfiguration sideConfig);
-
-    public abstract ResourceLocation getMachineFrontTexture();
 
     /**
      * When TileEntity update packet {@link S35PacketUpdateTileEntity} is received, read the data
