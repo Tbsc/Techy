@@ -3,7 +3,9 @@ package tbsc.techy.recipe;
 import com.google.common.collect.ImmutableList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
+import org.apache.logging.log4j.Level;
 
 /**
  * Listens to IMC messages, and when a message is received it attempts to
@@ -29,6 +31,7 @@ public class IMCRecipeHandler {
                         float experience = messageNBT.getFloat("Experience");
                         int energyUsage = messageNBT.getInteger("EnergyUsage");
                         PoweredFurnaceRecipes.instance().addItemStackRecipe(input, output, experience, energyUsage);
+                        FMLLog.log(Level.DEBUG, "Powered furnace recipe with " + input.getDisplayName() + " input and " + output.getDisplayName() + " output. Energy usage of " + energyUsage);
                     }
                 }
             }
