@@ -38,8 +38,10 @@ public class ElementProgressBar extends ElementBase {
         mc.getTextureManager().bindTexture(barLocation);
         drawTexturedModalRect(posX, posY, notWorkingStartX, notWorkingStartY, sizeX, sizeY); // sizeX - width & sizeY - height from constructor
         if (barWidth > 0) { // Prevents dividing by zero
-            int percentage = barWidth * sizeX / totalProgress;
-            drawTexturedModalRect(posX, posY, workingStartX, workingStartY, percentage, barHeight);
+            if (totalProgress != 0) {
+                int percentage = barWidth * sizeX / totalProgress;
+                drawTexturedModalRect(posX, posY, workingStartX, workingStartY, percentage, barHeight);
+            }
         }
     }
 
