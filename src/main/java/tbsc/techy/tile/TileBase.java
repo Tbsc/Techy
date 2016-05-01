@@ -1,7 +1,6 @@
 package tbsc.techy.tile;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -65,13 +64,6 @@ public abstract class TileBase extends TileEntity implements ISidedInventory {
             NBTTagCompound stackTag = list.getCompoundTagAt(i);
             int slot = stackTag.getByte("Slot") & 255;
             this.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(stackTag));
-        }
-    }
-
-    public void updateTileToPlayers() {
-        for (EntityPlayer player : worldObj.playerEntities) {
-            EntityPlayerMP playerMP = (EntityPlayerMP) player;
-            playerMP.playerNetServerHandler.sendPacket(getDescriptionPacket());
         }
     }
 
