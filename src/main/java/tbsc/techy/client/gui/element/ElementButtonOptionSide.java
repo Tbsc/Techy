@@ -3,6 +3,7 @@ package tbsc.techy.client.gui.element;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.ElementButtonManaged;
 import cofh.lib.render.RenderHelper;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 import tbsc.techy.api.SideConfiguration;
 import tbsc.techy.api.Sides;
@@ -21,8 +22,8 @@ import java.util.List;
 public class ElementButtonOptionSide extends ElementButtonManaged {
 
     private TileBase tile;
-    private Sides side;
-    private SideConfiguration currentConfig;
+    public Sides side;
+    public SideConfiguration currentConfig;
 
     public ElementButtonOptionSide(GuiBase containerScreen, int x, int y, int width, int height, TileBase tile, Sides side, SideConfiguration currentConfig) {
         super(containerScreen, x, y, width, height, "");
@@ -32,8 +33,10 @@ public class ElementButtonOptionSide extends ElementButtonManaged {
     }
 
     @Override
-    public void drawForeground(int mouseX, int mouseY) {
+    public void drawBackground(int mouseX, int mouseY, float partialTicks) {
         RenderHelper.bindTexture(new ResourceLocation("Techy:textures/gui/element/sideConfigRender.png"));
+        GlStateManager.color(1.0F, 1.0F, 1.0F);
+        GlStateManager.disableAlpha();
         switch (currentConfig) {
             case DISABLED:
                 drawTexturedModalRect(posX, posY, 30, 0, sizeX, sizeY);
@@ -51,11 +54,14 @@ public class ElementButtonOptionSide extends ElementButtonManaged {
                 drawTexturedModalRect(posX, posY, 40, 0, sizeX, sizeY);
                 break;
         }
+        GlStateManager.enableAlpha();
     }
 
     @Override
     public void addTooltip(List<String> list) {
-        list.add(currentConfig.toString());
+        if (intersectsWith(gui.getMouseX(), gui.getMouseY())) {
+            list.add(currentConfig.toString());
+        }
     }
 
     @Override
