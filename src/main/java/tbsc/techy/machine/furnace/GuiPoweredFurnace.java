@@ -18,8 +18,8 @@ public class GuiPoweredFurnace extends GuiMachineBase {
     }
 
     @Override
-    public void drawScreen(int x, int y, float partialTick) {
-        super.drawScreen(x, y, partialTick);
+    public void drawScreen(int mouseX, int mouseY, float partialTick) {
+        super.drawScreen(mouseX, mouseY, partialTick);
         addElement(new ElementProgressBar(this, 80, 37, 22, 16, new ResourceLocation("Techy:textures/gui/element/furnaceProgressBar.png"), 0, 0, 22, 0, ((TilePoweredFurnace) container.tileBase).progress, 17, ((TilePoweredFurnace) container.tileBase).totalProgress));
     }
 
