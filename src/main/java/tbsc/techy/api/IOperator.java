@@ -79,12 +79,6 @@ public interface IOperator extends ITickable {
     int getOperationTotalProgress();
 
     /**
-     * Changes if the tile should operate.
-     * @param shouldOperate new status of operation
-     */
-    void setShouldOperate(boolean shouldOperate);
-
-    /**
      * @param isRunning the new status
      */
     void setOperationStatus(boolean isRunning);

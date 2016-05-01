@@ -272,11 +272,6 @@ public class TilePoweredFurnace extends TileMachineBase {
         return totalProgress;
     }
 
-    @Override
-    public void setShouldOperate(boolean shouldOperate) {
-
-    }
-
     /**
      * Used for server/client communication, for transferring int fields between sides.
      *
