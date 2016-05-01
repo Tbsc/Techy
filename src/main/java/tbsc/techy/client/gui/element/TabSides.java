@@ -1,6 +1,7 @@
 package tbsc.techy.client.gui.element;
 
 import cofh.lib.gui.GuiBase;
+import cofh.lib.gui.element.ElementBase;
 import cofh.lib.gui.element.TabBase;
 import tbsc.techy.api.Sides;
 import tbsc.techy.tile.TileBase;
@@ -15,6 +16,7 @@ import java.util.List;
 public class TabSides extends TabBase {
 
     public TileBase tile;
+    protected ElementButtonOptionSide frontButton, backButton, leftButton, rightButton, upButton, downButton;
 
     public TabSides(GuiBase gui, int x, int y, int width, int height, TileBase tile) {
         super(gui);
@@ -22,17 +24,21 @@ public class TabSides extends TabBase {
         this.setSize(width, height);
         this.setName("Configure Sides");
         this.tile = tile;
-        addElement(new ElementButtonOptionSide(gui, 19, height - 10 - 24, 8, 8, tile, Sides.UP, tile.getConfigurationForSide(Sides.UP)));
-        addElement(new ElementButtonOptionSide(gui, 19, height - 10 - 14, 8, 8, tile, Sides.FRONT, tile.getConfigurationForSide(Sides.FRONT)));
-        addElement(new ElementButtonOptionSide(gui, 29, height - 10 - 14, 8, 8, tile, Sides.RIGHT, tile.getConfigurationForSide(Sides.RIGHT)));
-        addElement(new ElementButtonOptionSide(gui, 9, height - 10 - 14, 8, 8, tile, Sides.LEFT, tile.getConfigurationForSide(Sides.LEFT)));
-        addElement(new ElementButtonOptionSide(gui, 19, height - 10 - 4, 8, 8, tile, Sides.DOWN, tile.getConfigurationForSide(Sides.DOWN)));
-        addElement(new ElementButtonOptionSide(gui, 29, height - 10 - 4, 8, 8, tile, Sides.BACK, tile.getConfigurationForSide(Sides.BACK)));
+        addElement(this.upButton = new ElementButtonOptionSide(gui, 19, height - 10 - 24, 8, 8, tile, Sides.UP, tile.getConfigurationForSide(Sides.UP)));
+        addElement(this.frontButton = new ElementButtonOptionSide(gui, 19, height - 10 - 14, 8, 8, tile, Sides.FRONT, tile.getConfigurationForSide(Sides.FRONT)));
+        addElement(this.rightButton = new ElementButtonOptionSide(gui, 29, height - 10 - 14, 8, 8, tile, Sides.RIGHT, tile.getConfigurationForSide(Sides.RIGHT)));
+        addElement(this.leftButton = new ElementButtonOptionSide(gui, 9, height - 10 - 14, 8, 8, tile, Sides.LEFT, tile.getConfigurationForSide(Sides.LEFT)));
+        addElement(this.downButton = new ElementButtonOptionSide(gui, 19, height - 10 - 4, 8, 8, tile, Sides.DOWN, tile.getConfigurationForSide(Sides.DOWN)));
+        addElement(this.backButton = new ElementButtonOptionSide(gui, 29, height - 10 - 4, 8, 8, tile, Sides.BACK, tile.getConfigurationForSide(Sides.BACK)));
     }
 
     @Override
     public void addTooltip(List<String> list) {
         list.add("Configure Sides");
+    }
+
+    protected boolean isMouseOverElement(ElementBase element, int mouseX, int mouseY) {
+        return mouseX >= element.getPosX() && mouseX <= element.getPosX() + element.getWidth() && mouseY >= element.getPosY() && mouseY <= element.getPosY() + element.getHeight();
     }
 
     @Override
