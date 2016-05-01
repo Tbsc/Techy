@@ -21,6 +21,7 @@ public class ItemWrench extends ItemBase implements ITechyWrench {
 
     public ItemWrench() {
         super("itemWrench");
+        setMaxStackSize(1);
     }
 
     /**
