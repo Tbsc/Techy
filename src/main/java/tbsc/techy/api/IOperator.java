@@ -35,12 +35,12 @@ public interface IOperator extends ITickable {
      * a method for that,
      * What this method should do is reset the progress, and change the operation status to false,
      * so just make it stop working.
+     * It also lets you choose if you want to prevent it from operating the next time.
      * Because of the way operations are built, 1 tick after you stop the operation it should start
      * it again (if it can operate and should operate), as it should just stop the operation, not
-     * prevent it from operating. For that, there is the {@link #shouldOperate()} and the
-     * {@link #setShouldOperate(boolean)} methods.
+     * prevent it from operating. For that, there is the {@link #shouldOperate()} method.
      */
-    void stopOperating();
+    void stopOperating(boolean preventOperating);
 
     /**
      * Checks in the class if it can operate, and returns that.
