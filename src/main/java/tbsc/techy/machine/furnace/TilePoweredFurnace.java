@@ -7,7 +7,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.common.FMLLog;
 import org.apache.commons.lang3.ArrayUtils;
 import tbsc.techy.ConfigData;
 import tbsc.techy.api.SideConfiguration;
@@ -36,8 +35,30 @@ public class TilePoweredFurnace extends TileMachineBase {
      * Stores the progress (in ticks) made for this operation.
      */
     int progress = 0;
+
+    /**
+     * Stores the total amount of progress the machine needs to get to in order
+     * to finish operating.
+     */
     int totalProgress = 0;
-    // int energyConsumptionPerTick = 0;
+
+    /**
+     * How much energy needs to be consumed every tick, based on the cook time of
+     * the recipe and amount of energy this recipe needs to operate.
+     */
+    int energyConsumptionPerTick = 0;
+
+    /**
+     * Used for {@link #stopOperating()} to prevent {@link #update()} from operating even though
+     * it shouldn't
+     */
+    boolean preventOperation;
+
+    /**
+     * Contains values of configurations for sides.
+     * Since it is an {@link EnumMap}, it can *NOT* contain more than 1 enum
+     * value per key, therefore there are always exactly 6 keys, the 6 sides.
+     */
     public EnumMap<Sides, SideConfiguration> sideConfigMap = new EnumMap<>(Sides.class);
 
     public TilePoweredFurnace() {
@@ -64,18 +85,28 @@ public class TilePoweredFurnace extends TileMachineBase {
             if (PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]) != null && canOperate() && shouldOperate()) {
                 if (!isRunning) {
                     totalProgress = ConfigData.furnaceDefaultCookTime;
-                    // energyConsumptionPerTick = Math.floor(totalProgress / PoweredFurnaceRecipes.instance().getSmeltingEnergy(inventory[0]);
+                    energyConsumptionPerTick = (int) Math.floor(PoweredFurnaceRecipes.instance().getSmeltingEnergy(PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0])) / totalProgress);
                     setOperationStatus(true);
                 }
                 ++progress;
-                // setEnergyStored(getEnergyStored() - energyConsumptionPerTick);
-                if (progress >= totalProgress) {
-                    progress = totalProgress = 0;
-                    doOperation();
-                    setOperationStatus(false);
-                    markDirty = true;
+                if (energyConsumptionPerTick >= getEnergyStored(EnumFacing.DOWN)) {
+                    stopOperating();
                 }
+                setEnergyStored(getEnergyStored(EnumFacing.DOWN) - energyConsumptionPerTick);
+                if (progress >= totalProgress) {
+                    if (!preventOperation) {
+                        doOperation();
+                        stopOperating();
+                        markDirty = true;
+                    } else {
+                        preventOperation = false;
+                    }
+                }
+            } else {
+                stopOperating();
             }
+        } else {
+            stopOperating();
         }
 
         if (markDirty) {
@@ -92,7 +123,7 @@ public class TilePoweredFurnace extends TileMachineBase {
         // Double checking, you can never check more than enough
         if (this.canOperate()) {
             ItemStack itemstack = PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]);
-            float experience = PoweredFurnaceRecipes.instance().getSmeltingExperience(inventory[0]);
+            float experience = PoweredFurnaceRecipes.instance().getSmeltingExperience(itemstack);
 
             if (this.inventory[1] == null) {
                 this.inventory[1] = itemstack.copy();
@@ -108,6 +139,12 @@ public class TilePoweredFurnace extends TileMachineBase {
                 this.inventory[0] = null;
             }
         }
+    }
+
+    @Override
+    public void stopOperating() {
+        progress = totalProgress = 0;
+        setOperationStatus(false);
     }
 
     /**
@@ -128,10 +165,9 @@ public class TilePoweredFurnace extends TileMachineBase {
             // There is a recipe, then store the output in a variable
             ItemStack recipeOutput = PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]);
             // Not enough energy stored in tile
-            // if (PoweredFurnaceRecipes.instance().getSmeltingEnergy(inventory[0]) < getEnergyStored(EnumFacing.DOWN)) {
-                // FMLLog.info("Not enough energy");
-                // return false;
-            // }
+            if (PoweredFurnaceRecipes.instance().getSmeltingEnergy(recipeOutput) >= getEnergyStored(EnumFacing.DOWN)) {
+                return false;
+            }
             // If there is no item in output slot then it can smelt, returns true
             if (inventory[1] == null) {
                 return true;
@@ -153,17 +189,11 @@ public class TilePoweredFurnace extends TileMachineBase {
         nbt.setInteger("Progress", progress);
         nbt.setInteger("TotalProgress", totalProgress);
 
-        FMLLog.info(getConfigurationForSide(Sides.FRONT).toString());
         nbt.setInteger("SideConfigFront", getConfigurationForSide(Sides.FRONT).ordinal());
-        FMLLog.info(getConfigurationForSide(Sides.BACK).toString());
         nbt.setInteger("SideConfigBack", getConfigurationForSide(Sides.BACK).ordinal());
-        FMLLog.info(getConfigurationForSide(Sides.LEFT).toString());
         nbt.setInteger("SideConfigLeft", getConfigurationForSide(Sides.LEFT).ordinal());
-        FMLLog.info(getConfigurationForSide(Sides.RIGHT).toString());
         nbt.setInteger("SideConfigRight", getConfigurationForSide(Sides.RIGHT).ordinal());
-        FMLLog.info(getConfigurationForSide(Sides.UP).toString());
         nbt.setInteger("SideConfigUp", getConfigurationForSide(Sides.UP).ordinal());
-        FMLLog.info(getConfigurationForSide(Sides.DOWN).toString());
         nbt.setInteger("SideConfigDown", getConfigurationForSide(Sides.DOWN).ordinal());
     }
 
@@ -173,17 +203,11 @@ public class TilePoweredFurnace extends TileMachineBase {
         progress = nbt.getInteger("Progress");
         totalProgress = nbt.getInteger("TotalProgress");
 
-        FMLLog.info(SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigFront")).toString());
         setConfigurationForSide(Sides.FRONT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigFront")));
-        FMLLog.info(SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigBack")).toString());
         setConfigurationForSide(Sides.BACK, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigBack")));
-        FMLLog.info(SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigLeft")).toString());
         setConfigurationForSide(Sides.LEFT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigLeft")));
-        FMLLog.info(SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigRight")).toString());
         setConfigurationForSide(Sides.RIGHT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigRight")));
-        FMLLog.info(SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigUp")).toString());
         setConfigurationForSide(Sides.UP, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigUp")));
-        FMLLog.info(SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigDown")).toString());
         setConfigurationForSide(Sides.DOWN, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigDown")));
     }
 
@@ -230,8 +254,11 @@ public class TilePoweredFurnace extends TileMachineBase {
         }
     }
 
-    @Override
-    public ResourceLocation getMachineFrontTexture() {
+    /**
+     * Not used right now, will be used
+     * @return
+     */
+    public static ResourceLocation getMachineFrontTexture() {
         return new ResourceLocation("Techy:textures/blocks/blockPoweredFurnaceFront.png");
     }
 
@@ -243,6 +270,11 @@ public class TilePoweredFurnace extends TileMachineBase {
     @Override
     public int getOperationTotalProgress() {
         return totalProgress;
+    }
+
+    @Override
+    public void setShouldOperate(boolean shouldOperate) {
+
     }
 
     /**
