@@ -2,9 +2,13 @@ package tbsc.techy.client.gui;
 
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.ElementEnergyStored;
+import cofh.lib.render.RenderHelper;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import tbsc.techy.client.gui.element.TabSides;
 import tbsc.techy.container.ContainerBase;
+
+import java.util.List;
 
 /**
  * Machine GUI base class.
@@ -28,8 +32,40 @@ public abstract class GuiMachineBase extends GuiBase {
     @Override
     public void initGui() {
         super.initGui();
-        addElement(new ElementEnergyStored(this, xSize - 24, 12, container.tileBase.energyStorage));
         addTab(new TabSides(this, xSize + 1, 0, 22 + 28, 22 + 28, container.tileBase));
+    }
+
+    /**
+     * Renders an energy bar on the background layer
+     * @param partialTick
+     * @param x
+     * @param y
+     */
+    @Override
+    protected void drawGuiContainerBackgroundLayer(float partialTick, int x, int y) {
+        super.drawGuiContainerBackgroundLayer(partialTick, x, y);
+
+        int i = (this.width - this.xSize) / 2;
+        int j = (this.height - this.ySize) / 2;
+        int posX = i + xSize - 24;
+        int posY = j + 12;
+        int percentage = container.tileBase.getField(0) * 42 / container.tileBase.getMaxEnergyStored(EnumFacing.DOWN);
+
+        RenderHelper.bindTexture(ElementEnergyStored.DEFAULT_TEXTURE);
+        drawSizedTexturedModalRect(posX, posY, 0, 0, 16, 42, 32, 64);
+        drawSizedTexturedModalRect(posX, posY + 42 - percentage, 16, 42 - percentage, 16, percentage, 32, 64);
+    }
+
+    @Override
+    public void addTooltips(List<String> tooltip) {
+        super.addTooltips(tooltip);
+        if (mouseX >= xSize - 24 && mouseX <= xSize - 24 + 16 && mouseY >= 12 && mouseY <= 12 + 42) { // Mouse is currently on the energy bar
+            if (container.tileBase.getMaxEnergyStored(EnumFacing.DOWN) < 0) {
+                tooltip.add("Infinite RF");
+            } else {
+                tooltip.add(container.tileBase.getEnergyStored(EnumFacing.DOWN) + " / " + container.tileBase.getMaxEnergyStored(EnumFacing.DOWN) + " RF");
+            }
+        }
     }
 
     ///////////

@@ -167,6 +167,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
      */
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
+        updateTileToPlayers();
         return energyStorage.receiveEnergy(maxReceive, simulate);
     }
 
