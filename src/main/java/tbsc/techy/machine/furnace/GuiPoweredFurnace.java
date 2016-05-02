@@ -21,11 +21,10 @@ public class GuiPoweredFurnace extends GuiMachineBase {
     @Override
     public void initGui() {
         super.initGui();
-        float tint = 1.0F;
-        addElement(new ElementSlotRender(this, -21, 15, tint, tint, tint));
-        addElement(new ElementSlotRender(this, -21, 35, tint, tint, tint));
-        addElement(new ElementSlotRender(this, -21, 55, tint, tint, tint));
-        addElement(new ElementSlotRender(this, -21, 75, tint, tint, tint));
+        addElement(new ElementSlotRender(this, -21, 15));
+        addElement(new ElementSlotRender(this, -21, 35));
+        addElement(new ElementSlotRender(this, -21, 55));
+        addElement(new ElementSlotRender(this, -21, 75));
     }
 
     @Override
