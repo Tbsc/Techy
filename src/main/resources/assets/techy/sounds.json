@@ -1,0 +1,8 @@
+{
+  "machine.poweredFurnace": {
+    "category": "block",
+    "sounds": [
+      "poweredFurnaceSound"
+    ]
+  }
+}
