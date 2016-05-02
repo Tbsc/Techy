@@ -4,6 +4,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
 import tbsc.techy.client.gui.GuiMachineBase;
 import tbsc.techy.client.gui.element.ElementProgressBar;
+import tbsc.techy.client.gui.element.ElementSlotRender;
 
 /**
  * GUI for the powered furnace.
@@ -15,6 +16,16 @@ public class GuiPoweredFurnace extends GuiMachineBase {
 
     public GuiPoweredFurnace(IInventory playerInv, TilePoweredFurnace tile) {
         super(new ContainerPoweredFurnace(playerInv, tile, BlockPoweredFurnace.tileInvSize), BlockPoweredFurnace.tileInvSize, new ResourceLocation("Techy:textures/gui/container/guiPoweredFurnace.png"));
+    }
+
+    @Override
+    public void initGui() {
+        super.initGui();
+        float tint = 1.0F;
+        addElement(new ElementSlotRender(this, -21, 15, tint, tint, tint));
+        addElement(new ElementSlotRender(this, -21, 35, tint, tint, tint));
+        addElement(new ElementSlotRender(this, -21, 55, tint, tint, tint));
+        addElement(new ElementSlotRender(this, -21, 75, tint, tint, tint));
     }
 
     @Override
