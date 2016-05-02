@@ -26,11 +26,15 @@ public class BlockPoweredFurnace extends BlockBaseFacingMachine {
      * Slot 1 - Input
      * Slot 2 - Output
      * Slot 3 - Energy Input
+     * Slot 4 - Booster slot #1
+     * Slot 5 - Booster slot #2
+     * Slot 6 - Booster slot #3
+     * Slot 7 - Booster slot #4
      */
-    public static int tileInvSize = 3;
+    public static int tileInvSize = 7;
 
     public BlockPoweredFurnace() {
-        super(Material.iron, "blockPoweredFurnace", tileInvSize); // TODO Change size when needed
+        super(Material.iron, "blockPoweredFurnace", tileInvSize);
     }
 
     /**

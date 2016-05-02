@@ -3,6 +3,7 @@ package tbsc.techy.machine.furnace;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import tbsc.techy.container.ContainerBase;
+import tbsc.techy.container.slot.SlotBooster;
 import tbsc.techy.container.slot.SlotMachineOutput;
 import tbsc.techy.tile.TileMachineBase;
 
@@ -25,6 +26,10 @@ public class ContainerPoweredFurnace extends ContainerBase {
     protected void addBlockSlots() {
         addSlotToContainer(new Slot(tileBase, getNextAvailableSlot(), 52, 37));
         addSlotToContainer(new SlotMachineOutput(tileBase, getNextAvailableSlot(), 112, 37));
+        addSlotToContainer(new SlotBooster(tileBase, getNextAvailableSlot(), -20, 16));
+        addSlotToContainer(new SlotBooster(tileBase, getNextAvailableSlot(), -20, 36));
+        addSlotToContainer(new SlotBooster(tileBase, getNextAvailableSlot(), -20, 56));
+        addSlotToContainer(new SlotBooster(tileBase, getNextAvailableSlot(), -20, 76));
     }
 
 }
