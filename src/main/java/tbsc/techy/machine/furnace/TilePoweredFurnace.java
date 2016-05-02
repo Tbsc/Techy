@@ -8,7 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
 import org.apache.commons.lang3.ArrayUtils;
-import tbsc.techy.ConfigData;
+import tbsc.techy.api.IBoosterItem;
 import tbsc.techy.api.SideConfiguration;
 import tbsc.techy.api.Sides;
 import tbsc.techy.init.BlockInit;
@@ -17,6 +17,7 @@ import tbsc.techy.tile.TileMachineBase;
 
 import javax.annotation.Nonnull;
 import java.util.EnumMap;
+import java.util.Random;
 
 /**
  * Slot 0 - Input
@@ -32,27 +33,28 @@ import java.util.EnumMap;
 public class TilePoweredFurnace extends TileMachineBase {
 
     /**
-     * Stores the progress (in ticks) made for this operation.
+     * Amount of experience given for the operation will be divided by this, so boosters
+     * will work.
      */
-    int progress = 0;
+    int experienceModifier = 1;
 
     /**
-     * Stores the total amount of progress the machine needs to get to in order
-     * to finish operating.
+     * The chance to get another item. The way this will work is by taking a random number
+     * and seeing if it's in the range of the modifier. So, if the modifier is 2, then numbers
+     * 1 and 2 will result in an additional item, and based on the number the amount of additional
+     * items will be chosen. If the number is larger, then the total amount of random numbers will
+     * grow (to be exact, it calculates it like so: (16 * additionalItemModifier) + (4 * additionalItemModifier)).
+     * 0 is an ignored number --  if this field equals to 0 then it doesn't choose a random number.
+     *
+     * Note that if an additional item IS chosen to be added, and there is no room for it, then
+     * it will just not give it. For example, You have 62 items in the output slot, and the output
+     * of this recipe is 1 item, but suddenly you get 2 additional items. The normal recipe output
+     * is added to the output slot, which makes the output slot stack size 63. There are *2*
+     * additional items to be added, so what it's going to do is *delete* BOTH of the items, not
+     * just put the 1 item it can put. Therefore automation (if done right) should not backlog
+     * and if it does, then additional items are lost.
      */
-    int totalProgress = 0;
-
-    /**
-     * How much energy needs to be consumed every tick, based on the cook time of
-     * the recipe and amount of energy this recipe needs to operate.
-     */
-    int energyConsumptionPerTick = 0;
-
-    /**
-     * Used for {@link #stopOperating()} to prevent {@link #update()} from operating even though
-     * it shouldn't
-     */
-    boolean preventOperation;
+    int additionalItemModifier = 0;
 
     /**
      * Contains values of configurations for sides.
@@ -73,48 +75,6 @@ public class TilePoweredFurnace extends TileMachineBase {
     }
 
     /**
-     * Gets called every tick (1/20) of the game.
-     * Used to update the tile entity, or in this case do operations, since
-     * IOperator extends ITickable because operations *MUST* run every tick.
-     */
-    @Override
-    public void update() {
-        boolean markDirty = false;
-
-        if (inventory[0] != null) {
-            if (PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]) != null && canOperate() && shouldOperate()) {
-                if (!isRunning) {
-                    totalProgress = ConfigData.furnaceDefaultCookTime;
-                    energyConsumptionPerTick = (int) Math.floor(PoweredFurnaceRecipes.instance().getSmeltingEnergy(PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0])) / totalProgress);
-                    setOperationStatus(true);
-                }
-                ++progress;
-                if (energyConsumptionPerTick >= getEnergyStored(EnumFacing.DOWN)) {
-                    stopOperating();
-                }
-                setEnergyStored(getEnergyStored(EnumFacing.DOWN) - energyConsumptionPerTick);
-                if (progress >= totalProgress) {
-                    if (!preventOperation) {
-                        doOperation();
-                        stopOperating();
-                        markDirty = true;
-                    } else {
-                        preventOperation = false;
-                    }
-                }
-            } else {
-                stopOperating();
-            }
-        } else {
-            stopOperating();
-        }
-
-        if (markDirty) {
-            this.markDirty();
-        }
-    }
-
-    /**
      * When executed, will do whatever that needs to be done in the tile.
      * In this case, smelting.
      */
@@ -122,16 +82,69 @@ public class TilePoweredFurnace extends TileMachineBase {
     public void doOperation() {
         // Double checking, you can never check more than enough
         if (this.canOperate()) {
-            ItemStack itemstack = PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]);
-            float experience = PoweredFurnaceRecipes.instance().getSmeltingExperience(itemstack);
+            ItemStack recipeOutput = PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]);
+            float experience = PoweredFurnaceRecipes.instance().getSmeltingExperience(recipeOutput) / experienceModifier;
 
             if (this.inventory[1] == null) {
-                this.inventory[1] = itemstack.copy();
-            } else if (this.inventory[1].getItem() == itemstack.getItem()) {
-                this.inventory[1].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
+                this.inventory[1] = recipeOutput.copy();
+            } else if (this.inventory[1].getItem() == recipeOutput.getItem()) {
+                this.inventory[1].stackSize += recipeOutput.stackSize; // Forge BugFix: Results may have multiple items
+                if (additionalItemModifier >= 1) {
+                    Random rand = new Random();
+                    int randomInt = rand.nextInt((16 * additionalItemModifier) + (additionalItemModifier * 4)) + 1;
+                    boolean matchFound = false;
+                    // I couldn't find a better way to do this, so if you know one, let me know!
+                    switch (additionalItemModifier) {
+                        case 1:
+                            if (randomInt == 1) {
+                                matchFound = true;
+                            }
+                            break;
+                        case 2:
+                            if (randomInt == 1) {
+                                matchFound = true;
+                            }
+                            if (randomInt == 2) {
+                                matchFound = true;
+                            }
+                            break;
+                        case 3:
+                            if (randomInt == 1) {
+                                matchFound = true;
+                            }
+                            if (randomInt == 2) {
+                                matchFound = true;
+                            }
+                            if (randomInt == 3) {
+                                matchFound = true;
+                            }
+                            break;
+                        case 4:
+                            if (randomInt == 1) {
+                                matchFound = true;
+                            }
+                            if (randomInt == 2) {
+                                matchFound = true;
+                            }
+                            if (randomInt == 3) {
+                                matchFound = true;
+                            }
+                            if (randomInt == 4) {
+                                matchFound = true;
+                            }
+
+                            break;
+                    }
+                    if (matchFound) {
+                        int result = inventory[1].stackSize + additionalItemModifier;
+                        if (result <= getInventoryStackLimit() && result <= this.inventory[1].getMaxStackSize()) {
+                            inventory[1].stackSize =+ additionalItemModifier;
+                        }
+                    }
+                }
             }
 
-            spawnXPOrb((int) experience, itemstack.stackSize);
+            spawnXPOrb((int) experience, recipeOutput.stackSize);
 
             --this.inventory[0].stackSize;
 
@@ -141,8 +154,14 @@ public class TilePoweredFurnace extends TileMachineBase {
         }
     }
 
+    /**
+     * Documentation is in the IOperator class.
+     * NOTE: If you don't know what you should put, it will almost always be yes.
+     * @param preventOperation if to prevent operating (or rather finalizing the operation)
+     */
     @Override
-    public void stopOperating() {
+    public void stopOperating(boolean preventOperation) {
+        this.preventOperation = preventOperation;
         progress = totalProgress = 0;
         setOperationStatus(false);
     }
@@ -165,7 +184,7 @@ public class TilePoweredFurnace extends TileMachineBase {
             // There is a recipe, then store the output in a variable
             ItemStack recipeOutput = PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]);
             // Not enough energy stored in tile
-            if (PoweredFurnaceRecipes.instance().getSmeltingEnergy(recipeOutput) >= getEnergyStored(EnumFacing.DOWN)) {
+            if (PoweredFurnaceRecipes.instance().getSmeltingEnergy(recipeOutput) / energyModifier >= getEnergyStored(EnumFacing.DOWN)) {
                 return false;
             }
             // If there is no item in output slot then it can smelt, returns true
@@ -255,7 +274,7 @@ public class TilePoweredFurnace extends TileMachineBase {
     }
 
     /**
-     * Not used right now, will be used
+     * Not used right now, will be used sometime later (I don't know for what)
      * @return
      */
     public static ResourceLocation getMachineFrontTexture() {
@@ -331,7 +350,7 @@ public class TilePoweredFurnace extends TileMachineBase {
      */
     @Nonnull
     @Override
-    public int[] getEnergySlot() {
+    public int[] getEnergySlots() {
         return new int[]{
                 2
         };
@@ -372,8 +391,20 @@ public class TilePoweredFurnace extends TileMachineBase {
     @Nonnull
     @Override
     public int[] getBoosterSlots() {
-        return new int[0];
-    } // TODO Add booster slots and support for them
+        return new int[] {
+            3, 4, 5, 6
+        };
+    }
+
+    @Override
+    public ItemStack getSmeltingOutput(ItemStack input) {
+        return PoweredFurnaceRecipes.instance().getSmeltingResult(input);
+    }
+
+    @Override
+    public int getEnergyUsage(ItemStack output) {
+        return PoweredFurnaceRecipes.instance().getSmeltingEnergy(output);
+    }
 
     /**
      * If slot 0 (input) --> Check if {@code stack} is a valid input
@@ -392,6 +423,8 @@ public class TilePoweredFurnace extends TileMachineBase {
                 return false;
             case 2:
                 return stack.getItem() instanceof IEnergyContainerItem;
+            case 3 | 4 | 5 | 6:
+                return stack.getItem() instanceof IBoosterItem;
         }
         return false;
     }

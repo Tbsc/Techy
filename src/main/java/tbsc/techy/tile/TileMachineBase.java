@@ -4,9 +4,11 @@ import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import cofh.lib.util.helpers.EnergyHelper;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
+import tbsc.techy.ConfigData;
 import tbsc.techy.api.IOperator;
 
 import javax.annotation.Nonnull;
@@ -21,6 +23,44 @@ import javax.annotation.Nonnull;
  */
 public abstract class TileMachineBase extends TileBase implements IEnergyReceiver, IOperator {
 
+    /**
+     * Stores the progress (in ticks) made for this operation.
+     */
+    public int progress = 0;
+
+    /**
+     * Stores the total amount of progress the machine needs to get to in order
+     * to finish operating.
+     */
+    public int totalProgress = 0;
+
+    /**
+     * How much energy needs to be consumed every tick, based on the cook time of
+     * the recipe and amount of energy this recipe needs to operate.
+     */
+    protected int energyConsumptionPerTick = 0;
+
+    /**
+     * Amount of energy that needs to be consumed will be divided by this, so it takes
+     * in account the boosters that are in the machine.
+     * It won't change the amount of energy per tick, but rather the total amount.
+     */
+    public int energyModifier = 1;
+
+    /**
+     * Amount of time for this operation will be divided by this, so it takes in account
+     * the boosters that are in the machine.
+     * This won't reduce the amount of ticks it progresses every iteration, but rather it
+     * reduces the amount of total time it takes to finish the operation.
+     */
+    public int timeModifier = 1;
+
+    /**
+     * Used for {@link #stopOperating(boolean)} to prevent {@link #update()} from operating even though
+     * it shouldn't
+     */
+    protected boolean preventOperation;
+
     public EnergyStorage energyStorage;
     protected boolean isRunning;
     protected boolean shouldRun = true;
@@ -32,18 +72,54 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
 
     /**
      * Runs every tick, and ATM receives energy from energy container items every tick.
+     * Now also takes care of operation sounds.
      */
     @Override
     public void update() {
         // If receiving redstone signal, then prevent machine from operating
         shouldRun = !(worldObj.isBlockIndirectlyGettingPowered(pos) > 0);
 
-        if (getEnergySlot().length >= 1) {
-            for (int i : getEnergySlot()) {
-                if (inventory[getEnergySlot()[i]] != null) {
-                    receiveEnergy(EnumFacing.NORTH, EnergyHelper.extractEnergyFromContainer(inventory[getEnergySlot()[i]], energyStorage.getMaxReceive(), false), false);
+        if (getEnergySlots().length >= 1) {
+            for (int i = 0; i < getEnergySlots().length; ++i) {
+                if (inventory[getEnergySlots()[i]] != null) {
+                    receiveEnergy(EnumFacing.NORTH, EnergyHelper.extractEnergyFromContainer(inventory[getEnergySlots()[i]], energyStorage.getMaxReceive(), false), false);
                 }
             }
+        }
+
+        boolean markDirty = false;
+
+        if (inventory[0] != null) {
+            if (getSmeltingOutput(inventory[0]) != null && canOperate() && shouldOperate()) {
+                if (!isRunning) {
+                    totalProgress = ConfigData.furnaceDefaultCookTime / timeModifier;
+                    // What this does is calculate the amount of energy to be consumed per tick, by rounding it to a multiple of 10
+                    energyConsumptionPerTick = Math.round(((((getEnergyUsage(getSmeltingOutput(inventory[0])) / energyModifier) / totalProgress) + 5) / 10) * 10);
+                    setOperationStatus(true);
+                }
+                ++progress;
+                if (energyConsumptionPerTick >= getEnergyStored(EnumFacing.DOWN)) {
+                    stopOperating(true);
+                }
+                setEnergyStored(getEnergyStored(EnumFacing.DOWN) - energyConsumptionPerTick);
+                if (progress >= totalProgress) {
+                    if (!preventOperation) {
+                        doOperation();
+                        stopOperating(false);
+                        markDirty = true;
+                    } else {
+                        preventOperation = false;
+                    }
+                }
+            } else {
+                stopOperating(true);
+            }
+        } else {
+            stopOperating(true);
+        }
+
+        if (markDirty) {
+            this.markDirty();
         }
     }
 
@@ -75,7 +151,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
      * @return energy container slot ID array
      */
     @Nonnull
-    public abstract int[] getEnergySlot();
+    public abstract int[] getEnergySlots();
 
     /**
      * Returns the ID(s) of the input slot(s). If none, then return an empty int array.
@@ -101,6 +177,22 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
      */
     @Nonnull
     public abstract int[] getBoosterSlots();
+
+    /**
+     * In order to allow the base tile entity to get recipe data without needing
+     * to assume the recipe class, the subclass needs to just return a value for that.
+     * @param input input item stack
+     * @return output for the input given
+     */
+    public abstract ItemStack getSmeltingOutput(ItemStack input);
+
+    /**
+     * This method should return the amount of energy that will get consumed for a recipe with
+     * the output as output
+     * @param output recipe output
+     * @return energy usage for output recipe
+     */
+    public abstract int getEnergyUsage(ItemStack output);
 
     /**
      * Should the tile operate right now
@@ -167,7 +259,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
      */
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        updateTileToPlayers();
+        worldObj.markBlockForUpdate(pos);
         return energyStorage.receiveEnergy(maxReceive, simulate);
     }
 
