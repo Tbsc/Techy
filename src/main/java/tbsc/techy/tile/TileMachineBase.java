@@ -45,7 +45,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
      * in account the boosters that are in the machine.
      * It won't change the amount of energy per tick, but rather the total amount.
      */
-    public int energyModifier = 1;
+    public double energyModifier = 1;
 
     /**
      * Amount of time for this operation will be divided by this, so it takes in account
@@ -53,7 +53,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
      * This won't reduce the amount of ticks it progresses every iteration, but rather it
      * reduces the amount of total time it takes to finish the operation.
      */
-    public int timeModifier = 1;
+    public double timeModifier = 1;
 
     /**
      * Used for {@link #stopOperating(boolean)} to prevent {@link #update()} from operating even though
@@ -92,9 +92,9 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
         if (inventory[0] != null) {
             if (getSmeltingOutput(inventory[0]) != null && canOperate() && shouldOperate()) {
                 if (!isRunning) {
-                    totalProgress = ConfigData.furnaceDefaultCookTime / timeModifier;
+                    totalProgress = (int) (ConfigData.furnaceDefaultCookTime * timeModifier);
                     // What this does is calculate the amount of energy to be consumed per tick, by rounding it to a multiple of 10
-                    energyConsumptionPerTick = Math.round(((((getEnergyUsage(getSmeltingOutput(inventory[0])) / energyModifier) / totalProgress) + 5) / 10) * 10);
+                    energyConsumptionPerTick = (int) Math.round(((((getEnergyUsage(getSmeltingOutput(inventory[0])) * energyModifier) * totalProgress) + 5) / 10) * 10);
                     setOperationStatus(true);
                 }
                 ++progress;

@@ -36,7 +36,7 @@ public class TilePoweredFurnace extends TileMachineBase {
      * Amount of experience given for the operation will be divided by this, so boosters
      * will work.
      */
-    int experienceModifier = 1;
+    double experienceModifier = 1;
 
     /**
      * The chance to get another item. The way this will work is by taking a random number
@@ -83,7 +83,7 @@ public class TilePoweredFurnace extends TileMachineBase {
         // Double checking, you can never check more than enough
         if (this.canOperate()) {
             ItemStack recipeOutput = PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]);
-            float experience = PoweredFurnaceRecipes.instance().getSmeltingExperience(recipeOutput) / experienceModifier;
+            float experience = (float) (PoweredFurnaceRecipes.instance().getSmeltingExperience(recipeOutput) * experienceModifier);
 
             if (this.inventory[1] == null) {
                 this.inventory[1] = recipeOutput.copy();
@@ -184,7 +184,7 @@ public class TilePoweredFurnace extends TileMachineBase {
             // There is a recipe, then store the output in a variable
             ItemStack recipeOutput = PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]);
             // Not enough energy stored in tile
-            if (PoweredFurnaceRecipes.instance().getSmeltingEnergy(recipeOutput) / energyModifier >= getEnergyStored(EnumFacing.DOWN)) {
+            if (PoweredFurnaceRecipes.instance().getSmeltingEnergy(recipeOutput) * energyModifier >= getEnergyStored(EnumFacing.DOWN)) {
                 return false;
             }
             // If there is no item in output slot then it can smelt, returns true
