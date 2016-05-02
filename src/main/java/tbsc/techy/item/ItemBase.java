@@ -15,7 +15,7 @@ import tbsc.techy.Techy;
  */
 public class ItemBase extends Item {
 
-    public ItemBase(String unlocalizedName) {
+    protected ItemBase(String unlocalizedName) {
         setCreativeTab(Techy.tabTechyItems);
         setRegistryName(unlocalizedName);
         setUnlocalizedName(Techy.MODID + ":" + unlocalizedName);

@@ -22,7 +22,7 @@ public abstract class GuiMachineBase extends GuiBase {
     protected ResourceLocation guiTexture;
     protected ContainerBase container;
 
-    public GuiMachineBase(ContainerBase containerBase, int tileInvSize, ResourceLocation guiTexture) {
+    protected GuiMachineBase(ContainerBase containerBase, int tileInvSize, ResourceLocation guiTexture) {
         super(containerBase, guiTexture);
         this.container = containerBase;
         this.tileInvSize = tileInvSize;

@@ -18,7 +18,7 @@ public abstract class BlockBaseMachine extends BlockBase implements ITileEntityP
 
     public int tileInvSize;
 
-    public BlockBaseMachine(Material material, String registryName, int tileInvSize) {
+    protected BlockBaseMachine(Material material, String registryName, int tileInvSize) {
         super(material, registryName);
         this.tileInvSize = tileInvSize;
     }

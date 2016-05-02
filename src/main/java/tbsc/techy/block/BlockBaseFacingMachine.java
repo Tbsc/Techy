@@ -26,7 +26,7 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
     public static PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     public static PropertyBool WORKING = PropertyBool.create("working");
 
-    public BlockBaseFacingMachine(Material material, String registryName, int tileInvSize) {
+    protected BlockBaseFacingMachine(Material material, String registryName, int tileInvSize) {
         super(material, registryName, tileInvSize);
     }
 

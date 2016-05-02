@@ -24,7 +24,7 @@ public abstract class ContainerBase extends Container {
     protected int tileInvSize;
     private int nextAvailableSlot = 0;
 
-    public ContainerBase(IInventory playerInv, TileMachineBase tileBase, int tileInvSize) {
+    protected ContainerBase(IInventory playerInv, TileMachineBase tileBase, int tileInvSize) {
         this.playerInv = playerInv;
         this.tileBase = tileBase;
         this.tileInvSize = tileInvSize;
