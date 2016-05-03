@@ -49,17 +49,17 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
      * Percentage of energy to be added
      * It won't change the amount of energy per tick, but rather the total amount.
      */
-    public int energyModifier = 1;
+    public int energyModifier = 100;
 
     /**
      * PERCENTAGE of time to be given.
      */
-    public int timeModifier = 1;
+    public int timeModifier = 100;
 
     /**
      * Percentage of exeprience to be given.
      */
-    public int experienceModifier = 1;
+    public int experienceModifier = 100;
 
     /**
      * The chance to get another item. The way this will work is by taking a random number
