@@ -25,9 +25,9 @@ public abstract class ItemBoosterBase extends ItemBase implements IBoosterItem {
         super.addInformation(stack, playerIn, tooltip, advanced);
         tooltip.add("Tier " + stack.getMetadata());
         if (StringHelper.isShiftKeyDown()) {
-            tooltip.add("Energy modifier: x" + getEnergyModifier(stack.getMetadata()));
-            tooltip.add("Time modifier: x" + getTimeModifier(stack.getMetadata()));
-            tooltip.add("Experience modifier: x" + getExperienceModifier(stack.getMetadata()));
+            tooltip.add("Energy modifier: " + getEnergyModifier(stack.getMetadata()) + "%");
+            tooltip.add("Time modifier: " + getTimeModifier(stack.getMetadata()) + "%");
+            tooltip.add("Experience modifier: " + getExperienceModifier(stack.getMetadata()) + "%");
             tooltip.add("Additional items modifier: " + getAdditionalItemModifier(stack.getMetadata()) + " max");
         } else {
             tooltip.add(EnumChatFormatting.ITALIC + "Shift" + EnumChatFormatting.RESET + " for more info");
