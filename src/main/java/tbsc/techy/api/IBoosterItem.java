@@ -12,26 +12,25 @@ import tbsc.techy.tile.TileMachineBase;
 public interface IBoosterItem {
 
     /**
-     * Amount of energy consumed is divided by this integer.
+     * The percentage of energy to be consumed.
      * @param tier of booster
-     * @return energy modifier to divide by
+     * @return percentage of energy to consume
      */
-    double getEnergyModifier(int tier);
+    int getEnergyModifier(int tier);
 
     /**
-     * Modifier that defines total time for operations.
+     * Percentage of time progress.
      * @param tier of booster
-     * @return time modifier to divide by
+     * @return percentage of time for progress
      */
-    double getTimeModifier(int tier);
+    int getTimeModifier(int tier);
 
     /**
-     * How much experience should be given. Amount of experience given is multiplied
-     * by the modifier.
+     * Percentage of experience to be given.
      * @param tier of booster
      * @return experience multiplier
      */
-    double getExperienceModifier(int tier);
+    int getExperienceModifier(int tier);
 
     /**
      * Should return the amount of max possible additional items that this booster

@@ -4,14 +4,19 @@ import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import cofh.lib.util.helpers.EnergyHelper;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
+import org.apache.commons.lang3.tuple.MutablePair;
 import tbsc.techy.ConfigData;
+import tbsc.techy.api.IBoosterItem;
 import tbsc.techy.api.IOperator;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Basic class for machine tile entities.
@@ -41,19 +46,38 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     protected int energyConsumptionPerTick = 0;
 
     /**
-     * Amount of energy that needs to be consumed will be divided by this, so it takes
-     * in account the boosters that are in the machine.
+     * Percentage of energy to be added
      * It won't change the amount of energy per tick, but rather the total amount.
      */
-    public double energyModifier = 1;
+    public int energyModifier = 1;
 
     /**
-     * Amount of time for this operation will be divided by this, so it takes in account
-     * the boosters that are in the machine.
-     * This won't reduce the amount of ticks it progresses every iteration, but rather it
-     * reduces the amount of total time it takes to finish the operation.
+     * PERCENTAGE of time to be given.
      */
-    public double timeModifier = 1;
+    public int timeModifier = 1;
+
+    /**
+     * Percentage of exeprience to be given.
+     */
+    public int experienceModifier = 1;
+
+    /**
+     * The chance to get another item. The way this will work is by taking a random number
+     * and seeing if it's in the range of the modifier. So, if the modifier is 2, then numbers
+     * 1 and 2 will result in an additional item, and based on the number the amount of additional
+     * items will be chosen. If the number is larger, then the total amount of random numbers will
+     * grow (to be exact, it calculates it like so: (16 * additionalItemModifier) + (4 * additionalItemModifier)).
+     * 0 is an ignored number --  if this field equals to 0 then it doesn't choose a random number.
+     *
+     * Note that if an additional item IS chosen to be added, and there is no room for it, then
+     * it will just not give it. For example, You have 62 items in the output slot, and the output
+     * of this recipe is 1 item, but suddenly you get 2 additional items. The normal recipe output
+     * is added to the output slot, which makes the output slot stack size 63. There are *2*
+     * additional items to be added, so what it's going to do is *delete* BOTH of the items, not
+     * just put the 1 item it can put. Therefore automation (if done right) should not backlog
+     * and if it does, then additional items are lost.
+     */
+    public int additionalItemModifier = 0;
 
     /**
      * Used for {@link #stopOperating(boolean)} to prevent {@link #update()} from operating even though
@@ -64,6 +88,21 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     public EnergyStorage energyStorage;
     protected boolean isRunning;
     protected boolean shouldRun = true;
+
+    /**
+     * In order to keep data of previous boosters in order for me to undo their modifiers,
+     * I need to save an instance of the booster, so when it is removed (not that item anymore),
+     * I can also use the {@link ItemStack} instance I saved to check what are the modifiers
+     * and revert those.
+     *
+     * The key is an integer, more specifically the booster slot ID (based on {@link #getBoosterSlots()}.
+     * The value is a {@link MutablePair}, and it has a boolean on the left letting me know
+     * if this booster has already been appplied, to prevent applying boosters a ton of times.
+     * On the right it has the copy of the booster's {@link ItemStack} (and not {@link IBoosterItem}
+     * or {@link Item} because I need to know the metadata in order to correctly undo the
+     * booster).
+     */
+    Map<Integer, MutablePair<Boolean, ItemStack>> boosterApplied = new HashMap<>();
 
     protected TileMachineBase(int capacity, int maxReceive, int invSize) {
         super(invSize);
@@ -92,9 +131,9 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
         if (inventory[0] != null) {
             if (getSmeltingOutput(inventory[0]) != null && canOperate() && shouldOperate()) {
                 if (!isRunning) {
-                    totalProgress = (int) (ConfigData.furnaceDefaultCookTime * timeModifier);
+                    totalProgress = (timeModifier / 100) * ConfigData.furnaceDefaultCookTime;
                     // What this does is calculate the amount of energy to be consumed per tick, by rounding it to a multiple of 10
-                    energyConsumptionPerTick = (int) Math.round(((((getEnergyUsage(getSmeltingOutput(inventory[0])) * energyModifier) * totalProgress) + 5) / 10) * 10);
+                    energyConsumptionPerTick = ((energyModifier / 100) * (getEnergyUsage(getSmeltingOutput(inventory[0]))) / totalProgress) / 10 * 10;
                     setOperationStatus(true);
                 }
                 ++progress;

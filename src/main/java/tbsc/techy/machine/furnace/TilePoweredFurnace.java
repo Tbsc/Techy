@@ -33,30 +33,6 @@ import java.util.Random;
 public class TilePoweredFurnace extends TileMachineBase {
 
     /**
-     * Amount of experience given for the operation will be divided by this, so boosters
-     * will work.
-     */
-    double experienceModifier = 1;
-
-    /**
-     * The chance to get another item. The way this will work is by taking a random number
-     * and seeing if it's in the range of the modifier. So, if the modifier is 2, then numbers
-     * 1 and 2 will result in an additional item, and based on the number the amount of additional
-     * items will be chosen. If the number is larger, then the total amount of random numbers will
-     * grow (to be exact, it calculates it like so: (16 * additionalItemModifier) + (4 * additionalItemModifier)).
-     * 0 is an ignored number --  if this field equals to 0 then it doesn't choose a random number.
-     *
-     * Note that if an additional item IS chosen to be added, and there is no room for it, then
-     * it will just not give it. For example, You have 62 items in the output slot, and the output
-     * of this recipe is 1 item, but suddenly you get 2 additional items. The normal recipe output
-     * is added to the output slot, which makes the output slot stack size 63. There are *2*
-     * additional items to be added, so what it's going to do is *delete* BOTH of the items, not
-     * just put the 1 item it can put. Therefore automation (if done right) should not backlog
-     * and if it does, then additional items are lost.
-     */
-    int additionalItemModifier = 0;
-
-    /**
      * Contains values of configurations for sides.
      * Since it is an {@link EnumMap}, it can *NOT* contain more than 1 enum
      * value per key, therefore there are always exactly 6 keys, the 6 sides.
@@ -83,7 +59,7 @@ public class TilePoweredFurnace extends TileMachineBase {
         // Double checking, you can never check more than enough
         if (this.canOperate()) {
             ItemStack recipeOutput = PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]);
-            float experience = (float) (PoweredFurnaceRecipes.instance().getSmeltingExperience(recipeOutput) * experienceModifier);
+            float experience = (experienceModifier / 100) * PoweredFurnaceRecipes.instance().getSmeltingExperience(recipeOutput);
 
             if (this.inventory[1] == null) {
                 this.inventory[1] = recipeOutput.copy();

@@ -25,6 +25,14 @@ public class ItemBoosterEnergy extends ItemBoosterBase {
     }
 
     @Override
+    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+        super.getSubItems(itemIn, tab, subItems);
+        subItems.add(new ItemStack(itemIn, 1, 1));
+        subItems.add(new ItemStack(itemIn, 1, 2));
+        subItems.add(new ItemStack(itemIn, 1, 3));
+    }
+
+    @Override
     public void initModel() {
         ModelBakery.registerItemVariants(this, new ResourceLocation(getRegistryName() + "T0"), new ResourceLocation(getRegistryName() + "T1"), new ResourceLocation(getRegistryName() + "T2"), new ResourceLocation(getRegistryName() + "T3"));
         ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName() + "T0", "inventory"));
@@ -34,58 +42,50 @@ public class ItemBoosterEnergy extends ItemBoosterBase {
     }
 
     @Override
-    public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
-        super.getSubItems(itemIn, tab, subItems);
-        subItems.add(new ItemStack(itemIn, 1, 1));
-        subItems.add(new ItemStack(itemIn, 1, 2));
-        subItems.add(new ItemStack(itemIn, 1, 3));
-    }
-
-    @Override
-    public double getEnergyModifier(int tier) {
+    public int getEnergyModifier(int tier) {
         switch (tier) {
             case 0:
-                return 1.25;
+                return 125;
             case 1:
-                return 0.85;
+                return 85;
             case 2:
-                return 0.60;
+                return 60;
             case 3:
-                return 0.25;
+                return 25;
             default:
-                return 1;
+                return 100;
         }
     }
 
     @Override
-    public double getTimeModifier(int tier) {
+    public int getTimeModifier(int tier) {
         switch (tier) {
             case 0:
-                return 1;
+                return 100;
             case 1:
-                return 1.15;
+                return 115;
             case 2:
-                return 1.30;
+                return 130;
             case 3:
-                return 1.55;
+                return 155;
             default:
-                return 1;
+                return 100;
         }
     }
 
     @Override
-    public double getExperienceModifier(int tier) {
+    public int getExperienceModifier(int tier) {
         switch (tier) {
             case 0:
-                return 1;
+                return 100;
             case 1:
-                return 0.90;
+                return 90;
             case 2:
-                return 0.75;
+                return 75;
             case 3:
-                return 0.45;
+                return 45;
             default:
-                return 1;
+                return 100;
         }
     }
 
