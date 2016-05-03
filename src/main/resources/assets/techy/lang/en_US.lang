@@ -1,9 +1,12 @@
-# Creative Tabs
+### Creative Tabs ###
 itemGroup.techy.items=Techy Items
 itemGroup.techy.machines=Techy Machines
 
-# Items
+### Items ###
 item.Techy:itemWrench.name=Wrench
+## Boosters ##
+# Energy
+item.Techy:itemBoosterEnergy.name=Energy Saver Booster
 
-# Blocks
+### Blocks ##
 tile.Techy:blockPoweredFurnace.name=Powered Furnace

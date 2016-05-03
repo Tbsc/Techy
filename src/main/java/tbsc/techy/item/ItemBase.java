@@ -13,7 +13,7 @@ import tbsc.techy.Techy;
  *
  * Created by tbsc on 3/27/16.
  */
-public class ItemBase extends Item {
+public abstract class ItemBase extends Item {
 
     protected ItemBase(String unlocalizedName) {
         setCreativeTab(Techy.tabTechyItems);

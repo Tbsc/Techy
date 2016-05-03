@@ -1,0 +1,37 @@
+package tbsc.techy.item;
+
+import cofh.lib.util.helpers.StringHelper;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
+import tbsc.techy.api.IBoosterItem;
+
+import java.util.List;
+
+/**
+ * Base class for booster items.
+ * NOTE: The metadata value of the booster value should equal to the tier.
+ *
+ * Created by tbsc on 5/2/16.
+ */
+public abstract class ItemBoosterBase extends ItemBase implements IBoosterItem {
+
+    protected ItemBoosterBase(String unlocalizedName) {
+        super(unlocalizedName);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+        super.addInformation(stack, playerIn, tooltip, advanced);
+        tooltip.add("Tier " + stack.getMetadata());
+        if (StringHelper.isShiftKeyDown()) {
+            tooltip.add("Energy modifier: x" + getEnergyModifier(stack.getMetadata()));
+            tooltip.add("Time modifier: x" + getTimeModifier(stack.getMetadata()));
+            tooltip.add("Experience modifier: x" + getExperienceModifier(stack.getMetadata()));
+            tooltip.add("Additional items modifier: " + getAdditionalItemModifier(stack.getMetadata()) + " max");
+        } else {
+            tooltip.add(EnumChatFormatting.ITALIC + "Shift" + EnumChatFormatting.RESET + " for more info");
+        }
+    }
+
+}
