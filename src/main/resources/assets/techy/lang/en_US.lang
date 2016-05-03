@@ -6,7 +6,9 @@ itemGroup.techy.machines=Techy Machines
 item.Techy:itemWrench.name=Wrench
 ## Boosters ##
 # Energy
-item.Techy:itemBoosterEnergy.name=Energy Saver Booster
+item.Techy:itemBoosterEnergy.name=Energy Booster
+# Time
+item.Techy:itemBoosterTime.name=Time Booster
 
 ### Blocks ##
 tile.Techy:blockPoweredFurnace.name=Powered Furnace
