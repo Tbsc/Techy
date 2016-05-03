@@ -133,7 +133,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
                 if (!isRunning) {
                     totalProgress = (timeModifier / 100) * ConfigData.furnaceDefaultCookTime;
                     // What this does is calculate the amount of energy to be consumed per tick, by rounding it to a multiple of 10
-                    energyConsumptionPerTick = ((energyModifier / 100) * (getEnergyUsage(getSmeltingOutput(inventory[0]))) / totalProgress) / 10 * 10;
+                    energyConsumptionPerTick = (((energyModifier / 100) * getEnergyUsage(getSmeltingOutput(inventory[0]))) / totalProgress) / 10 * 10;
                     setOperationStatus(true);
                 }
                 ++progress;
