@@ -43,13 +43,13 @@ public class ItemBoosterAdditionalItems extends ItemBoosterBase {
     public int getEnergyModifier(int tier) {
         switch (tier) {
             case 0:
-                return 100; // %
+                return 0; // +%
             case 1:
-                return 150; // %
+                return 50; // +%
             case 2:
-                return 185; // %
+                return 85; // +%
             default:
-                return 100 ; // %
+                return 0; // +%
         }
     }
 
@@ -57,13 +57,13 @@ public class ItemBoosterAdditionalItems extends ItemBoosterBase {
     public int getTimeModifier(int tier) {
         switch (tier) {
             case 0:
-                return 100;
+                return 0;
             case 1:
-                return 150;
+                return 50;
             case 2:
-                return 185;
+                return 85;
             default:
-                return 100;
+                return 0;
         }
     }
 
@@ -71,13 +71,13 @@ public class ItemBoosterAdditionalItems extends ItemBoosterBase {
     public int getExperienceModifier(int tier) {
         switch (tier) {
             case 0:
-                return 100;
+                return 0;
             case 1:
-                return 125;
+                return 25;
             case 2:
-                return 155;
+                return 55;
             default:
-                return 100;
+                return 0;
         }
     }
 
