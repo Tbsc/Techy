@@ -15,15 +15,18 @@ public class ItemInit {
     public static ItemBase itemWrench;
     public static ItemBoosterBase itemBoosterEnergy;
     public static ItemBoosterBase itemBoosterTime;
+    public static ItemBoosterBase itemBoosterBonus;
 
     public static void init() {
         itemWrench = new ItemWrench();
         itemBoosterEnergy = new ItemBoosterEnergy();
         itemBoosterTime = new ItemBoosterTime();
+        itemBoosterBonus = new ItemBoosterAdditionalItems();
 
         GameRegistry.registerItem(itemWrench);
         GameRegistry.registerItem(itemBoosterEnergy);
         GameRegistry.registerItem(itemBoosterTime);
+        GameRegistry.registerItem(itemBoosterBonus);
     }
 
     /**
@@ -35,6 +38,7 @@ public class ItemInit {
         itemWrench.initModel();
         itemBoosterEnergy.initModel();
         itemBoosterTime.initModel();
+        itemBoosterBonus.initModel();
     }
 
 }
