@@ -93,13 +93,13 @@ public class PoweredFurnaceRecipes {
     }
 
     /**
-     * Returns the Input --> Experience float map
+     * Returns the Outputs --> Experience float map
      * @return experience map instance
      */
     public Map<ItemStack, Float> getExperienceMap() { return this.experienceMap; }
 
     /**
-     * Returns the Input --> energy usage integer map
+     * Returns the Outputs --> energy usage integer map
      * @return energy usage map instance
      */
     public Map<ItemStack, Integer> getEnergyMap() { return this.energyMap; }
