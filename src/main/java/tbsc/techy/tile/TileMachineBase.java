@@ -174,7 +174,9 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
                 setEnergyStored(getEnergyStored(EnumFacing.DOWN) - energyConsumptionPerTick);
                 if (progress >= totalProgress) {
                     doOperation();
-                    BlockBaseFacingMachine.setState(false, worldObj, pos);
+                    if (worldObj.getBlockState(pos).getBlock() == null) {
+                        BlockBaseFacingMachine.setState(false, worldObj, pos);
+                    }
                     shouldRefresh = true;
                     progress = totalProgress = 0;
                     setOperationStatus(false);
