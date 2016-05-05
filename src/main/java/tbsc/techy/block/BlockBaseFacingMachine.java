@@ -32,7 +32,14 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
 
     public static void setState(boolean active, World worldIn, BlockPos pos) {
         IBlockState iblockstate = worldIn.getBlockState(pos);
+
         worldIn.setBlockState(pos, iblockstate.withProperty(WORKING, active));
+    }
+
+    public static boolean getState(World world, BlockPos pos) {
+        IBlockState iblockstate = world.getBlockState(pos);
+
+        return iblockstate.getValue(WORKING);
     }
 
     /**

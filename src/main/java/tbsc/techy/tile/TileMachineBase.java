@@ -3,16 +3,20 @@ package tbsc.techy.tile;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyReceiver;
 import cofh.lib.util.helpers.EnergyHelper;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.MutablePair;
-import tbsc.techy.ConfigData;
 import tbsc.techy.api.IBoosterItem;
 import tbsc.techy.api.IOperator;
+import tbsc.techy.block.BlockBaseFacingMachine;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -80,14 +84,22 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     public int additionalItemModifier = 0;
 
     /**
+     * Since every machine will probably have a different amount of time processing
+     * materials, I need to get from subclasses the time in which they finish
+     * processing.
+     */
+    public int machineProcessTime = 0;
+
+    /**
      * Used for {@link #stopOperating(boolean)} to prevent {@link #update()} from operating even though
      * it shouldn't
      */
-    protected boolean preventOperation;
+    protected boolean preventOperation = false;
 
     public EnergyStorage energyStorage;
     protected boolean isRunning;
     protected boolean shouldRun = true;
+    protected boolean shouldRefresh = true;
 
     /**
      * In order to keep data of previous boosters in order for me to undo their modifiers,
@@ -104,20 +116,33 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
      */
     Map<Integer, MutablePair<Boolean, ItemStack>> boosterApplied = new HashMap<>();
 
-    protected TileMachineBase(int capacity, int maxReceive, int invSize) {
+    protected TileMachineBase(int capacity, int maxReceive, int invSize, int cookTime) {
         super(invSize);
+        this.machineProcessTime = cookTime;
         this.energyStorage = new EnergyStorage(capacity, maxReceive);
     }
 
-    /**
-     * Runs every tick, and ATM receives energy from energy container items every tick.
-     * Now also takes care of operation sounds.
-     */
     @Override
     public void update() {
+        handleRedstone();
+        handleEnergyItems();
+
+        boolean markDirty;
+
+        markDirty = handleProcessing();
+
+        if (markDirty) {
+            this.markDirty();
+        }
+    }
+
+    protected boolean handleRedstone() {
         // If receiving redstone signal, then prevent machine from operating
         shouldRun = !(worldObj.isBlockIndirectlyGettingPowered(pos) > 0);
+        return false;
+    }
 
+    protected boolean handleEnergyItems() {
         if (getEnergySlots().length >= 1) {
             for (int i = 0; i < getEnergySlots().length; ++i) {
                 if (inventory[getEnergySlots()[i]] != null) {
@@ -125,17 +150,21 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
                 }
             }
         }
+        return false;
+    }
 
+    protected boolean handleProcessing() {
         boolean markDirty = false;
-
         if (inventory[0] != null) {
             if (getSmeltingOutput(inventory[0]) != null && canOperate() && shouldOperate()) {
                 if (!isRunning) {
                     double timePercentage = timeModifier / 100;
-                    totalProgress = (int) (timePercentage * ConfigData.furnaceDefaultCookTime);
+                    totalProgress = (int) (timePercentage * machineProcessTime);
                     // What this does is calculate the amount of energy to be consumed per tick, by rounding it to a multiple of 10
                     double energyPercentage = (energyModifier / 100) * getEnergyUsage(getSmeltingOutput(inventory[0]));
                     energyConsumptionPerTick = (int) ((energyPercentage / totalProgress) / 10 * 10);
+                    shouldRefresh = false;
+                    BlockBaseFacingMachine.setState(true, worldObj, pos);
                     setOperationStatus(true);
                 }
                 ++progress;
@@ -144,24 +173,39 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
                 }
                 setEnergyStored(getEnergyStored(EnumFacing.DOWN) - energyConsumptionPerTick);
                 if (progress >= totalProgress) {
-                    if (!preventOperation) {
-                        doOperation();
-                        stopOperating(false);
-                        markDirty = true;
-                    } else {
-                        preventOperation = false;
-                    }
+                    doOperation();
+                    BlockBaseFacingMachine.setState(false, worldObj, pos);
+                    shouldRefresh = true;
+                    progress = totalProgress = 0;
+                    setOperationStatus(false);
+                    markDirty = true;
                 }
             } else {
                 stopOperating(true);
+                if (BlockBaseFacingMachine.getState(worldObj, pos)) {
+                    BlockBaseFacingMachine.setState(false, worldObj, pos);
+                }
             }
         } else {
             stopOperating(true);
+            if (BlockBaseFacingMachine.getState(worldObj, pos)) {
+                BlockBaseFacingMachine.setState(false, worldObj, pos);
+            }
         }
 
-        if (markDirty) {
-            this.markDirty();
-        }
+        return markDirty;
+    }
+
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+        return super.shouldRefresh(world, pos, oldState, newSate) && shouldRefresh;
+    }
+
+    @Override
+    public void stopOperating(boolean preventOperation) {
+        this.preventOperation = preventOperation;
+        progress = totalProgress = 0;
+        setOperationStatus(false);
     }
 
     public void spawnXPOrb(int xpAmount, int stackSize) {
@@ -273,6 +317,12 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
+        NBTTagList list = nbt.getTagList("Items", 10);
+        for (int i = 0; i < list.tagCount(); ++i) {
+            NBTTagCompound stackTag = list.getCompoundTagAt(i);
+            int slot = stackTag.getByte("Slot") & 255;
+            this.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(stackTag));
+        }
         energyStorage.readFromNBT(nbt);
     }
 
@@ -284,6 +334,16 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     @Override
     public void writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
+        NBTTagList list = new NBTTagList();
+        for (int i = 0; i < this.getSizeInventory(); ++i) {
+            if (this.getStackInSlot(i) != null) {
+                NBTTagCompound stackTag = new NBTTagCompound();
+                stackTag.setByte("Slot", (byte) i);
+                this.getStackInSlot(i).writeToNBT(stackTag);
+                list.appendTag(stackTag);
+            }
+        }
+        nbt.setTag("Items", list);
         energyStorage.writeToNBT(nbt);
     }
 

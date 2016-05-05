@@ -1,20 +1,20 @@
-package tbsc.techy.machine.furnace;
+package tbsc.techy.machine.crusher;
 
-import cofh.api.energy.IEnergyContainerItem;
-import net.minecraft.entity.player.EntityPlayer;
+import cofh.lib.util.helpers.EnergyHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IChatComponent;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 import tbsc.techy.ConfigData;
 import tbsc.techy.api.IBoosterItem;
 import tbsc.techy.api.SideConfiguration;
 import tbsc.techy.api.Sides;
-import tbsc.techy.init.BlockInit;
-import tbsc.techy.recipe.PoweredFurnaceRecipes;
+import tbsc.techy.machine.furnace.BlockPoweredFurnace;
+import tbsc.techy.recipe.CrusherRecipes;
 import tbsc.techy.tile.TileMachineBase;
 
 import javax.annotation.Nonnull;
@@ -22,53 +22,50 @@ import java.util.EnumMap;
 import java.util.Random;
 
 /**
- * Slot 0 - Input
- * Slot 1 - Output
- * Slot 2 - Booster slot
- * <p>
- * Packet field 1 - Energy stored
- * Packet field 2 - Progress
- * Packet field 3 - Max Progress
- * <p>
- * Created by tbsc on 4/22/16.
+ * Crusher's tile entity.
+ *
+ * Created by tbsc on 5/4/16.
  */
-public class TilePoweredFurnace extends TileMachineBase {
+public class TileCrusher extends TileMachineBase {
 
-    /**
-     * Contains values of configurations for sides.
-     * Since it is an {@link EnumMap}, it can *NOT* contain more than 1 enum
-     * value per key, therefore there are always exactly 6 keys, the 6 sides.
-     */
+    int totalProgress;
+    int progress;
     public EnumMap<Sides, SideConfiguration> sideConfigMap = new EnumMap<>(Sides.class);
 
-    public TilePoweredFurnace() {
-        super(40000, 640, BlockPoweredFurnace.tileInvSize, ConfigData.furnaceDefaultCookTime);
+    protected TileCrusher() {
+        super(50000, 700, BlockCrusher.tileInvSize, ConfigData.crusherDefaultProceessTime);
 
+        sideConfigMap.put(Sides.UP, SideConfiguration.INPUT);
+        sideConfigMap.put(Sides.DOWN, SideConfiguration.OUTPUT);
         sideConfigMap.put(Sides.FRONT, SideConfiguration.INPUT);
         sideConfigMap.put(Sides.BACK, SideConfiguration.INPUT);
         sideConfigMap.put(Sides.LEFT, SideConfiguration.INPUT);
         sideConfigMap.put(Sides.RIGHT, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.UP, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.DOWN, SideConfiguration.OUTPUT);
     }
 
-    /**
-     * When executed, will do whatever that needs to be done in the tile.
-     * In this case, smelting.
-     */
     @Override
     public void doOperation() {
         // Double checking, you can never check more than enough
         if (this.canOperate()) {
-            ItemStack recipeOutput = PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]);
-            float experience = (experienceModifier / 100) * PoweredFurnaceRecipes.instance().getSmeltingExperience(recipeOutput);
+            ItemStack recipeOutput = getSmeltingOutput(inventory[0]);
+            float experience = (experienceModifier / 100) * CrusherRecipes.instance().getSmeltingExperience(recipeOutput);
 
             if (this.inventory[1] == null) {
                 this.inventory[1] = recipeOutput.copy();
             } else if (this.inventory[1].getItem() == recipeOutput.getItem()) {
                 this.inventory[1].stackSize += recipeOutput.stackSize; // Forge BugFix: Results may have multiple items
+                Random rand = new Random();
+                ImmutableTriple<ItemStack, ItemStack, Integer> triple = CrusherRecipes.instance().getSmeltingResult(inventory[0]);
+                int chance = rand.nextInt(100) + 1;
+                if (chance <= triple.getRight()) {
+                    // Finished with the checking, it found a random number and it matched, so extra item to be given
+                    if (this.inventory[2] == null) {
+                        this.inventory[2] = triple.getMiddle().copy();
+                    } else if (this.inventory[2].getItem() == triple.getMiddle().getItem() && this.inventory[2].getMaxStackSize() >= this.inventory[2].stackSize + triple.getMiddle().stackSize) {
+                        this.inventory[2].stackSize += triple.getMiddle().stackSize;
+                    }
+                }
                 if (additionalItemModifier >= 1) {
-                    Random rand = new Random();
                     int randomInt = rand.nextInt((16 * additionalItemModifier) + (additionalItemModifier * 4)) + 1;
                     boolean matchFound = false;
                     // I couldn't find a better way to do this, so if you know one, let me know!
@@ -132,42 +129,6 @@ public class TilePoweredFurnace extends TileMachineBase {
         }
     }
 
-    /**
-     * Checks if the tile can operate
-     *
-     * @return can the tile operate
-     */
-    @Override
-    public boolean canOperate() {
-        // No input item
-        if (inventory[0] == null) {
-            return false;
-        } else {
-            // No recipe with input item
-            if (PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]) == null) {
-                return false;
-            }
-            // There is a recipe, then store the output in a variable
-            ItemStack recipeOutput = PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]);
-            // Not enough energy stored in tile
-            if ((energyModifier / 100) * PoweredFurnaceRecipes.instance().getSmeltingEnergy(recipeOutput) >= getEnergyStored(EnumFacing.DOWN)) {
-                return false;
-            }
-            // If there is no item in output slot then it can smelt, returns true
-            if (inventory[1] == null) {
-                return true;
-            }
-            // If there is an item in output slot, then check if is the output of the current recipe
-            if (!inventory[1].isItemEqual(recipeOutput)) {
-                return false;
-            }
-            // Variable of the new output slot stack size
-            int result = inventory[1].stackSize + recipeOutput.stackSize;
-            // Checks if the new output slot stack size respects inventory stack limit and item stack limit
-            return result <= getInventoryStackLimit() && result <= this.inventory[1].getMaxStackSize(); //Forge BugFix: Make it respect stack sizes properly.
-        }
-    }
-
     @Override
     public void writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
@@ -196,65 +157,80 @@ public class TilePoweredFurnace extends TileMachineBase {
         setConfigurationForSide(Sides.DOWN, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigDown")));
     }
 
-    /**
-     * Returns the side config for the side given.
-     * @param side the side to check
-     * @return config for the side
-     */
     @Override
-    public SideConfiguration getConfigurationForSide(Sides side) {
-        return sideConfigMap.get(side);
-    }
-
-    /**
-     * Sets in the class the side config for the side given
-     * @param side to change
-     * @param sideConfig what to change
-     */
-    @Override
-    public void setConfigurationForSide(Sides side, SideConfiguration sideConfig) {
-        sideConfigMap.put(side, sideConfig);
-    }
-
-    /**
-     * For the configuration given, return the slots this configuration should access
-     * @param sideConfig configuration for side
-     * @return slots for configuration
-     */
-    @Override
-    public int[] getSlotsForConfiguration(SideConfiguration sideConfig) {
-        switch (sideConfig) {
-            case DISABLED:
-                return new int[0];
-            case INPUT:
-                return getInputSlots();
-            case OUTPUT:
-                return getOutputSlots();
-            case IO:
-                return ArrayUtils.addAll(getInputSlots(), getOutputSlots());
-            case UNKNOWN:
-                return null;
-            default:
-                return null;
+    public boolean canOperate() {
+        // No input item
+        if (inventory[0] == null) {
+            return false;
+        } else {
+            // No recipe with input item
+            if (CrusherRecipes.instance().getSmeltingResult(inventory[0]) == null) {
+                return false;
+            }
+            // There is a recipe, then store the output in a variable
+            ItemStack recipeOutput = CrusherRecipes.instance().getSmeltingResult(inventory[0]).getLeft();
+            // Not enough energy stored in tile
+            if ((energyModifier / 100) * CrusherRecipes.instance().getSmeltingEnergy(recipeOutput) >= getEnergyStored(EnumFacing.DOWN)) {
+                return false;
+            }
+            // If there is no item in output slot then it can smelt, returns true
+            if (inventory[1] == null) {
+                return true;
+            }
+            // If there is an item in output slot, then check if is the output of the current recipe
+            if (!inventory[1].isItemEqual(recipeOutput)) {
+                return false;
+            }
+            // Variable of the new output slot stack size
+            int result = inventory[1].stackSize + recipeOutput.stackSize;
+            // Checks if the new output slot stack size respects inventory stack limit and item stack limit
+            return result <= getInventoryStackLimit() && result <= this.inventory[1].getMaxStackSize(); //Forge BugFix: Make it respect stack sizes properly.
         }
     }
 
-    /**
-     * Checks if the player can use the tile entity.
-     * @param player The player that's checked
-     * @return if the player is in range of 8 blocks from the block.
-     */
+    @Nonnull
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return this.worldObj.getTileEntity(pos) == this && player.getDistanceSq(this.pos.add(0.5, 0.5, 0.5)) <= 64;
+    public int[] getEnergySlots() {
+        return new int[0];
+    }
+
+    @Nonnull
+    @Override
+    public int[] getInputSlots() {
+        return new int[] {
+                0
+        };
+    }
+
+    @Nonnull
+    @Override
+    public int[] getOutputSlots() {
+        return new int[] {
+                1, 2
+        };
+    }
+
+    @Nonnull
+    @Override
+    public int[] getBoosterSlots() {
+        return new int[] {
+                4, 5, 6, 7
+        };
     }
 
     /**
-     * Not used right now, will be used sometime later (I don't know for what)
-     * @return
+     * Since it will only accept a single itemstack, I will just return the first output.
+     * @param input input item stack
+     * @return first output stack
      */
-    public static ResourceLocation getMachineFrontTexture() {
-        return new ResourceLocation("Techy:textures/blocks/blockPoweredFurnaceFront.png");
+    @Override
+    public ItemStack getSmeltingOutput(ItemStack input) {
+        return CrusherRecipes.instance().getSmeltingResult(input) != null ? CrusherRecipes.instance().getSmeltingResult(input).getLeft() : null;
+    }
+
+    @Override
+    public int getEnergyUsage(ItemStack output) {
+        return CrusherRecipes.instance().getSmeltingEnergy(output);
     }
 
     @Override
@@ -267,167 +243,34 @@ public class TilePoweredFurnace extends TileMachineBase {
         return totalProgress;
     }
 
-    /**
-     * Used for server/client communication, for transferring int fields between sides.
-     *
-     * @param id ID of field to get
-     * @return the value for that field, unused right now
-     */
     @Override
-    public int getField(int id) {
-        switch (id) {
-            case 0:
-                return getEnergyStored(EnumFacing.DOWN);
-            case 1:
-                return getOperationProgress();
-            case 2:
-                return getOperationTotalProgress();
+    public SideConfiguration getConfigurationForSide(Sides side) {
+        return sideConfigMap.get(side);
+    }
+
+    @Override
+    public void setConfigurationForSide(Sides side, SideConfiguration sideConfig) {
+        sideConfigMap.put(side, sideConfig);
+    }
+
+    @Override
+    public int[] getSlotsForConfiguration(SideConfiguration sideConfig) {
+        switch (sideConfig) {
+            case INPUT:
+                return getInputSlots();
+            case OUTPUT:
+                return getOutputSlots();
+            case IO:
+                return ArrayUtils.addAll(getInputSlots(), getOutputSlots());
+            default:
+                return new int[0];
         }
-        return 0;
-    }
-
-    /**
-     * Sets the value of the specified field ID to the value specified
-     *
-     * @param id    of field
-     * @param value of field
-     */
-    @Override
-    public void setField(int id, int value) {
-        switch (id) {
-            case 0:
-                this.setEnergyStored(value);
-                break;
-            case 1:
-                progress = value;
-                break;
-            case 2:
-                totalProgress = value;
-                break;
-        }
-    }
-
-    /**
-     * Returns how many field there are
-     *
-     * @return amount of fields
-     */
-    @Override
-    public int getFieldCount() {
-        return 0;
-    }
-
-    /**
-     * Returns the slot ID array of the energy container slot
-     * It needs to return an array in case there is no energy slot, therefore it should
-     * return an empty array.
-     *
-     * @return energy container slot ID array
-     */
-    @Nonnull
-    @Override
-    public int[] getEnergySlots() {
-        return new int[]{
-                2
-        };
-    }
-
-    /**
-     * Returns the ID(s) of the input slot(s). If none, then return an empty int array.
-     *
-     * @return input slot IDs array (can be empty, but not null!)
-     */
-    @Nonnull
-    @Override
-    public int[] getInputSlots() {
-        return new int[]{
-                0
-        };
-    }
-
-    /**
-     * Returns the ID(s) of the output slot(s). If none, then return an empty int array.
-     *
-     * @return output slot IDs array (can be empty, but not null!)
-     */
-    @Nonnull
-    @Override
-    public int[] getOutputSlots() {
-        return new int[]{
-                1
-        };
-    }
-
-    /**
-     * Booster items are upgrades for the machine.
-     * This method should return an array of the slot IDs in which you should
-     *
-     * @return booster slot IDs array (can be empty, but not null!)
-     */
-    @Nonnull
-    @Override
-    public int[] getBoosterSlots() {
-        return new int[] {
-            3, 4, 5, 6
-        };
-    }
-
-    @Override
-    public ItemStack getSmeltingOutput(ItemStack input) {
-        return PoweredFurnaceRecipes.instance().getSmeltingResult(input);
-    }
-
-    @Override
-    public int getEnergyUsage(ItemStack output) {
-        return PoweredFurnaceRecipes.instance().getSmeltingEnergy(output);
-    }
-
-    /**
-     * If slot 0 (input) --> Check if {@code stack} is a valid input
-     * If slot 1 (output) --> nothing can be inserted manually
-     *
-     * @param index slot
-     * @param stack itemstack
-     * @return if it can be there
-     */
-    @Override
-    public boolean isItemValidForSlot(int index, ItemStack stack) {
-        switch (index) {
-            case 0:
-                return PoweredFurnaceRecipes.instance().getSmeltingResult(stack) != null;
-            case 1:
-                return false;
-            case 2:
-                return stack.getItem() instanceof IEnergyContainerItem;
-            case 3 | 4 | 5 | 6:
-                return stack.getItem() instanceof IBoosterItem;
-        }
-        return false;
-    }
-
-    /**
-     * Returns the name of the TileEntity.
-     *
-     * @return name of the tile
-     */
-    @Override
-    public String getName() {
-        return BlockInit.blockPoweredFurnace.getLocalizedName();
-    }
-
-    /**
-     * Returns the name of the tile entity, just in a chat supported format.
-     *
-     * @return name of the tile
-     */
-    @Override
-    public IChatComponent getDisplayName() {
-        return new ChatComponentText(BlockInit.blockPoweredFurnace.getLocalizedName());
     }
 
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
-        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockPoweredFurnace.FACING);
+        if (worldObj == null) return new int[0]; // WTF
+        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockCrusher.FACING);
         if (frontOfBlock == side) { // FRONT
             return getSlotsForConfiguration(getConfigurationForSide(Sides.FRONT));
         }
@@ -507,4 +350,67 @@ public class TilePoweredFurnace extends TileMachineBase {
         }
         return sideAllows && ArrayUtils.contains(getOutputSlots(), index);
     }
+
+    @Override
+    public boolean isItemValidForSlot(int index, ItemStack stack) {
+        switch (index) {
+            case 0:
+                return true;
+            case 1:
+                return false;
+            case 2:
+                return false;
+            case 3:
+                return EnergyHelper.isEnergyContainerItem(stack);
+            case 4 | 5 | 6 | 7:
+                return stack.getItem() instanceof IBoosterItem;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public int getField(int id) {
+        switch (id) {
+            case 0:
+                return getEnergyStored(EnumFacing.DOWN);
+            case 1:
+                return progress;
+            case 2:
+                return totalProgress;
+            default:
+                return 0;
+        }
+    }
+
+    @Override
+    public void setField(int id, int value) {
+        switch (id) {
+            case 0:
+                setEnergyStored(value);
+                break;
+            case 1:
+                progress = value;
+                break;
+            case 2:
+                totalProgress = value;
+                break;
+        }
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 2;
+    }
+
+    @Override
+    public String getName() {
+        return StatCollector.translateToLocal("tile.Techy:blockCrusher.name");
+    }
+
+    @Override
+    public IChatComponent getDisplayName() {
+        return new ChatComponentText(getName());
+    }
+
 }

@@ -35,6 +35,7 @@ public class Techy {
      * GUI stuff
      */
     public static final int POWERED_FURNACE_GUI_ID = 0;
+    public static final int CRUSHER_GUI_ID = 1;
 
     /**
      * Instance of this class
@@ -122,6 +123,10 @@ public class Techy {
                     "Define (in ticks) the processing time for vanilla recipes in the powered furnace.", 1, Integer.MAX_VALUE).getInt();
             ConfigData.furnaceDefaultEnergyUsage = config.get("Powered Furnace", "DefaultEnergyUsage", ConfigData.furnaceDefaultEnergyUsage,
                     "Amount of energy consumed when vanilla recipes are processed in the powered furnace", 0, Integer.MAX_VALUE).getInt();
+            ConfigData.crusherDefaultProceessTime = config.get("Crusher", "DefaultCookTime", ConfigData.crusherDefaultProceessTime,
+                    "The time in ticks it takes to complete a process in the crusher.", 1, Integer.MAX_VALUE).getInt();
+            ConfigData.crusherDefaultEnergyUsage = config.get("Crusher", "DefaultEnergyUsage", ConfigData.crusherDefaultEnergyUsage,
+                    "How much energy is used when doing a default recipe.", 0, Integer.MAX_VALUE).getInt();
         } catch (Exception e) {
             e.printStackTrace();
             FMLLog.warning("Techy is unable to load config!");

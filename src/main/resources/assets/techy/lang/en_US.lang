@@ -12,3 +12,4 @@ item.Techy:itemBoosterTime.name=Time Booster
 
 ### Blocks ##
 tile.Techy:blockPoweredFurnace.name=Powered Furnace
+tile.Techy:blockCrusher.name=Crusher

@@ -33,16 +33,4 @@ public class GuiPoweredFurnace extends GuiMachineBase {
         addElement(new ElementProgressBar(this, 80, 37, 22, 16, new ResourceLocation("Techy:textures/gui/element/furnaceProgressBar.png"), 0, 0, 22, 0, ((TilePoweredFurnace) container.tileBase).progress, 17, ((TilePoweredFurnace) container.tileBase).totalProgress));
     }
 
-    /**
-     * Draws the background layer of the GUI.
-     * All done by the supermethod.
-     * @param partialTicks
-     * @param mouseX Position of the mouse pointer on the x-axis.
-     * @param mouseY Position of the mouse pointer on the y-axis.
-     */
-    @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {
-        super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
-    }
-
 }

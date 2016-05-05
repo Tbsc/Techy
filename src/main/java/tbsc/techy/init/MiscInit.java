@@ -5,6 +5,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import tbsc.techy.Techy;
 import tbsc.techy.client.gui.TechyGuiHandler;
 import tbsc.techy.event.GeneralEventHandler;
+import tbsc.techy.recipe.CrusherRecipes;
 import tbsc.techy.recipe.PoweredFurnaceRecipes;
 
 /**
@@ -27,6 +28,7 @@ public class MiscInit {
      */
     public static void postInit() {
         PoweredFurnaceRecipes.instance().loadVanillaRecipes();
+        CrusherRecipes.instance().loadModRecipes();
     }
 
 }

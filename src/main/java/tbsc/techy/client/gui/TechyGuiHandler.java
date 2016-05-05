@@ -5,6 +5,9 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import tbsc.techy.Techy;
+import tbsc.techy.machine.crusher.ContainerCrusher;
+import tbsc.techy.machine.crusher.GuiCrusher;
+import tbsc.techy.machine.crusher.TileCrusher;
 import tbsc.techy.machine.furnace.BlockPoweredFurnace;
 import tbsc.techy.machine.furnace.ContainerPoweredFurnace;
 import tbsc.techy.machine.furnace.GuiPoweredFurnace;
@@ -30,6 +33,9 @@ public class TechyGuiHandler implements IGuiHandler {
         if (ID == Techy.POWERED_FURNACE_GUI_ID) {
             return new ContainerPoweredFurnace(player.inventory, (TilePoweredFurnace) world.getTileEntity(new BlockPos(x, y, z)), BlockPoweredFurnace.tileInvSize);
         }
+        if (ID == Techy.CRUSHER_GUI_ID) {
+            return new ContainerCrusher(player.inventory, (TileCrusher) world.getTileEntity(new BlockPos(x, y, z)));
+        }
         return null;
     }
 
@@ -47,6 +53,9 @@ public class TechyGuiHandler implements IGuiHandler {
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         if (ID == Techy.POWERED_FURNACE_GUI_ID) {
             return new GuiPoweredFurnace(player.inventory, (TilePoweredFurnace) world.getTileEntity(new BlockPos(x, y, z)));
+        }
+        if (ID == Techy.CRUSHER_GUI_ID) {
+            return new GuiCrusher(player.inventory, (TileCrusher) world.getTileEntity(new BlockPos(x, y, z)));
         }
         return null;
     }
