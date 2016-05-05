@@ -24,6 +24,9 @@ public abstract class ItemBoosterBase extends ItemBase implements IBoosterItem {
     public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
         super.addInformation(stack, playerIn, tooltip, advanced);
         tooltip.add("Tier " + stack.getMetadata());
+
+        tooltip.add(EnumChatFormatting.BOLD + "***NOT WORKING ATM***"); // Todo fix boosters
+
         if (StringHelper.isShiftKeyDown()) {
             tooltip.add("Energy modifier: " + getEnergyModifier(stack.getMetadata()) + "%");
             tooltip.add("Time modifier: " + getTimeModifier(stack.getMetadata()) + "%");
