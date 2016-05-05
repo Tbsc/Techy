@@ -36,7 +36,7 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
         IBlockState iblockstate = worldIn.getBlockState(pos);
 
         worldIn.setBlockState(pos, iblockstate.withProperty(WORKING, active));
-        ((TileMachineBase) worldIn.getTileEntity(pos)).setShouldRefresh(false);
+        ((TileMachineBase) worldIn.getTileEntity(pos)).setShouldRefresh(true);
     }
 
     public static boolean getState(World world, BlockPos pos) {
