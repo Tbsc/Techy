@@ -8,12 +8,21 @@ item.Techy:itemBatterySmall.name=Small Rechargeable Battery
 item.Techy:itemBatteryMedium.name=Medium Rechargeable Battery
 item.Techy:itemBatteryLarge.name=Large Rechargeable Battery
 
+## Dusts ##
+item.Techy:itemDustIron.name=Iron Dust
+item.Techy:itemDustGold.name=Gold Dust
+item.Techy:itemDustDiamond.name=Diamond Dust
+item.Techy:itemDustCoal.name=Coal Dust
+item.Techy:itemDustEmerald.name=Emerald Dust
+item.Techy:itemDustWood.name=Sawdust
+item.Techy:itemDustStone.name=Stone Dust
+
 ## Boosters ##
 # Energy
 item.Techy:itemBoosterEnergy.name=Energy Booster
 # Time
 item.Techy:itemBoosterTime.name=Time Booster
 
-### Blocks ##
+### Blocks ###
 tile.Techy:blockPoweredFurnace.name=Powered Furnace
 tile.Techy:blockCrusher.name=Crusher

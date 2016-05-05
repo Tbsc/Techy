@@ -19,6 +19,7 @@ public class ItemInit {
     public static ItemBatteryBase itemBatterySmall;
     public static ItemBatteryBase itemBatteryMedium;
     public static ItemBatteryBase itemBatteryLarge;
+    public static ItemDusts itemDusts;
 
     public static void init() {
         itemWrench = new ItemWrench();
@@ -28,6 +29,7 @@ public class ItemInit {
         itemBatterySmall = new ItemBatteryBase("itemBatterySmall", 100000, 500, 500);
         itemBatteryMedium = new ItemBatteryBase("itemBatteryMedium", 1000000, 1000, 1000);
         itemBatteryLarge = new ItemBatteryBase("itemBatteryLarge", 10000000, 2500, 2500);
+        itemDusts = new ItemDusts();
 
         GameRegistry.registerItem(itemWrench);
         GameRegistry.registerItem(itemBoosterEnergy);
@@ -36,6 +38,7 @@ public class ItemInit {
         GameRegistry.registerItem(itemBatterySmall);
         GameRegistry.registerItem(itemBatteryMedium);
         GameRegistry.registerItem(itemBatteryLarge);
+        GameRegistry.registerItem(itemDusts);
     }
 
     /**
@@ -51,6 +54,7 @@ public class ItemInit {
         itemBatterySmall.initModel();
         itemBatteryMedium.initModel();
         itemBatteryLarge.initModel();
+        itemDusts.initModel();
     }
 
 }
