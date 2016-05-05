@@ -16,17 +16,26 @@ public class ItemInit {
     public static ItemBoosterBase itemBoosterEnergy;
     public static ItemBoosterBase itemBoosterTime;
     public static ItemBoosterBase itemBoosterBonus;
+    public static ItemBatteryBase itemBatterySmall;
+    public static ItemBatteryBase itemBatteryMedium;
+    public static ItemBatteryBase itemBatteryLarge;
 
     public static void init() {
         itemWrench = new ItemWrench();
         itemBoosterEnergy = new ItemBoosterEnergy();
         itemBoosterTime = new ItemBoosterTime();
         itemBoosterBonus = new ItemBoosterAdditionalItems();
+        itemBatterySmall = new ItemBatteryBase("itemBatterySmall", 100000, 500, 500);
+        itemBatteryMedium = new ItemBatteryBase("itemBatteryMedium", 1000000, 1000, 1000);
+        itemBatteryLarge = new ItemBatteryBase("itemBatteryLarge", 10000000, 2500, 2500);
 
         GameRegistry.registerItem(itemWrench);
         GameRegistry.registerItem(itemBoosterEnergy);
         GameRegistry.registerItem(itemBoosterTime);
         GameRegistry.registerItem(itemBoosterBonus);
+        GameRegistry.registerItem(itemBatterySmall);
+        GameRegistry.registerItem(itemBatteryMedium);
+        GameRegistry.registerItem(itemBatteryLarge);
     }
 
     /**
@@ -39,6 +48,9 @@ public class ItemInit {
         itemBoosterEnergy.initModel();
         itemBoosterTime.initModel();
         itemBoosterBonus.initModel();
+        itemBatterySmall.initModel();
+        itemBatteryMedium.initModel();
+        itemBatteryLarge.initModel();
     }
 
 }

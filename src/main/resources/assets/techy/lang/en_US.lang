@@ -4,6 +4,10 @@ itemGroup.techy.machines=Techy Machines
 
 ### Items ###
 item.Techy:itemWrench.name=Wrench
+item.Techy:itemBatterySmall.name=Small Rechargeable Battery
+item.Techy:itemBatteryMedium.name=Medium Rechargeable Battery
+item.Techy:itemBatteryLarge.name=Large Rechargeable Battery
+
 ## Boosters ##
 # Energy
 item.Techy:itemBoosterEnergy.name=Energy Booster
