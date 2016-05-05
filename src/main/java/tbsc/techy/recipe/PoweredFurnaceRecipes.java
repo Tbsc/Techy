@@ -1,5 +1,6 @@
 package tbsc.techy.recipe;
 
+import cofh.lib.util.helpers.ItemHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -7,6 +8,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.fml.common.FMLLog;
 import tbsc.techy.ConfigData;
 
+import javax.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -14,7 +16,7 @@ import java.util.Map.Entry;
 public class PoweredFurnaceRecipes {
 
     private static final PoweredFurnaceRecipes instance = new PoweredFurnaceRecipes();
-    private Map<ItemStack, ItemStack> recipeMap = new HashMap<>();
+    private Map<IRecipeInput, ItemStack> recipeMap = new HashMap<>();
     private Map<ItemStack, Float> experienceMap = new HashMap<>();
     private Map<ItemStack, Integer> energyMap = new HashMap<>();
 
@@ -52,9 +54,29 @@ public class PoweredFurnaceRecipes {
     }
 
     /**
+     * Adds a recipe with an ore dictionary ore name as the input, and 2 outputs with a chance
+     */
+    public void addOreDictionaryRecipe(@Nonnull String oreName, @Nonnull ItemStack output, float experience, int energyUsage) {
+        this.addIRecipeInputRecipe(OreRecipeInput.of(oreName), output, experience, energyUsage);
+    }
+
+    /**
      * Adds a recipe with an ItemStack as the input
      */
     public void addItemStackRecipe(ItemStack input, ItemStack output, float experience, int energyUsage) {
+        if (getSmeltingResult(StackRecipeInput.of(input)) != null) {
+            FMLLog.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
+            return;
+        }
+        this.recipeMap.put(StackRecipeInput.of(input), output);
+        this.experienceMap.put(output, experience);
+        this.energyMap.put(output, energyUsage);
+    }
+
+    /**
+     * Adds a recipe with an IRecipeInput as the input
+     */
+    public void addIRecipeInputRecipe(IRecipeInput input, @Nonnull ItemStack output, float experience, int energyUsage) {
         if (getSmeltingResult(input) != null) {
             FMLLog.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
             return;
@@ -67,14 +89,39 @@ public class PoweredFurnaceRecipes {
     /**
      * Returns the smelting result of an item.
      */
-    public ItemStack getSmeltingResult(ItemStack input) {
-        for (Entry<ItemStack, ItemStack> entry : this.recipeMap.entrySet()) {
-            if (this.compareItemStacks(input, entry.getKey())) {
+    public ItemStack getSmeltingResult(IRecipeInput input) {
+        for (Entry<IRecipeInput, ItemStack> entry : this.recipeMap.entrySet()) {
+            if (this.compareIRecipeInputs(input, entry.getKey())) {
                 return entry.getValue();
             }
         }
 
         return null;
+    }
+
+    /**
+     * Checks if the two inputs are equal
+     */
+    private boolean compareIRecipeInputs(IRecipeInput input1, IRecipeInput input2) {
+        if (input1.getInput() instanceof String && input2.getInput() instanceof String) {
+            return ((String) input1.getInput()).equalsIgnoreCase((String) input2.getInput());
+        }
+        if (input1.getInput() instanceof ItemStack && input2.getInput() instanceof ItemStack) {
+            ItemStack stack1 = (ItemStack) input1.getInput();
+            ItemStack stack2 = (ItemStack) input2.getInput();
+            return stack2.getItem() == stack1.getItem() && (stack2.getMetadata() == 32767 || stack2.getMetadata() == stack1.getMetadata());
+        }
+        if (input1.getInput() instanceof ItemStack && input2.getInput() instanceof String) {
+            ItemStack stack1 = (ItemStack) input1.getInput();
+            String stack2 = (String) input2.getInput();
+            return ItemHelper.getOreNames(stack1).contains(stack2);
+        }
+        if (input1.getInput() instanceof String && input2.getInput() instanceof ItemStack) {
+            String stack1 = (String) input1.getInput();
+            ItemStack stack2 = (ItemStack) input2.getInput();
+            return ItemHelper.getOreNames(stack2).contains(stack1);
+        }
+        return false;
     }
 
     /**
@@ -88,7 +135,7 @@ public class PoweredFurnaceRecipes {
      * Returns the recipe map
      * @return recipe map instance
      */
-    public Map<ItemStack, ItemStack> getRecipeMap() {
+    public Map<IRecipeInput, ItemStack> getRecipeMap() {
         return this.recipeMap;
     }
 

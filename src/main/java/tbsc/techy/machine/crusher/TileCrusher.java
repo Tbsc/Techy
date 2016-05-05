@@ -15,6 +15,7 @@ import tbsc.techy.api.SideConfiguration;
 import tbsc.techy.api.Sides;
 import tbsc.techy.machine.furnace.BlockPoweredFurnace;
 import tbsc.techy.recipe.CrusherRecipes;
+import tbsc.techy.recipe.StackRecipeInput;
 import tbsc.techy.tile.TileMachineBase;
 
 import javax.annotation.Nonnull;
@@ -55,7 +56,7 @@ public class TileCrusher extends TileMachineBase {
             } else if (this.inventory[1].getItem() == recipeOutput.getItem()) {
                 this.inventory[1].stackSize += recipeOutput.stackSize; // Forge BugFix: Results may have multiple items
                 Random rand = new Random();
-                ImmutableTriple<ItemStack, ItemStack, Integer> triple = CrusherRecipes.instance().getSmeltingResult(inventory[0]);
+                ImmutableTriple<ItemStack, ItemStack, Integer> triple = CrusherRecipes.instance().getSmeltingResult(StackRecipeInput.of(inventory[0]));
                 int chance = rand.nextInt(100) + 1;
                 if (chance <= triple.getRight()) {
                     // Finished with the checking, it found a random number and it matched, so extra item to be given
@@ -164,11 +165,11 @@ public class TileCrusher extends TileMachineBase {
             return false;
         } else {
             // No recipe with input item
-            if (CrusherRecipes.instance().getSmeltingResult(inventory[0]) == null) {
+            if (CrusherRecipes.instance().getSmeltingResult(StackRecipeInput.of(inventory[0])) == null) {
                 return false;
             }
             // There is a recipe, then store the output in a variable
-            ItemStack recipeOutput = CrusherRecipes.instance().getSmeltingResult(inventory[0]).getLeft();
+            ItemStack recipeOutput = CrusherRecipes.instance().getSmeltingResult(StackRecipeInput.of(inventory[0])).getLeft();
             // Not enough energy stored in tile
             if ((energyModifier / 100) * CrusherRecipes.instance().getSmeltingEnergy(recipeOutput) >= getEnergyStored(EnumFacing.DOWN)) {
                 return false;
@@ -225,7 +226,7 @@ public class TileCrusher extends TileMachineBase {
      */
     @Override
     public ItemStack getSmeltingOutput(ItemStack input) {
-        return CrusherRecipes.instance().getSmeltingResult(input) != null ? CrusherRecipes.instance().getSmeltingResult(input).getLeft() : null;
+        return CrusherRecipes.instance().getSmeltingResult(StackRecipeInput.of(input)) != null ? CrusherRecipes.instance().getSmeltingResult(StackRecipeInput.of(input)).getLeft() : null;
     }
 
     @Override

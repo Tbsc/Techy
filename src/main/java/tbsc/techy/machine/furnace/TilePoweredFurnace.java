@@ -15,6 +15,7 @@ import tbsc.techy.api.SideConfiguration;
 import tbsc.techy.api.Sides;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.recipe.PoweredFurnaceRecipes;
+import tbsc.techy.recipe.StackRecipeInput;
 import tbsc.techy.tile.TileMachineBase;
 
 import javax.annotation.Nonnull;
@@ -60,7 +61,7 @@ public class TilePoweredFurnace extends TileMachineBase {
     public void doOperation() {
         // Double checking, you can never check more than enough
         if (this.canOperate()) {
-            ItemStack recipeOutput = PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]);
+            ItemStack recipeOutput = PoweredFurnaceRecipes.instance().getSmeltingResult(StackRecipeInput.of(inventory[0]));
             float experience = (experienceModifier / 100) * PoweredFurnaceRecipes.instance().getSmeltingExperience(recipeOutput);
 
             if (this.inventory[1] == null) {
@@ -144,11 +145,11 @@ public class TilePoweredFurnace extends TileMachineBase {
             return false;
         } else {
             // No recipe with input item
-            if (PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]) == null) {
+            if (PoweredFurnaceRecipes.instance().getSmeltingResult(StackRecipeInput.of(inventory[0])) == null) {
                 return false;
             }
             // There is a recipe, then store the output in a variable
-            ItemStack recipeOutput = PoweredFurnaceRecipes.instance().getSmeltingResult(inventory[0]);
+            ItemStack recipeOutput = PoweredFurnaceRecipes.instance().getSmeltingResult(StackRecipeInput.of(inventory[0]));
             // Not enough energy stored in tile
             if ((energyModifier / 100) * PoweredFurnaceRecipes.instance().getSmeltingEnergy(recipeOutput) >= getEnergyStored(EnumFacing.DOWN)) {
                 return false;
@@ -374,7 +375,7 @@ public class TilePoweredFurnace extends TileMachineBase {
 
     @Override
     public ItemStack getSmeltingOutput(ItemStack input) {
-        return PoweredFurnaceRecipes.instance().getSmeltingResult(input);
+        return PoweredFurnaceRecipes.instance().getSmeltingResult(StackRecipeInput.of(input));
     }
 
     @Override
@@ -394,7 +395,7 @@ public class TilePoweredFurnace extends TileMachineBase {
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         switch (index) {
             case 0:
-                return PoweredFurnaceRecipes.instance().getSmeltingResult(stack) != null;
+                return PoweredFurnaceRecipes.instance().getSmeltingResult(StackRecipeInput.of(stack)) != null;
             case 1:
                 return false;
             case 2:

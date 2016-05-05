@@ -1,5 +1,6 @@
 package tbsc.techy.recipe;
 
+import cofh.lib.util.helpers.ItemHelper;
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -26,7 +27,7 @@ import java.util.Map;
 public class CrusherRecipes {
 
     private static final CrusherRecipes instance = new CrusherRecipes();
-    private Map<ItemStack, ImmutableTriple<ItemStack, ItemStack, Integer>> recipeMap = new HashMap<>();
+    private Map<IRecipeInput, ImmutableTriple<ItemStack, ItemStack, Integer>> recipeMap = new HashMap<>();
     private Map<ImmutableTriple<ItemStack, ItemStack, Integer>, Float> experienceMap = new HashMap<>();
     private Map<ImmutableTriple<ItemStack, ItemStack, Integer>, Integer> energyMap = new HashMap<>();
 
@@ -41,26 +42,48 @@ public class CrusherRecipes {
 
     public void loadModRecipes() {
         addItemRecipe(Items.apple, new ItemStack(Items.arrow), new ItemStack(Items.baked_potato), 50, 100, 4000); // Test recipe
+        addOreDictionaryRecipe("gemDiamond", new ItemStack(Items.blaze_powder), new ItemStack(Items.beef), 40, 100, 4000);
     }
 
     /**
      * Adds a recipe with a block as the input
      */
-    public void addBlockRecipe(Block input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
+    public void addBlockRecipe(@Nonnull Block input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
         this.addItemRecipe(Item.getItemFromBlock(input), output, output2, output2Chance, experience, energyUsage);
     }
 
     /**
      * Adds a recipe with an item as the input, and 2 outputs with a chance
      */
-    public void addItemRecipe(Item input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
+    public void addItemRecipe(@Nonnull Item input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
         this.addItemStackRecipe(new ItemStack(input, 1, 32767), output, output2, output2Chance, experience, energyUsage);
+    }
+
+    /**
+     * Adds a recipe with an ore dictionary ore name as the input, and 2 outputs with a chance
+     */
+    public void addOreDictionaryRecipe(@Nonnull String oreName, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
+        this.addIRecipeInputRecipe(OreRecipeInput.of(oreName), output, output2, output2Chance, experience, energyUsage);
     }
 
     /**
      * Adds a recipe with an ItemStack as the input
      */
-    public void addItemStackRecipe(ItemStack input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
+    public void addItemStackRecipe(@Nonnull ItemStack input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
+        if (getSmeltingResult(StackRecipeInput.of(input)) != null) {
+            FMLLog.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
+            return;
+        }
+        ImmutableTriple<ItemStack, ItemStack, Integer> key = new ImmutableTriple<>(output, output2, output2Chance);
+        this.recipeMap.put(StackRecipeInput.of(input), key);
+        this.experienceMap.put(key, experience);
+        this.energyMap.put(key, energyUsage);
+    }
+
+    /**
+     * Adds a recipe with an ItemStack as the input
+     */
+    public void addIRecipeInputRecipe(IRecipeInput input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
         if (getSmeltingResult(input) != null) {
             FMLLog.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
             return;
@@ -72,11 +95,29 @@ public class CrusherRecipes {
     }
 
     /**
+     * Checks if the given item stack is a valid recipe input
+     * @param input item stack to check
+     * @return if is a valid input for any recipe
+     */
+    public boolean isValidInput(ItemStack input) {
+        return getSmeltingResult(StackRecipeInput.of(input)) != null;
+    }
+
+    /**
+     * Checks if the given ore name is a valid recipe input
+     * @param input ore name to check
+     * @return if it is a valid input for any recipe
+     */
+    public boolean isValidInput(String input) {
+        return getSmeltingResult(OreRecipeInput.of(input)) != null;
+    }
+
+    /**
      * Returns the smelting result of an item.
      */
-    public ImmutableTriple<ItemStack, ItemStack, Integer> getSmeltingResult(ItemStack input) {
-        for (Map.Entry<ItemStack, ImmutableTriple<ItemStack, ItemStack, Integer>> entry : this.recipeMap.entrySet()) {
-            if (this.compareItemStacks(input, entry.getKey())) {
+    public ImmutableTriple<ItemStack, ItemStack, Integer> getSmeltingResult(IRecipeInput input) {
+        for (Map.Entry<IRecipeInput, ImmutableTriple<ItemStack, ItemStack, Integer>> entry : this.recipeMap.entrySet()) {
+            if (this.compareIRecipeInputs(input, entry.getKey())) {
                 return entry.getValue();
             }
         }
@@ -85,7 +126,33 @@ public class CrusherRecipes {
     }
 
     /**
-     * Checks if the two itemstacks are equal
+     * Checks if the two inputs are equal
+     */
+    private boolean compareIRecipeInputs(IRecipeInput input1, IRecipeInput input2) {
+        if (input1.getInput() instanceof String && input2.getInput() instanceof String) {
+            return ((String) input1.getInput()).equalsIgnoreCase((String) input2.getInput());
+        }
+        if (input1.getInput() instanceof ItemStack && input2.getInput() instanceof ItemStack) {
+            ItemStack stack1 = (ItemStack) input1.getInput();
+            ItemStack stack2 = (ItemStack) input2.getInput();
+            return stack2.getItem() == stack1.getItem() && (stack2.getMetadata() == 32767 || stack2.getMetadata() == stack1.getMetadata());
+        }
+        if (input1.getInput() instanceof ItemStack && input2.getInput() instanceof String) {
+            ItemStack stack1 = (ItemStack) input1.getInput();
+            String stack2 = (String) input2.getInput();
+            return ItemHelper.getOreNames(stack1).contains(stack2);
+        }
+        if (input1.getInput() instanceof String && input2.getInput() instanceof ItemStack) {
+            String stack1 = (String) input1.getInput();
+            ItemStack stack2 = (ItemStack) input2.getInput();
+            return ItemHelper.getOreNames(stack2).contains(stack1);
+        }
+        return false;
+    }
+
+    /**
+     * Compares between two item stacks.
+     * Checks the metadata and the item type.
      */
     private boolean compareItemStacks(ItemStack stack1, ItemStack stack2) {
         return stack2.getItem() == stack1.getItem() && (stack2.getMetadata() == 32767 || stack2.getMetadata() == stack1.getMetadata());
@@ -95,7 +162,7 @@ public class CrusherRecipes {
      * Returns the recipe map
      * @return recipe map instance
      */
-    public Map<ItemStack, ImmutableTriple<ItemStack, ItemStack, Integer>> getRecipeMap() {
+    public Map<IRecipeInput, ImmutableTriple<ItemStack, ItemStack, Integer>> getRecipeMap() {
         return this.recipeMap;
     }
 
