@@ -11,6 +11,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
 import tbsc.techy.api.ITechyRotatable;
+import tbsc.techy.tile.TileMachineBase;
 
 /**
  * This base class adds rotation logic to the machines, and most machines will be based on
@@ -31,9 +32,11 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
     }
 
     public static void setState(boolean active, World worldIn, BlockPos pos) {
+        ((TileMachineBase) worldIn.getTileEntity(pos)).setShouldRefresh(false);
         IBlockState iblockstate = worldIn.getBlockState(pos);
 
         worldIn.setBlockState(pos, iblockstate.withProperty(WORKING, active));
+        ((TileMachineBase) worldIn.getTileEntity(pos)).setShouldRefresh(false);
     }
 
     public static boolean getState(World world, BlockPos pos) {
@@ -66,7 +69,9 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
     @Override
     public void rotateBlock(IBlockState block, World world, BlockPos pos, EnumFacing rotateTo, EntityLivingBase rotatedBy) {
         if (EnumFacing.Plane.HORIZONTAL.apply(rotateTo)) { // Is this EnumFacing rotation valid for the horizontal plane
+            ((TileMachineBase) world.getTileEntity(pos)).setShouldRefresh(false);
             world.setBlockState(pos, block.withProperty(FACING, rotateTo), 2); // Change rotation
+            ((TileMachineBase) world.getTileEntity(pos)).setShouldRefresh(true);
         }
     }
 

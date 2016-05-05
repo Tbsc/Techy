@@ -206,8 +206,13 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     @Override
     public void stopOperating(boolean preventOperation) {
         this.preventOperation = preventOperation;
+        this.shouldRefresh = true;
         progress = totalProgress = 0;
         setOperationStatus(false);
+    }
+
+    public void setShouldRefresh(boolean state) {
+        this.shouldRefresh = state;
     }
 
     public void spawnXPOrb(int xpAmount, int stackSize) {
