@@ -21,6 +21,13 @@ public abstract class ItemBase extends Item {
         setUnlocalizedName(Techy.MODID + ":" + unlocalizedName);
     }
 
+    /**
+     * For subitems who have no unlocalized name, and they set it by their own
+     */
+    protected ItemBase() {
+        setCreativeTab(Techy.tabTechyItems);
+    }
+
     @SideOnly(Side.CLIENT)
     public void initModel() {
         ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
