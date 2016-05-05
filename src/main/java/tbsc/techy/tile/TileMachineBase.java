@@ -47,7 +47,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
      * How much energy needs to be consumed every tick, based on the cook time of
      * the recipe and amount of energy this recipe needs to operate.
      */
-    protected int energyConsumptionPerTick = 0;
+    public int energyConsumptionPerTick = 0;
 
     /**
      * Percentage of energy to be added
