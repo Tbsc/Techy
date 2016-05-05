@@ -57,13 +57,15 @@ public class TileCrusher extends TileMachineBase {
                 this.inventory[1].stackSize += recipeOutput.stackSize; // Forge BugFix: Results may have multiple items
                 Random rand = new Random();
                 ImmutableTriple<ItemStack, ItemStack, Integer> triple = CrusherRecipes.instance().getSmeltingResult(StackRecipeInput.of(inventory[0]));
-                int chance = rand.nextInt(100) + 1;
-                if (chance <= triple.getRight()) {
-                    // Finished with the checking, it found a random number and it matched, so extra item to be given
-                    if (this.inventory[2] == null) {
-                        this.inventory[2] = triple.getMiddle().copy();
-                    } else if (this.inventory[2].getItem() == triple.getMiddle().getItem() && this.inventory[2].getMaxStackSize() >= this.inventory[2].stackSize + triple.getMiddle().stackSize) {
-                        this.inventory[2].stackSize += triple.getMiddle().stackSize;
+                if (triple.getMiddle() != null) { // If there is any additional output
+                    int chance = rand.nextInt(100) + 1;
+                    if (chance <= triple.getRight()) {
+                        // Finished with the checking, it found a random number and it matched, so extra item to be given
+                        if (this.inventory[2] == null) {
+                            this.inventory[2] = triple.getMiddle().copy();
+                        } else if (this.inventory[2].getItem() == triple.getMiddle().getItem() && this.inventory[2].getMaxStackSize() >= this.inventory[2].stackSize + triple.getMiddle().stackSize) {
+                            this.inventory[2].stackSize += triple.getMiddle().stackSize;
+                        }
                     }
                 }
                 if (additionalItemModifier >= 1) {
