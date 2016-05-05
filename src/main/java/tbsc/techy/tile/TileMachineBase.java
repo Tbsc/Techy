@@ -164,7 +164,9 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
                     double energyPercentage = (energyModifier / 100) * getEnergyUsage(getSmeltingOutput(inventory[0]));
                     energyConsumptionPerTick = (int) ((energyPercentage / totalProgress) / 10 * 10);
                     shouldRefresh = false;
-                    BlockBaseFacingMachine.setState(true, worldObj, pos);
+                    if (worldObj.getBlockState(pos).getBlock() == null) {
+                        BlockBaseFacingMachine.setState(true, worldObj, pos);
+                    }
                     setOperationStatus(true);
                 }
                 ++progress;
