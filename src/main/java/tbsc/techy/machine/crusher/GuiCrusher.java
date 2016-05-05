@@ -25,7 +25,11 @@ public class GuiCrusher extends GuiMachineBase {
         addElement(new ElementSlotRender(this, -21, 35));
         addElement(new ElementSlotRender(this, -21, 55));
         addElement(new ElementSlotRender(this, -21, 75));
-        addElement(new ElementProgressBar(this, 72, 37, 22, 16, new ResourceLocation("Techy:textures/gui/element/furnaceProgressBar.png"), 0, 0, 22, 0, container.tileBase.progress, 17, container.tileBase.totalProgress));
     }
 
+    @Override
+    protected void drawGuiContainerBackgroundLayer(float gameTicks, int x, int y) {
+        super.drawGuiContainerBackgroundLayer(gameTicks, x, y);
+        addElement(new ElementProgressBar(this, 72, 37, 22, 16, new ResourceLocation("Techy:textures/gui/element/furnaceProgressBar.png"), 0, 0, 22, 0, container.tileBase.progress, 17, container.tileBase.totalProgress));
+    }
 }
