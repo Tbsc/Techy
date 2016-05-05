@@ -39,6 +39,10 @@ public class PoweredFurnaceRecipes {
         }
     }
 
+    public void loadModRecipes() {
+
+    }
+
     /**
      * Adds a recipe with a block as the input
      */
