@@ -33,7 +33,7 @@ public class TileCrusher extends TileMachineBase {
     int progress;
     public EnumMap<Sides, SideConfiguration> sideConfigMap = new EnumMap<>(Sides.class);
 
-    protected TileCrusher() {
+    public TileCrusher() {
         super(50000, 700, BlockCrusher.tileInvSize, ConfigData.crusherDefaultProceessTime);
 
         sideConfigMap.put(Sides.UP, SideConfiguration.INPUT);
