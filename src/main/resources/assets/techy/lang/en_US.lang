@@ -17,6 +17,9 @@ item.Techy:itemDustEmerald.name=Emerald Dust
 item.Techy:itemDustWood.name=Sawdust
 item.Techy:itemDustStone.name=Stone Dust
 
+## Crafting Components ##
+item.Techy:itemHeatingComponent.name=Heating Component
+
 ## Boosters ##
 # Energy
 item.Techy:itemBoosterEnergy.name=Energy Booster
