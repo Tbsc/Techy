@@ -9,4 +9,6 @@ public interface IProxy {
 
     void initModels();
 
+    void preInit();
+
 }

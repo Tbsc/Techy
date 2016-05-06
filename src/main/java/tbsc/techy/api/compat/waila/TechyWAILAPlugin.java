@@ -1,0 +1,65 @@
+package tbsc.techy.api.compat.waila;
+
+import mcp.mobius.waila.api.IWailaConfigHandler;
+import mcp.mobius.waila.api.IWailaDataAccessor;
+import mcp.mobius.waila.api.IWailaDataProvider;
+import mcp.mobius.waila.api.IWailaRegistrar;
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
+import tbsc.techy.tile.TileMachineBase;
+
+import java.util.List;
+
+/**
+ * WAILA Techy plugin
+ *
+ * Created by tbsc on 5/6/16.
+ */
+@Optional.Interface(iface = "mcp.mobius.waila.IWailaDataProvider", modid = "Waila")
+public class TechyWAILAPlugin implements IWailaDataProvider {
+
+    @Optional.Method(modid = "Waila")
+    @Override
+    public ItemStack getWailaStack(IWailaDataAccessor iWailaDataAccessor, IWailaConfigHandler iWailaConfigHandler) {
+        return null;
+    }
+
+    @Optional.Method(modid = "Waila")
+    @Override
+    public List<String> getWailaHead(ItemStack itemStack, List<String> list, IWailaDataAccessor iWailaDataAccessor, IWailaConfigHandler iWailaConfigHandler) {
+        return null;
+    }
+
+    @Optional.Method(modid = "Waila")
+    @Override
+    public List<String> getWailaBody(ItemStack stack, List<String> list, IWailaDataAccessor data, IWailaConfigHandler config) {
+        TileMachineBase tile = (TileMachineBase) data.getTileEntity();
+        list.clear();
+        list.add(tile.getEnergyStored(EnumFacing.DOWN) + " / " + tile.getMaxEnergyStored(EnumFacing.DOWN) + " RF");
+        return list;
+    }
+
+    @Optional.Method(modid = "Waila")
+    @Override
+    public List<String> getWailaTail(ItemStack itemStack, List<String> list, IWailaDataAccessor iWailaDataAccessor, IWailaConfigHandler iWailaConfigHandler) {
+        return null;
+    }
+
+    @Optional.Method(modid = "Waila")
+    @Override
+    public NBTTagCompound getNBTData(EntityPlayerMP entityPlayerMP, TileEntity tileEntity, NBTTagCompound nbtTagCompound, World world, BlockPos blockPos) {
+        return null;
+    }
+
+    @Optional.Method(modid = "Waila")
+    public static void callbackRegister(IWailaRegistrar registrar) {
+        registrar.registerBodyProvider(new TechyWAILAPlugin(), TileMachineBase.class);
+    }
+
+}

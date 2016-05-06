@@ -12,4 +12,9 @@ public class ServerProxy extends CommonProxy {
         // NO-OP
     }
 
+    @Override
+    public void preInit() {
+
+    }
+
 }

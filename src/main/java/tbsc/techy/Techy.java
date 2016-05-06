@@ -85,6 +85,7 @@ public class Techy {
         ItemInit.init();
         MiscInit.init();
         proxy.initModels();
+        proxy.preInit();
 
         config = new Configuration(event.getSuggestedConfigurationFile());
         syncConfig();
