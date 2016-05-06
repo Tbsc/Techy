@@ -1,7 +1,6 @@
 package tbsc.techy.machine.furnace;
 
 import cofh.api.energy.IEnergyContainerItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
@@ -45,12 +44,12 @@ public class TilePoweredFurnace extends TileMachineBase {
     public TilePoweredFurnace() {
         super(40000, 640, BlockPoweredFurnace.tileInvSize, ConfigData.furnaceDefaultCookTime);
 
+        sideConfigMap.put(Sides.UP, SideConfiguration.INPUT);
+        sideConfigMap.put(Sides.DOWN, SideConfiguration.OUTPUT);
         sideConfigMap.put(Sides.FRONT, SideConfiguration.INPUT);
         sideConfigMap.put(Sides.BACK, SideConfiguration.INPUT);
         sideConfigMap.put(Sides.LEFT, SideConfiguration.INPUT);
         sideConfigMap.put(Sides.RIGHT, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.UP, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.DOWN, SideConfiguration.OUTPUT);
     }
 
     /**
@@ -225,29 +224,15 @@ public class TilePoweredFurnace extends TileMachineBase {
     @Override
     public int[] getSlotsForConfiguration(SideConfiguration sideConfig) {
         switch (sideConfig) {
-            case DISABLED:
-                return new int[0];
             case INPUT:
                 return getInputSlots();
             case OUTPUT:
                 return getOutputSlots();
             case IO:
                 return ArrayUtils.addAll(getInputSlots(), getOutputSlots());
-            case UNKNOWN:
-                return null;
             default:
-                return null;
+                return new int[0];
         }
-    }
-
-    /**
-     * Checks if the player can use the tile entity.
-     * @param player The player that's checked
-     * @return if the player is in range of 8 blocks from the block.
-     */
-    @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return this.worldObj.getTileEntity(pos) == this && player.getDistanceSq(this.pos.add(0.5, 0.5, 0.5)) <= 64;
     }
 
     /**
@@ -478,7 +463,7 @@ public class TilePoweredFurnace extends TileMachineBase {
         if (side == EnumFacing.DOWN) { // DOWN
             sideAllows = getConfigurationForSide(Sides.DOWN).allowsInput();
         }
-        return sideAllows && ArrayUtils.contains(getOutputSlots(), index);
+        return sideAllows && ArrayUtils.contains(getInputSlots(), index);
     }
 
     @Override
@@ -508,4 +493,5 @@ public class TilePoweredFurnace extends TileMachineBase {
         }
         return sideAllows && ArrayUtils.contains(getOutputSlots(), index);
     }
+
 }

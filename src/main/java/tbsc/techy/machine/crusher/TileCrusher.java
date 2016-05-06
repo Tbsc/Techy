@@ -13,7 +13,6 @@ import tbsc.techy.ConfigData;
 import tbsc.techy.api.IBoosterItem;
 import tbsc.techy.api.SideConfiguration;
 import tbsc.techy.api.Sides;
-import tbsc.techy.machine.furnace.BlockPoweredFurnace;
 import tbsc.techy.recipe.CrusherRecipes;
 import tbsc.techy.recipe.StackRecipeInput;
 import tbsc.techy.tile.TileMachineBase;
@@ -272,7 +271,6 @@ public class TileCrusher extends TileMachineBase {
 
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
-        if (worldObj == null) return new int[0]; // WTF
         EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockCrusher.FACING);
         if (frontOfBlock == side) { // FRONT
             return getSlotsForConfiguration(getConfigurationForSide(Sides.FRONT));
@@ -300,7 +298,7 @@ public class TileCrusher extends TileMachineBase {
 
     @Override
     public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing side) {
-        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockPoweredFurnace.FACING);
+        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockCrusher.FACING);
         boolean sideAllows = false;
         if (frontOfBlock == side) { // FRONT
             sideAllows = getConfigurationForSide(Sides.FRONT).allowsInput();
@@ -323,12 +321,12 @@ public class TileCrusher extends TileMachineBase {
         if (side == EnumFacing.DOWN) { // DOWN
             sideAllows = getConfigurationForSide(Sides.DOWN).allowsInput();
         }
-        return sideAllows && ArrayUtils.contains(getOutputSlots(), index);
+        return sideAllows && ArrayUtils.contains(getInputSlots(), index);
     }
 
     @Override
     public boolean canExtractItem(int index, ItemStack stack, EnumFacing side) {
-        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockPoweredFurnace.FACING);
+        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockCrusher.FACING);
         boolean sideAllows = false;
         if (frontOfBlock == side) { // FRONT
             sideAllows = getConfigurationForSide(Sides.FRONT).allowsOutput();
