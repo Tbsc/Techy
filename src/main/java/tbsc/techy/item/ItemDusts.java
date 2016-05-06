@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLLog;
-import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
@@ -26,10 +25,6 @@ public class ItemDusts extends ItemBase {
         setHasSubtypes(true);
         setMaxStackSize(64);
         setRegistryName("itemDust");
-
-        for (DustType dustType : DustType.values()) {
-            OreDictionary.registerOre("dust" + dustType.regName, new ItemStack(this, 1, dustType.id));
-        }
     }
 
     @Override

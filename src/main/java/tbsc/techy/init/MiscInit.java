@@ -2,13 +2,16 @@ package tbsc.techy.init;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import tbsc.techy.Techy;
 import tbsc.techy.client.gui.TechyGuiHandler;
 import tbsc.techy.event.GeneralEventHandler;
+import tbsc.techy.item.ItemDusts;
 import tbsc.techy.recipe.CrusherRecipes;
 import tbsc.techy.recipe.PoweredFurnaceRecipes;
 
@@ -34,6 +37,11 @@ public class MiscInit {
     public static void init() {
         MinecraftForge.EVENT_BUS.register(new GeneralEventHandler());
         NetworkRegistry.INSTANCE.registerGuiHandler(Techy.instance, new TechyGuiHandler());
+
+        // Adding dusts to ore dictionary
+        for (ItemDusts.DustType dustType : ItemDusts.DustType.values()) {
+            OreDictionary.registerOre("dust" + dustType.regName, new ItemStack(ItemInit.itemDusts, 1, dustType.id));
+        }
 
         // MACHINES //
 
