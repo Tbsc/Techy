@@ -99,7 +99,6 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     public EnergyStorage energyStorage;
     protected boolean isRunning;
     protected boolean shouldRun = true;
-    protected boolean shouldRefresh = true;
 
     /**
      * In order to keep data of previous boosters in order for me to undo their modifiers,
@@ -163,7 +162,6 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
                     // What this does is calculate the amount of energy to be consumed per tick, by rounding it to a multiple of 10
                     double energyPercentage = (energyModifier / 100) * getEnergyUsage(getSmeltingOutput(inventory[0]));
                     energyConsumptionPerTick = (int) ((energyPercentage / totalProgress) / 10 * 10);
-                    shouldRefresh = false;
                     if (worldObj.getBlockState(pos).getBlock() == null) {
                         BlockBaseFacingMachine.setState(true, worldObj, pos);
                     }
@@ -179,7 +177,6 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
                     if (worldObj.getBlockState(pos).getBlock() == null) {
                         BlockBaseFacingMachine.setState(false, worldObj, pos);
                     }
-                    shouldRefresh = true;
                     progress = totalProgress = 0;
                     setOperationStatus(false);
                     markDirty = true;
@@ -202,19 +199,14 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
 
     @Override
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
-        return super.shouldRefresh(world, pos, oldState, newSate) && shouldRefresh;
+        return oldState.getBlock() != newSate.getBlock();
     }
 
     @Override
     public void stopOperating(boolean preventOperation) {
         this.preventOperation = preventOperation;
-        this.shouldRefresh = true;
         progress = totalProgress = 0;
         setOperationStatus(false);
-    }
-
-    public void setShouldRefresh(boolean state) {
-        this.shouldRefresh = state;
     }
 
     public void spawnXPOrb(int xpAmount, int stackSize) {
