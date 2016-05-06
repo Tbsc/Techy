@@ -7,7 +7,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.common.FMLLog;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
@@ -44,7 +43,6 @@ public class ItemDusts extends ItemBase {
         ModelBakery.registerItemVariants(this, textures);
         for (DustType type : DustType.values()) {
             ModelLoader.setCustomModelResourceLocation(this, type.id, new ModelResourceLocation(getRegistryName() + type.regName, "inventory"));
-            FMLLog.info(getRegistryName());
         }
     }
 
