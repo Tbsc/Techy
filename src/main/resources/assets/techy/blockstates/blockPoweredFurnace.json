@@ -1,9 +1,12 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "Techy:blockPoweredFurnace",
+    "model": "Techy:machine",
     "textures": {
-      "front": "Techy:blocks/blockPoweredFurnaceFront"
+      "front": "Techy:blocks/blockPoweredFurnaceFront",
+      "top": "Techy:blocks/blockGenericTop",
+      "bottom": "Techy:blocks/blockGenericTop",
+      "side": "Techy:blocks/blockGenericSide"
     }
   },
   "variants": {
