@@ -1,6 +1,5 @@
 package tbsc.techy.init;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
@@ -49,7 +48,13 @@ public class MiscInit {
                 "SIS",
                 "BFB",
                 "SHS",
-                'F', Blocks.furnace, 'H', ItemInit.itemHeatingComponent, 'B', ItemInit.itemBatterySmall, 'S', "stone", 'I', "ingotIron"));
+                'F', BlockInit.blockMachineBaseBasic, 'H', ItemInit.itemHeatingComponent, 'B', ItemInit.itemBatterySmall, 'S', "stone", 'I', "ingotIron"));
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockCrusher,
+                "IAI",
+                "BFB",
+                "IGI",
+                'F', BlockInit.blockMachineBaseBasic, 'B', ItemInit.itemBatterySmall, 'G', ItemInit.itemGrindingComponent, 'A', "ingotGold", 'I', "ingotIron"));
 
         // CRAFTING COMPONENTS //
 
