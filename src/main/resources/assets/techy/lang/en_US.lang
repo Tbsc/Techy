@@ -19,6 +19,7 @@ item.Techy:itemDustStone.name=Stone Dust
 
 ## Crafting Components ##
 item.Techy:itemHeatingComponent.name=Heating Component
+item.Techy:itemGrindingComponent.name=Grinding Component
 
 ## Boosters ##
 # Energy
@@ -29,3 +30,6 @@ item.Techy:itemBoosterTime.name=Time Booster
 ### Blocks ###
 tile.Techy:blockPoweredFurnace.name=Powered Furnace
 tile.Techy:blockCrusher.name=Crusher
+tile.Techy:blockMachineBaseBasic.name=Basic Machine Base
+tile.Techy:blockMachineBaseImproved.name=Improved Machine Base
+tile.Techy:blockMachineBaseAdvanced.name=Advanced Machine Base
