@@ -1,12 +1,9 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "Techy:machine",
+    "model": "Techy:blockCrusher",
     "textures": {
-      "front": "Techy:blocks/blockCrusherFront",
-      "top": "Techy:blocks/blockGenericTop",
-      "bottom": "Techy:blocks/blockGenericTop",
-      "side": "Techy:blocks/blockGenericSide"
+      "front": "Techy:blocks/blockCrusherFront"
     }
   },
   "variants": {

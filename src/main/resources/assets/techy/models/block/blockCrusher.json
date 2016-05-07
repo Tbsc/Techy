@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "Techy:blocks/blockCrusherFront",
+    "down": "Techy:blocks/blockGenericTop",
+    "up": "Techy:blocks/blockGenericTop",
+    "east": "Techy:blocks/blockGenericSide",
+    "west": "Techy:blocks/blockGenericSide",
+    "north": "#front",
+    "south": "Techy:blocks/blockGenericSide"
+  }
+}
