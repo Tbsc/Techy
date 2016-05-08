@@ -125,6 +125,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     public void update() {
         handleRedstone();
         handleEnergyItems();
+        handleBoosters();
 
         boolean markDirty;
 
@@ -133,6 +134,28 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
         if (markDirty) {
             this.markDirty();
         }
+    }
+
+    protected boolean handleBoosters() {
+        int energyModifierSet = 100, timeModifierSet = 100, experienceModifierSet = 100, additionalItemModifierSet = 0;
+        if (getBoosterSlots().length >= 1) {
+            for (int i = 0; i < getBoosterSlots().length; ++i) {
+                if (inventory[getBoosterSlots()[i]] != null) {
+                    // No need to check if item is a booster, because only booster items area allowed there
+                    IBoosterItem booster = (IBoosterItem) inventory[getBoosterSlots()[i]].getItem();
+                    int tier = inventory[getBoosterSlots()[i]].getMetadata();
+                    energyModifierSet =+ booster.getEnergyModifier(tier);
+                    timeModifierSet = booster.getTimeModifier(tier);
+                    experienceModifierSet =+ booster.getExperienceModifier(tier);
+                    additionalItemModifierSet =+ booster.getAdditionalItemModifier(tier);
+                }
+            }
+        }
+        energyModifier = energyModifierSet;
+        timeModifier = timeModifierSet;
+        experienceModifier = experienceModifierSet;
+        additionalItemModifier = additionalItemModifierSet;
+        return false;
     }
 
     protected boolean handleRedstone() {
