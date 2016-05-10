@@ -4,10 +4,14 @@ import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import tbsc.techy.api.ITechyWrenchable;
 import tbsc.techy.tile.TileBase;
+
+import java.util.ArrayList;
 
 /**
  * The base class for machines, that adds support for tile entities and wrenching.
@@ -58,6 +62,17 @@ public abstract class BlockBaseMachine extends BlockBase implements ITileEntityP
     @Override
     public boolean canDismantle(IBlockState block, World world, BlockPos pos, EntityLivingBase wrenchedBy) {
         return true;
+    }
+
+    @Override
+    public ArrayList<ItemStack> dismantleBlock(EntityPlayer player, World world, BlockPos pos, boolean returnDrops) {
+        dismantleBlock(world.getBlockState(pos), world, pos, player);
+        return null;
+    }
+
+    @Override
+    public boolean canDismantle(EntityPlayer player, World world, BlockPos pos) {
+        return canDismantle(world.getBlockState(pos), world, pos, player);
     }
 
 }
