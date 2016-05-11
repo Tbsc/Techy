@@ -107,8 +107,6 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
         }
     }
 
-    getColl
-
     /**
      * Creates a new block state with the connection boolean properties
      * @return BlockState with properties
