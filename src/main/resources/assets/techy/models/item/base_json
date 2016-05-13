@@ -1,8 +1,4 @@
-{
-  "parent": "builtin/generated",
-  "textures": {
-    "layer0": "Techy:items/item"
-  },
+  ,
   "display": {
     "thirdperson": {
       "rotation": [ 298, 0, 0 ],
@@ -35,4 +31,3 @@
       "scale": [ 1.00, 1.00, 1.00 ]
     }
   }
-}
