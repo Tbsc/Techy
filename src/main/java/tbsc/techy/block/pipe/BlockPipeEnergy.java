@@ -29,22 +29,7 @@ public class BlockPipeEnergy extends BlockPipeBase {
 
     @Override
     public boolean canConnectOnSide(IBlockAccess world, BlockPos thisBlock, EnumFacing side) {
-        switch (side) {
-            case NORTH:
-                return canConnectWithBlock(world.getBlockState(thisBlock.north()).getBlock());
-            case SOUTH:
-                return canConnectWithBlock(world.getBlockState(thisBlock.south()).getBlock());
-            case WEST:
-                return canConnectWithBlock(world.getBlockState(thisBlock.west()).getBlock());
-            case EAST:
-                return canConnectWithBlock(world.getBlockState(thisBlock.east()).getBlock());
-            case UP:
-                return canConnectWithBlock(world.getBlockState(thisBlock.up()).getBlock());
-            case DOWN:
-                return canConnectWithBlock(world.getBlockState(thisBlock.down()).getBlock());
-            default:
-                return false;
-        }
+        return canConnectWithBlock(world.getBlockState(thisBlock.offset(side)).getBlock());
     }
 
     /**
