@@ -1,11 +1,19 @@
 package tbsc.techy.block.pipe;
 
-import cofh.api.energy.IEnergyReceiver;
+import cofh.api.energy.IEnergyConnection;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.statemap.StateMapperBase;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import tbsc.techy.block.pipe.client.PipeEnergyISBM;
 import tbsc.techy.tile.pipe.TilePipeEnergy;
 
 /**
@@ -15,12 +23,12 @@ import tbsc.techy.tile.pipe.TilePipeEnergy;
  */
 public class BlockPipeEnergy extends BlockPipeBase {
 
-    protected BlockPipeEnergy() {
+    public BlockPipeEnergy() {
         super("blockPipeEnergy", 0);
     }
 
     @Override
-    public boolean canConnectOnSide(World world, BlockPos thisBlock, EnumFacing side) {
+    public boolean canConnectOnSide(IBlockAccess world, BlockPos thisBlock, EnumFacing side) {
         switch (side) {
             case NORTH:
                 return canConnectWithBlock(world.getBlockState(thisBlock.north()).getBlock());
@@ -39,9 +47,24 @@ public class BlockPipeEnergy extends BlockPipeBase {
         }
     }
 
+    /**
+     * Inits the ISBM
+     */
+    @SideOnly(Side.CLIENT)
+    public void initModel() {
+        // To make sure that our ISBM model is chosen for all states we use this custom state mapper:
+        StateMapperBase ignoreState = new StateMapperBase() {
+            @Override
+            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
+                return PipeEnergyISBM.modelResourceLocation;
+            }
+        };
+        ModelLoader.setCustomStateMapper(this, ignoreState);
+    }
+
     @Override
     public boolean canConnectWithBlock(Block block) {
-        return block instanceof IEnergyReceiver; // If the block can receive energy, then we can connect to it
+        return block instanceof IEnergyConnection || block instanceof BlockPipeEnergy; // If the block can receive energy, then we can connect to it
     }
 
     @Override

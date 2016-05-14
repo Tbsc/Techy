@@ -1,10 +1,9 @@
 package tbsc.techy.tile.pipe;
 
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.common.property.IExtendedBlockState;
 import tbsc.techy.block.pipe.BlockPipeBase;
 
 /**
@@ -28,34 +27,34 @@ public abstract class TilePipeBase extends TileEntity implements ITickable {
      * to them.
      */
     public void onConnectableNeighborPlaced() {
-        IBlockState state = worldObj.getBlockState(pos);
+        IExtendedBlockState state = (IExtendedBlockState) worldObj.getBlockState(pos);
         BlockPipeBase pipe = (BlockPipeBase) state.getBlock();
         for (EnumFacing side : EnumFacing.VALUES) {
-            IBlockState neighbor = null;
-            PropertyBool sideProperty = null;
+            IExtendedBlockState neighbor = null;
+            BlockPipeBase.PropertyConnection sideProperty = null;
             switch (side) {
                 case NORTH:
-                    neighbor = worldObj.getBlockState(pos.north());
+                    neighbor = (IExtendedBlockState) worldObj.getBlockState(pos.north());
                     sideProperty = BlockPipeBase.NORTH_CONNECTION;
                     break;
                 case SOUTH:
-                    neighbor = worldObj.getBlockState(pos.south());
+                    neighbor = (IExtendedBlockState) worldObj.getBlockState(pos.south());
                     sideProperty = BlockPipeBase.SOUTH_CONNECTION;
                     break;
                 case WEST:
-                    neighbor = worldObj.getBlockState(pos.west());
+                    neighbor = (IExtendedBlockState) worldObj.getBlockState(pos.west());
                     sideProperty = BlockPipeBase.WEST_CONNECTION;
                     break;
                 case EAST:
-                    neighbor = worldObj.getBlockState(pos.east());
+                    neighbor = (IExtendedBlockState) worldObj.getBlockState(pos.east());
                     sideProperty = BlockPipeBase.EAST_CONNECTION;
                     break;
                 case UP:
-                    neighbor = worldObj.getBlockState(pos.up());
+                    neighbor = (IExtendedBlockState) worldObj.getBlockState(pos.up());
                     sideProperty = BlockPipeBase.UP_CONNECTION;
                     break;
                 case DOWN:
-                    neighbor = worldObj.getBlockState(pos.down());
+                    neighbor = (IExtendedBlockState) worldObj.getBlockState(pos.down());
                     sideProperty = BlockPipeBase.DOWN_CONNECTION;
                     break;
             }

@@ -2,15 +2,26 @@ package tbsc.techy.block.pipe;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import tbsc.techy.Techy;
 import tbsc.techy.block.BlockBaseMachine;
-import tbsc.techy.tile.pipe.TilePipeBase;
 
 /**
  * Block for the basic pipe. It is protected because it isn't an actual pipe, but rather
@@ -20,23 +31,16 @@ import tbsc.techy.tile.pipe.TilePipeBase;
  */
 public abstract class BlockPipeBase extends BlockBaseMachine {
 
-    public static final PropertyBool NORTH_CONNECTION = PropertyBool.create("north_connection");
-    public static final PropertyBool SOUTH_CONNECTION = PropertyBool.create("up_connection");
-    public static final PropertyBool WEST_CONNECTION = PropertyBool.create("west_connection");
-    public static final PropertyBool EAST_CONNECTION = PropertyBool.create("east_connection");
-    public static final PropertyBool UP_CONNECTION = PropertyBool.create("up_connection");
-    public static final PropertyBool DOWN_CONNECTION = PropertyBool.create("down_connection");
+    public static final PropertyConnection NORTH_CONNECTION = PropertyConnection.create("north_connection");
+    public static final PropertyConnection SOUTH_CONNECTION = PropertyConnection.create("up_connection");
+    public static final PropertyConnection WEST_CONNECTION = PropertyConnection.create("west_connection");
+    public static final PropertyConnection EAST_CONNECTION = PropertyConnection.create("east_connection");
+    public static final PropertyConnection UP_CONNECTION = PropertyConnection.create("up_connection");
+    public static final PropertyConnection DOWN_CONNECTION = PropertyConnection.create("down_connection");
 
     protected BlockPipeBase(String registryName, int tileInvSize) {
         super(Material.circuits, registryName, tileInvSize);
         setHardness(2.0F);
-        setDefaultState(blockState.getBaseState()
-                .withProperty(NORTH_CONNECTION, false)
-                .withProperty(SOUTH_CONNECTION, false)
-                .withProperty(WEST_CONNECTION, false)
-                .withProperty(EAST_CONNECTION, false)
-                .withProperty(UP_CONNECTION, false)
-                .withProperty(DOWN_CONNECTION, false));
     }
 
     /**
@@ -45,7 +49,7 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
      * @param side to check
      * @return if it can connect on given side
      */
-    public abstract boolean canConnectOnSide(World world, BlockPos thisBlock, EnumFacing side);
+    public abstract boolean canConnectOnSide(IBlockAccess world, BlockPos thisBlock, EnumFacing side);
 
     /**
      * Checks if the pipe can connect with the block given.
@@ -55,87 +59,132 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
     public abstract boolean canConnectWithBlock(Block block);
 
     /**
-     * Performs a check on all side properties of the block and actually compares it to the actual world.
-     * For example, if the block state says it is connected on the north side, but there isn't a block it
-     * can connect to on the north side it sets the north connection property to false.
-     * @param state of the block
-     * @param worldIn block access
-     * @param pos of the block
-     * @return state with correct data
+     * Inits the item model for the pipe, so it'd render in hand like it does when placed
      */
-    @Override
-    public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        if (state.getValue(NORTH_CONNECTION) && !canConnectOnSide((World) worldIn, pos, EnumFacing.NORTH)) {
-            state = state.withProperty(NORTH_CONNECTION, false);
-        } else if (!state.getValue(NORTH_CONNECTION) && canConnectOnSide((World) worldIn, pos, EnumFacing.NORTH)) {
-            state = state.withProperty(NORTH_CONNECTION, true);
-        }
-        if (state.getValue(SOUTH_CONNECTION) && !canConnectOnSide((World) worldIn, pos, EnumFacing.SOUTH)) {
-            state = state.withProperty(SOUTH_CONNECTION, false);
-        } else if (!state.getValue(SOUTH_CONNECTION) && canConnectOnSide((World) worldIn, pos, EnumFacing.SOUTH)) {
-            state = state.withProperty(SOUTH_CONNECTION, true);
-        }
-        if (state.getValue(WEST_CONNECTION) && !canConnectOnSide((World) worldIn, pos, EnumFacing.WEST)) {
-            state = state.withProperty(WEST_CONNECTION, false);
-        } else if (!state.getValue(WEST_CONNECTION) && canConnectOnSide((World) worldIn, pos, EnumFacing.WEST)) {
-            state = state.withProperty(WEST_CONNECTION, true);
-        }
-        if (state.getValue(EAST_CONNECTION) && !canConnectOnSide((World) worldIn, pos, EnumFacing.EAST)) {
-            state = state.withProperty(EAST_CONNECTION, false);
-        } else if (!state.getValue(EAST_CONNECTION) && canConnectOnSide((World) worldIn, pos, EnumFacing.EAST)) {
-            state = state.withProperty(EAST_CONNECTION, true);
-        }
-        if (state.getValue(UP_CONNECTION) && !canConnectOnSide((World) worldIn, pos, EnumFacing.UP)) {
-            state = state.withProperty(UP_CONNECTION, false);
-        } else if (!state.getValue(UP_CONNECTION) && canConnectOnSide((World) worldIn, pos, EnumFacing.UP)) {
-            state = state.withProperty(UP_CONNECTION, true);
-        }
-        if (state.getValue(DOWN_CONNECTION) && !canConnectOnSide((World) worldIn, pos, EnumFacing.DOWN)) {
-            state = state.withProperty(DOWN_CONNECTION, false);
-        } else if (!state.getValue(DOWN_CONNECTION) && canConnectOnSide((World) worldIn, pos, EnumFacing.DOWN)) {
-            state = state.withProperty(DOWN_CONNECTION, true);
-        }
-
-        return state;
-    }
-
-    @Override
-    public void onNeighborBlockChange(World worldIn, BlockPos pos, IBlockState state, Block neighborBlock) {
-        if (canConnectWithBlock(neighborBlock)) {
-            TilePipeBase tilePipe = (TilePipeBase) worldIn.getTileEntity(pos);
-            tilePipe.onConnectableNeighborPlaced();
-        }
+    @SideOnly(Side.CLIENT)
+    public void initItemModel() {
+        // For our item model we want to use a normal json model. This has to be called in
+        // ClientProxy.init (not preInit) so that's why it is a separate method.
+        Item itemBlock = GameRegistry.findItem(Techy.MODID, getRegistryName());
+        ModelResourceLocation itemModelResourceLocation = new ModelResourceLocation(getRegistryName(), "inventory");
+        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(itemBlock, 0, itemModelResourceLocation);
     }
 
     /**
-     * Creates a new block state with the connection boolean properties
-     * @return BlockState with properties
+     * Update nearby blocks when block is placed for them to know a pipe is placed, and if they are a pipe too
+     * then to connect
+     * @param world the world
+     * @param pos of the pipe
+     * @param state of the pipe
+     * @param placer who placed the block
+     * @param stack the stack the block was placed from
      */
     @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, NORTH_CONNECTION, SOUTH_CONNECTION, WEST_CONNECTION, EAST_CONNECTION, UP_CONNECTION, DOWN_CONNECTION);
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        world.markBlockRangeForRenderUpdate(pos.add(-1, -1, -1), pos.add(1, 1, 1));
     }
 
+    /**
+     * Tells the game to not render any sides, as it is done by the ISBM
+     * @param worldIn the world
+     * @param pos of the pipe
+     * @param side side to render
+     * @return if the side should be rendered (false)
+     */
+    @Override
+    @SideOnly(Side.CLIENT)
+    public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+        return false;
+    }
+
+    /**
+     * Is the block a normal cube
+     * @return false
+     */
+    @Override
+    public boolean isBlockNormalCube() {
+        return false;
+    }
+
+    /**
+     * Is the block opaque
+     * @return false
+     */
     @Override
     public boolean isOpaqueCube() {
         return false;
     }
 
     /**
-     * This is a pipe, and it isn't a normal cube
-     * @return false
+     * Returns the extended block state of the block, containing the connection properties.
+     * @param state of the block
+     * @param world the world
+     * @param pos of the block
+     * @return extended state with connection properties
      */
     @Override
-    public boolean isNormalCube() {
-        return false;
+    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
+        IExtendedBlockState extendedBlockState = (IExtendedBlockState) state;
+
+        boolean north = canConnectOnSide(world, pos, EnumFacing.NORTH);
+        boolean south = canConnectOnSide(world, pos, EnumFacing.SOUTH);
+        boolean west = canConnectOnSide(world, pos, EnumFacing.WEST);
+        boolean east = canConnectOnSide(world, pos, EnumFacing.EAST);
+        boolean up = canConnectOnSide(world, pos, EnumFacing.UP);
+        boolean down = canConnectOnSide(world, pos, EnumFacing.DOWN);
+
+        return extendedBlockState
+                .withProperty(NORTH_CONNECTION, north)
+                .withProperty(SOUTH_CONNECTION, south)
+                .withProperty(WEST_CONNECTION, west)
+                .withProperty(EAST_CONNECTION, east)
+                .withProperty(UP_CONNECTION, up)
+                .withProperty(DOWN_CONNECTION, down);
     }
 
     /**
-     * This isn't a full block, this is a pipe, and is smaller than a block
-     * @return false
+     * Returns a block state with the applicable properties
+     * @return block state container
      */
     @Override
-    public boolean isFullBlock() {
-        return false;
+    protected BlockState createBlockState() {
+        IUnlistedProperty[] unlistedProps = new IUnlistedProperty[] { NORTH_CONNECTION, SOUTH_CONNECTION, WEST_CONNECTION, EAST_CONNECTION, UP_CONNECTION, DOWN_CONNECTION };
+        IProperty[] props = new IProperty[0];
+        return new ExtendedBlockState(this, props, unlistedProps);
     }
+
+    public static class PropertyConnection implements IUnlistedProperty<Boolean> {
+
+        private final String name;
+
+        private PropertyConnection(String name) {
+            this.name = name;
+        }
+
+        public static PropertyConnection create(String name) {
+            return new PropertyConnection(name);
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public boolean isValid(Boolean value) {
+            return true;
+        }
+
+        @Override
+        public Class<Boolean> getType() {
+            return Boolean.class;
+        }
+
+        @Override
+        public String valueToString(Boolean value) {
+            return Boolean.toString(value);
+        }
+
+    }
+
 }

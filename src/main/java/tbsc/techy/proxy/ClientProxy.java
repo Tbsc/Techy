@@ -29,4 +29,9 @@ public class ClientProxy extends CommonProxy {
         BlockInit.initModels();
     }
 
+    @Override
+    public void initItemModels() {
+        BlockInit.initItemModels();
+    }
+
 }

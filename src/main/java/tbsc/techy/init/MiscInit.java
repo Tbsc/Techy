@@ -9,6 +9,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import tbsc.techy.Techy;
 import tbsc.techy.client.gui.TechyGuiHandler;
+import tbsc.techy.event.ClientEventHandler;
 import tbsc.techy.event.GeneralEventHandler;
 import tbsc.techy.item.ItemDusts;
 import tbsc.techy.recipe.CrusherRecipes;
@@ -35,6 +36,7 @@ public class MiscInit {
      */
     public static void init() {
         MinecraftForge.EVENT_BUS.register(new GeneralEventHandler());
+        MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
         NetworkRegistry.INSTANCE.registerGuiHandler(Techy.instance, new TechyGuiHandler());
 
         // Adding dusts to ore dictionary

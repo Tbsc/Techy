@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -27,7 +28,7 @@ public class Techy {
      * Basic data
      */
     public static final String MODID = "Techy";
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION = "1";
     public static final String CLIENT_PROXY = "tbsc.techy.proxy.ClientProxy";
     public static final String SERVER_PROXY = "tbsc.techy.proxy.ServerProxy";
 
@@ -89,6 +90,11 @@ public class Techy {
 
         config = new Configuration(event.getSuggestedConfigurationFile());
         syncConfig();
+    }
+
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+        proxy.initItemModels();
     }
 
     /**

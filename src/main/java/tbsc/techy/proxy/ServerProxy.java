@@ -13,6 +13,11 @@ public class ServerProxy extends CommonProxy {
     }
 
     @Override
+    public void initItemModels() {
+
+    }
+
+    @Override
     public void preInit() {
 
     }
