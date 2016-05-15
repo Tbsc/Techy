@@ -1,6 +1,5 @@
 package tbsc.techy.block.pipe;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockState;
@@ -53,10 +52,11 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
 
     /**
      * Checks if the pipe can connect with the block given.
+     * @param world the world
      * @param block to be checked
      * @return if it can connect with the block
      */
-    public abstract boolean canConnectWithBlock(Block block);
+    public abstract boolean canConnectWithBlock(IBlockAccess world, BlockPos block);
 
     /**
      * Inits the item model for the pipe, so it'd render in hand like it does when placed

@@ -29,7 +29,7 @@ public class BlockPipeEnergy extends BlockPipeBase {
 
     @Override
     public boolean canConnectOnSide(IBlockAccess world, BlockPos thisBlock, EnumFacing side) {
-        return canConnectWithBlock(world.getBlockState(thisBlock.offset(side)).getBlock());
+        return canConnectWithBlock(world, thisBlock.offset(side));
     }
 
     /**
@@ -48,8 +48,10 @@ public class BlockPipeEnergy extends BlockPipeBase {
     }
 
     @Override
-    public boolean canConnectWithBlock(Block block) {
-        return block instanceof IEnergyConnection || block instanceof BlockPipeEnergy; // If the block can receive energy, then we can connect to it
+    public boolean canConnectWithBlock(IBlockAccess world, BlockPos blockPos) {
+        Block block = world.getBlockState(blockPos).getBlock();
+        TileEntity tile = world.getTileEntity(blockPos);
+        return (tile != null && tile instanceof IEnergyConnection) || block instanceof BlockPipeEnergy; // If the block can connect to energy stuff, then we can connect to it
     }
 
     @Override
