@@ -42,6 +42,11 @@ public class TechyWAILAPlugin implements IWailaDataProvider {
         TileMachineBase tile = (TileMachineBase) data.getTileEntity();
         list.clear();
         list.add(tile.getEnergyStored(EnumFacing.DOWN) + " / " + tile.getMaxEnergyStored(EnumFacing.DOWN) + " RF");
+        if (tile.getOperationTotalProgress() == 0) {
+            list.add("Not Operating");
+        } else {
+            list.add("Operating: " + tile.getOperationProgress() * 100 / tile.getOperationTotalProgress() + "%");
+        }
         return list;
     }
 
