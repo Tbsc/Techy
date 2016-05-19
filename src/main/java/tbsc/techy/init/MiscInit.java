@@ -3,8 +3,10 @@ package tbsc.techy.init;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import tbsc.techy.Techy;
@@ -36,7 +38,9 @@ public class MiscInit {
      */
     public static void init() {
         MinecraftForge.EVENT_BUS.register(new GeneralEventHandler());
-        MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+            MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
+        }
         NetworkRegistry.INSTANCE.registerGuiHandler(Techy.instance, new TechyGuiHandler());
 
         // Adding dusts to ore dictionary
