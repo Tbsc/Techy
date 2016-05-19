@@ -3,7 +3,14 @@
   "defaults": {
     "model": "Techy:blockCrusher",
     "textures": {
-      "front": "Techy:blocks/blockCrusherFront"
+      "front": "Techy:blocks/blockCrusherFront",
+      "west": "Techy:blocks/blockGenericSide",
+      "east": "Techy:blocks/blockGenericSide",
+      "south": "Techy:blocks/blockGenericSide",
+      "up": "Techy:blocks/blockGenericTop",
+      "down": "Techy:blocks/blockGenericTop",
+      "cube": "Techy:blocks/machineTinyCube",
+      "line": "Techy:blocks/machineLine"
     }
   },
   "variants": {
