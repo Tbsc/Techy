@@ -10,7 +10,7 @@ import tbsc.techy.api.pipes.IPipeRoutable;
  *
  * Created by tbsc on 5/14/2016.
  */
-public class EnergyPipeRoutable implements IPipeRoutable {
+public class EnergyPipeRoutable implements IPipeRoutable<Integer> {
 
     protected BlockPos origin;
     protected BlockPos destination;
@@ -41,7 +41,7 @@ public class EnergyPipeRoutable implements IPipeRoutable {
     }
 
     @Override
-    public Object getRoutedObject() {
+    public Integer getRoutedObject() {
         return energyTransferred;
     }
 
