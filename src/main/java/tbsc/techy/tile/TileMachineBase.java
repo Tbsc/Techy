@@ -177,43 +177,45 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
 
     protected boolean handleProcessing() {
         boolean markDirty = false;
-        if (inventory[0] != null) {
-            if (getSmeltingOutput(inventory[0]) != null && canOperate() && shouldOperate()) {
-                if (!isRunning) {
-                    double timePercentage = timeModifier / 100;
-                    totalProgress = (int) (timePercentage * machineProcessTime);
-                    // What this does is calculate the amount of energy to be consumed per tick, by rounding it to a multiple of 10
-                    double energyPercentage = (energyModifier / 100) * getEnergyUsage(getSmeltingOutput(inventory[0]));
-                    energyConsumptionPerTick = (int) ((energyPercentage / totalProgress) / 10 * 10);
-                    if (worldObj.getBlockState(pos).getBlock() == null) {
-                        BlockBaseFacingMachine.setState(true, worldObj, pos);
+        for (int input : getInputSlots()) {
+            if (inventory[input] != null) {
+                if (getSmeltingOutput(inventory[input]) != null && canOperate() && shouldOperate()) {
+                    if (!isRunning) {
+                        double timePercentage = timeModifier / 100;
+                        totalProgress = (int) (timePercentage * machineProcessTime);
+                        // What this does is calculate the amount of energy to be consumed per tick, by rounding it to a multiple of 10
+                        double energyPercentage = (energyModifier / 100) * getEnergyUsage(getSmeltingOutput(inventory[0]));
+                        energyConsumptionPerTick = (int) ((energyPercentage / totalProgress) / 10 * 10);
+                        if (worldObj.getBlockState(pos).getBlock() == null) {
+                            BlockBaseFacingMachine.setState(true, worldObj, pos);
+                        }
+                        setOperationStatus(true);
                     }
-                    setOperationStatus(true);
-                }
-                ++progress;
-                if (energyConsumptionPerTick >= getEnergyStored(EnumFacing.DOWN)) {
+                    ++progress;
+                    if (energyConsumptionPerTick >= getEnergyStored(EnumFacing.DOWN)) {
+                        stopOperating(true);
+                    }
+                    setEnergyStored(getEnergyStored(EnumFacing.DOWN) - energyConsumptionPerTick);
+                    if (progress >= totalProgress) {
+                        doOperation();
+                        if (worldObj.getBlockState(pos).getBlock() == null) {
+                            BlockBaseFacingMachine.setState(false, worldObj, pos);
+                        }
+                        progress = totalProgress = 0;
+                        setOperationStatus(false);
+                        markDirty = true;
+                    }
+                } else {
                     stopOperating(true);
-                }
-                setEnergyStored(getEnergyStored(EnumFacing.DOWN) - energyConsumptionPerTick);
-                if (progress >= totalProgress) {
-                    doOperation();
-                    if (worldObj.getBlockState(pos).getBlock() == null) {
+                    if (BlockBaseFacingMachine.getState(worldObj, pos)) {
                         BlockBaseFacingMachine.setState(false, worldObj, pos);
                     }
-                    progress = totalProgress = 0;
-                    setOperationStatus(false);
-                    markDirty = true;
                 }
             } else {
                 stopOperating(true);
                 if (BlockBaseFacingMachine.getState(worldObj, pos)) {
                     BlockBaseFacingMachine.setState(false, worldObj, pos);
                 }
-            }
-        } else {
-            stopOperating(true);
-            if (BlockBaseFacingMachine.getState(worldObj, pos)) {
-                BlockBaseFacingMachine.setState(false, worldObj, pos);
             }
         }
 
