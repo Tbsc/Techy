@@ -113,6 +113,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
      * or {@link Item} because I need to know the metadata in order to correctly undo the
      * booster).
      */
+    @Deprecated
     Map<Integer, MutablePair<Boolean, ItemStack>> boosterApplied = new HashMap<>();
 
     protected TileMachineBase(int capacity, int maxReceive, int invSize, int cookTime) {
@@ -187,7 +188,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
                         double energyPercentage = (energyModifier / 100) * getEnergyUsage(getSmeltingOutput(inventory[0]));
                         energyConsumptionPerTick = (int) ((energyPercentage / totalProgress) / 10 * 10);
                         if (worldObj.getBlockState(pos).getBlock() == null) {
-                            BlockBaseFacingMachine.setState(true, worldObj, pos);
+                            BlockBaseFacingMachine.setWorkingState(true, worldObj, pos);
                         }
                         setOperationStatus(true);
                     }
@@ -199,7 +200,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
                     if (progress >= totalProgress) {
                         doOperation();
                         if (worldObj.getBlockState(pos).getBlock() == null) {
-                            BlockBaseFacingMachine.setState(false, worldObj, pos);
+                            BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
                         }
                         progress = totalProgress = 0;
                         setOperationStatus(false);
@@ -207,14 +208,14 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
                     }
                 } else {
                     stopOperating(true);
-                    if (BlockBaseFacingMachine.getState(worldObj, pos)) {
-                        BlockBaseFacingMachine.setState(false, worldObj, pos);
+                    if (BlockBaseFacingMachine.getWorkingState(worldObj, pos)) {
+                        BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
                     }
                 }
             } else {
                 stopOperating(true);
-                if (BlockBaseFacingMachine.getState(worldObj, pos)) {
-                    BlockBaseFacingMachine.setState(false, worldObj, pos);
+                if (BlockBaseFacingMachine.getWorkingState(worldObj, pos)) {
+                    BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
                 }
             }
         }

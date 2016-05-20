@@ -30,13 +30,25 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
         super(material, registryName, tileInvSize);
     }
 
-    public static void setState(boolean active, World worldIn, BlockPos pos) {
+    /**
+     * Used to change the front texture of a block, based on a working property.
+     * @param active the new value for the "working" property
+     * @param worldIn the world
+     * @param pos position of block
+     */
+    public static void setWorkingState(boolean active, World worldIn, BlockPos pos) {
         IBlockState iblockstate = worldIn.getBlockState(pos);
 
         worldIn.setBlockState(pos, iblockstate.withProperty(WORKING, active));
     }
 
-    public static boolean getState(World world, BlockPos pos) {
+    /**
+     * Returns the working property for the state in the world and position given
+     * @param world the world
+     * @param pos position of block
+     * @return value of working property
+     */
+    public static boolean getWorkingState(World world, BlockPos pos) {
         IBlockState iblockstate = world.getBlockState(pos);
 
         return iblockstate.getValue(WORKING);
