@@ -34,6 +34,11 @@ public class BlockPoweredFurnace extends BlockBaseFacingMachine {
         super(Material.iron, "blockPoweredFurnace", tileInvSize);
     }
 
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
     /**
      * When called, will return a new instance of this block's specific TileEntity.
      * @param worldIn the world it is happening in

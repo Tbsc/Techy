@@ -27,6 +27,11 @@ public class BlockCrusher extends BlockBaseFacingMachine {
         super(Material.iron, "blockCrusher", tileInvSize);
     }
 
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+
     /**
      * Gets called when a player hits the block (right click).
      * @param worldIn world
