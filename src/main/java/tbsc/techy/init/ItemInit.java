@@ -35,16 +35,16 @@ public class ItemInit {
         itemHeatingComponent = new ItemGenericCraftingComponent("itemHeatingComponent");
         itemGrindingComponent = new ItemGenericCraftingComponent("itemGrindingComponent");
 
-        GameRegistry.registerItem(itemWrench);
-        GameRegistry.registerItem(itemBoosterEnergy);
-        GameRegistry.registerItem(itemBoosterTime);
-        GameRegistry.registerItem(itemBoosterBonus);
-        GameRegistry.registerItem(itemBatterySmall);
-        GameRegistry.registerItem(itemBatteryMedium);
-        GameRegistry.registerItem(itemBatteryLarge);
-        GameRegistry.registerItem(itemDusts);
-        GameRegistry.registerItem(itemHeatingComponent);
-        GameRegistry.registerItem(itemGrindingComponent);
+        GameRegistry.register(itemWrench);
+        GameRegistry.register(itemBoosterEnergy);
+        GameRegistry.register(itemBoosterTime);
+        GameRegistry.register(itemBoosterBonus);
+        GameRegistry.register(itemBatterySmall);
+        GameRegistry.register(itemBatteryMedium);
+        GameRegistry.register(itemBatteryLarge);
+        GameRegistry.register(itemDusts);
+        GameRegistry.register(itemHeatingComponent);
+        GameRegistry.register(itemGrindingComponent);
     }
 
     /**

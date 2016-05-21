@@ -3,17 +3,17 @@ package tbsc.techy.block.pipe;
 import cofh.api.energy.IEnergyConnection;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMapperBase;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tbsc.techy.block.pipe.client.PipeEnergyISBM;
+import tbsc.techy.block.pipe.render.PipeEnergyBakedModel;
 import tbsc.techy.tile.pipe.TilePipeEnergy;
 
 /**
@@ -24,7 +24,7 @@ import tbsc.techy.tile.pipe.TilePipeEnergy;
 public class BlockPipeEnergy extends BlockPipeBase {
 
     public BlockPipeEnergy() {
-        super("blockPipeEnergy", 0);
+        super("blockPipeEnergy", 0, BlockPipeEnergy.class);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class BlockPipeEnergy extends BlockPipeBase {
         StateMapperBase ignoreState = new StateMapperBase() {
             @Override
             protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-                return PipeEnergyISBM.modelResourceLocation;
+                return PipeEnergyBakedModel.BAKED_MODEL;
             }
         };
         ModelLoader.setCustomStateMapper(this, ignoreState);

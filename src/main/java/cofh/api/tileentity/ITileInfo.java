@@ -2,7 +2,7 @@ package cofh.api.tileentity;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 
 import java.util.List;
 
@@ -26,6 +26,6 @@ public interface ITileInfo {
 	 * @param debug
 	 *            If true, the tile should return "debug" information.
 	 */
-	void getTileInfo(List<IChatComponent> info, EnumFacing side, EntityPlayer player, boolean debug);
+	void getTileInfo(List<ITextComponent> info, EnumFacing side, EntityPlayer player, boolean debug);
 
 }

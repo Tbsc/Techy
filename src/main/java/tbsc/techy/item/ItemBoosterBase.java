@@ -3,7 +3,7 @@ package tbsc.techy.item;
 import cofh.lib.util.helpers.StringHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import tbsc.techy.api.IBoosterItem;
 
 import java.util.List;
@@ -25,7 +25,7 @@ public abstract class ItemBoosterBase extends ItemBase implements IBoosterItem {
         super.addInformation(stack, playerIn, tooltip, advanced);
         tooltip.add("Tier " + stack.getMetadata());
 
-        tooltip.add(EnumChatFormatting.BOLD + "***NOT WORKING ATM***"); // Todo fix boosters
+        tooltip.add(TextFormatting.BOLD + "***NOT WORKING ATM***"); // Todo fix boosters
 
         if (StringHelper.isShiftKeyDown()) {
             tooltip.add("Energy modifier: " + getEnergyModifier(stack.getMetadata()) + "%");
@@ -33,7 +33,7 @@ public abstract class ItemBoosterBase extends ItemBase implements IBoosterItem {
             tooltip.add("Experience modifier: " + getExperienceModifier(stack.getMetadata()) + "%");
             tooltip.add("Additional items modifier: " + getAdditionalItemModifier(stack.getMetadata()) + " max");
         } else {
-            tooltip.add(EnumChatFormatting.ITALIC + "Shift" + EnumChatFormatting.RESET + " for more info");
+            tooltip.add(TextFormatting.ITALIC + "Shift" + TextFormatting.RESET + " for more info");
         }
     }
 

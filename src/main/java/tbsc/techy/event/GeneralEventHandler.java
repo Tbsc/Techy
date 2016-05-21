@@ -18,7 +18,7 @@ public class GeneralEventHandler {
      */
     @SubscribeEvent
     public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
-        if (Techy.MODID.equals(event.modID)) {
+        if (Techy.MODID.equals(event.getModID())) {
             Techy.instance.syncConfig();
         }
     }

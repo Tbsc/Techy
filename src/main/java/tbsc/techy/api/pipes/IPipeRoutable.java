@@ -1,6 +1,6 @@
 package tbsc.techy.api.pipes;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * Pipes will work so, for example, items transfer through the pipe, an instance of
@@ -44,5 +44,13 @@ public interface IPipeRoutable<T> {
      * @return object of what's routed through the pipe
      */
     T getRoutedObject();
+
+    /**
+     * Creates a human readable string from an instance of this class
+     * @return human readable string
+     */
+    default String toReadableString() {
+        return "Origin: " + getOrigin().toString() + ", Destination: " + getDestination().toString() + ", Routed Object: " + getRoutedObject();
+    }
 
 }

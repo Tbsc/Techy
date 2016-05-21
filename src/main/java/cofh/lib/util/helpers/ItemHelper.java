@@ -1,12 +1,10 @@
 package cofh.lib.util.helpers;
 
 import cofh.api.item.IInventoryContainerItem;
-import cofh.api.item.IMultiModeItem;
 import cofh.lib.util.OreDictionaryProxy;
 import com.google.common.base.Strings;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.Item;
@@ -18,8 +16,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.IFluidContainerItem;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -265,7 +261,7 @@ public final class ItemHelper {
 	 */
 	public static int getItemDamage(ItemStack stack) {
 
-		return Items.diamond.getDamage(stack);
+		return Items.DIAMOND.getDamage(stack);
 	}
 
 	/**
@@ -904,60 +900,6 @@ public final class ItemHelper {
 
 	// }
 
-	/* MULTIMODE ITEM HELPERS */
-	public static boolean isPlayerHoldingMultiModeItem(EntityPlayer player) {
-
-		Item equipped = player.getCurrentEquippedItem() != null ? player.getCurrentEquippedItem().getItem() : null;
-		return equipped instanceof IMultiModeItem;
-	}
-
-	public static boolean incrHeldMultiModeItemState(EntityPlayer player) {
-
-		ItemStack equipped = player.getCurrentEquippedItem();
-		IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
-
-		return multiModeItem.incrMode(equipped);
-	}
-
-	public static boolean decrHeldMultiModeItemState(EntityPlayer player) {
-
-		ItemStack equipped = player.getCurrentEquippedItem();
-		IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
-
-		return multiModeItem.incrMode(equipped);
-	}
-
-	public static boolean setHeldMultiModeItemState(EntityPlayer player, int mode) {
-
-		ItemStack equipped = player.getCurrentEquippedItem();
-		IMultiModeItem multiModeItem = (IMultiModeItem) equipped.getItem();
-
-		return multiModeItem.setMode(equipped, mode);
-	}
-
-	/**
-	 * Determine if a player is holding a registered Fluid Container.
-	 */
-	public static final boolean isPlayerHoldingFluidContainer(EntityPlayer player) {
-
-		return FluidContainerRegistry.isContainer(player.getCurrentEquippedItem());
-	}
-
-	public static final boolean isPlayerHoldingFluidContainerItem(EntityPlayer player) {
-
-		return player.getHeldItem().getItem() instanceof IFluidContainerItem;
-	}
-
-	public static final boolean isPlayerHoldingEnergyContainerItem(EntityPlayer player) {
-
-		return EnergyHelper.isPlayerHoldingEnergyContainerItem(player);
-	}
-
-	public static final boolean isPlayerHoldingNothing(EntityPlayer player) {
-
-		return player.getCurrentEquippedItem() == null;
-	}
-
 	public static Item getItemFromStack(ItemStack theStack) {
 
 		return theStack == null ? null : theStack.getItem();
@@ -969,27 +911,6 @@ public final class ItemHelper {
 			return false;
 		}
 		return itemA == itemB || itemA.equals(itemB);
-	}
-
-	public static final boolean isPlayerHoldingItem(Class<?> item, EntityPlayer player) {
-
-		return item.isInstance(getItemFromStack(player.getCurrentEquippedItem()));
-	}
-
-	/**
-	 * Determine if a player is holding an ItemStack of a specific Item type.
-	 */
-	public static final boolean isPlayerHoldingItem(Item item, EntityPlayer player) {
-
-		return areItemsEqual(item, getItemFromStack(player.getCurrentEquippedItem()));
-	}
-
-	/**
-	 * Determine if a player is holding an ItemStack with a specific Item ID, Metadata, and NBT.
-	 */
-	public static final boolean isPlayerHoldingItemStack(ItemStack stack, EntityPlayer player) {
-
-		return itemsEqualWithMetadata(stack, player.getCurrentEquippedItem());
 	}
 
 	/**
@@ -1064,19 +985,6 @@ public final class ItemHelper {
 				&& (!stackA.getHasSubtypes() || ((getItemDamage(stackA) == OreDictionary.WILDCARD_VALUE || getItemDamage(stackB) == OreDictionary.WILDCARD_VALUE) || getItemDamage(stackB) == getItemDamage(stackA)));
 	}
 
-	public static boolean craftingEquivalent(ItemStack checked, ItemStack source, String oreDict, ItemStack output) {
-
-		if (itemsEqualForCrafting(checked, source)) {
-			return true;
-		} else if (output != null && isBlacklist(output)) {
-			return false;
-		} else if (oreDict == null || oreDict.equals("Unknown")) {
-			return false;
-		} else {
-			return getFirstOreName(checked).equalsIgnoreCase(oreDict);
-		}
-	}
-
 	public static boolean doOreIDsMatch(ItemStack stackA, ItemStack stackB) {
 		int[] idsA = OreDictionary.getOreIDs(stackA);
 		int[] idsB = OreDictionary.getOreIDs(stackB);
@@ -1089,14 +997,6 @@ public final class ItemHelper {
 			}
 		}
 		return matchFound;
-	}
-
-	public static boolean isBlacklist(ItemStack output) {
-
-		Item item = output.getItem();
-		return Item.getItemFromBlock(Blocks.birch_stairs) == item || Item.getItemFromBlock(Blocks.jungle_stairs) == item
-				|| Item.getItemFromBlock(Blocks.oak_stairs) == item || Item.getItemFromBlock(Blocks.spruce_stairs) == item
-				|| Item.getItemFromBlock(Blocks.planks) == item || Item.getItemFromBlock(Blocks.wooden_slab) == item;
 	}
 
 	public static String getItemNBTString(ItemStack theItem, String nbtKey, String invalidReturn) {

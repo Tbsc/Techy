@@ -1,6 +1,6 @@
 package tbsc.techy.api.pipes.impl;
 
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.FMLLog;
 import tbsc.techy.api.pipes.IPipeRoutable;
 

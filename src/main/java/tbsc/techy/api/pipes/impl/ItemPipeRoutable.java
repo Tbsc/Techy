@@ -1,7 +1,7 @@
 package tbsc.techy.api.pipes.impl;
 
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import tbsc.techy.api.pipes.IPipeRoutable;
 
 /**

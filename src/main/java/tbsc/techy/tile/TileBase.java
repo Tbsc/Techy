@@ -6,8 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import tbsc.techy.api.SideConfiguration;
 import tbsc.techy.api.Sides;
@@ -36,7 +35,7 @@ public abstract class TileBase extends TileEntity implements ISidedInventory {
      * @param nbt The tag to be written to
      */
     @Override
-    public void writeToNBT(NBTTagCompound nbt) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
 
         NBTTagList list = new NBTTagList();
@@ -49,6 +48,7 @@ public abstract class TileBase extends TileEntity implements ISidedInventory {
             }
         }
         nbt.setTag("Items", list);
+        return nbt;
     }
 
     /**
@@ -74,28 +74,28 @@ public abstract class TileBase extends TileEntity implements ISidedInventory {
     public abstract int[] getSlotsForConfiguration(SideConfiguration sideConfig);
 
     /**
-     * When TileEntity update packet {@link S35PacketUpdateTileEntity} is received, read the data
+     * When TileEntity update packet {@link SPacketUpdateTileEntity} is received, read the data
      * from the NBT tag inside of it, to sync with the server/client.
      * @param net The packet manager instane
      * @param pkt The packet sent
      */
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         readFromNBT(pkt.getNbtCompound());
     }
 
     /**
      * When TileEntity update packet is needed to get sent, this method is executed.
-     * It creates a {@link S35PacketUpdateTileEntity} packet instance and returns it to
+     * It creates a {@link SPacketUpdateTileEntity} packet instance and returns it to
      * be sent.
-     * @return instance of {@link S35PacketUpdateTileEntity} to be sent
+     * @return instance of {@link SPacketUpdateTileEntity} to be sent
      */
     @Override
-    public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound nbt = new NBTTagCompound();
         writeToNBT(nbt);
         int metadata = getBlockMetadata();
-        return new S35PacketUpdateTileEntity(this.pos, metadata, nbt);
+        return new SPacketUpdateTileEntity(this.pos, metadata, nbt);
     }
 
     /**

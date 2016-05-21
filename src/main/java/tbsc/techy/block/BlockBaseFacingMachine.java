@@ -3,12 +3,12 @@ package tbsc.techy.block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import tbsc.techy.api.ITechyRotatable;
 
@@ -107,11 +107,11 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
     /**
      * Creates a new BlockState instance based on the block, that holds the property of the direction
      * the block is facing.
-     * @return {@link BlockState} with {@link PropertyDirection} of {@code FACING} on the horizontal plane.
+     * @return {@link BlockStateContainer} with {@link PropertyDirection} of {@code FACING} on the horizontal plane.
      */
     @Override
-    protected BlockState createBlockState() {
-        return new BlockState(this, FACING, WORKING);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FACING, WORKING);
     }
 
 }

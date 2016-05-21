@@ -1,7 +1,7 @@
 package tbsc.techy.tile;
 
 import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyReceiver;
+import cofh.api.energy.IEnergyHandler;
 import cofh.lib.util.helpers.EnergyHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -9,13 +9,15 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.tuple.MutablePair;
 import tbsc.techy.api.IBoosterItem;
 import tbsc.techy.api.IOperator;
+import tbsc.techy.api.SideConfiguration;
+import tbsc.techy.api.Sides;
 import tbsc.techy.block.BlockBaseFacingMachine;
 
 import javax.annotation.Nonnull;
@@ -30,7 +32,7 @@ import java.util.Map;
  * <p>
  * Created by tbsc on 4/22/16.
  */
-public abstract class TileMachineBase extends TileBase implements IEnergyReceiver, IOperator {
+public abstract class TileMachineBase extends TileBase implements IEnergyHandler, IOperator {
 
     /**
      * Stores the progress (in ticks) made for this operation.
@@ -116,10 +118,10 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
     @Deprecated
     Map<Integer, MutablePair<Boolean, ItemStack>> boosterApplied = new HashMap<>();
 
-    protected TileMachineBase(int capacity, int maxReceive, int invSize, int cookTime) {
+    protected TileMachineBase(int capacity, int maxTransfer, int invSize, int cookTime) {
         super(invSize);
         this.machineProcessTime = cookTime;
-        this.energyStorage = new EnergyStorage(capacity, maxReceive);
+        this.energyStorage = new EnergyStorage(capacity, maxTransfer);
     }
 
     @Override
@@ -169,7 +171,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
         if (getEnergySlots().length >= 1) {
             for (int i = 0; i < getEnergySlots().length; ++i) {
                 if (inventory[getEnergySlots()[i]] != null) {
-                    receiveEnergy(EnumFacing.NORTH, EnergyHelper.extractEnergyFromContainer(inventory[getEnergySlots()[i]], energyStorage.getMaxReceive(), false), false);
+                    setEnergyStored(getEnergyStored(EnumFacing.DOWN) + EnergyHelper.extractEnergyFromContainer(inventory[getEnergySlots()[i]], energyStorage.getMaxReceive(), false));
                 }
             }
         }
@@ -351,6 +353,15 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
             this.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(stackTag));
         }
         energyStorage.readFromNBT(nbt);
+        progress = nbt.getInteger("Progress");
+        totalProgress = nbt.getInteger("TotalProgress");
+
+        setConfigurationForSide(Sides.FRONT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigFront")));
+        setConfigurationForSide(Sides.BACK, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigBack")));
+        setConfigurationForSide(Sides.LEFT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigLeft")));
+        setConfigurationForSide(Sides.RIGHT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigRight")));
+        setConfigurationForSide(Sides.UP, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigUp")));
+        setConfigurationForSide(Sides.DOWN, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigDown")));
     }
 
     /**
@@ -359,36 +370,30 @@ public abstract class TileMachineBase extends TileBase implements IEnergyReceive
      * @param nbt The tag to be written to
      */
     @Override
-    public void writeToNBT(NBTTagCompound nbt) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         NBTTagList list = new NBTTagList();
         for (int i = 0; i < this.getSizeInventory(); ++i) {
             if (this.getStackInSlot(i) != null) {
                 NBTTagCompound stackTag = new NBTTagCompound();
+                stackTag = this.getStackInSlot(i).writeToNBT(stackTag);
                 stackTag.setByte("Slot", (byte) i);
-                this.getStackInSlot(i).writeToNBT(stackTag);
                 list.appendTag(stackTag);
             }
         }
         nbt.setTag("Items", list);
         energyStorage.writeToNBT(nbt);
-    }
+        nbt.setInteger("Progress", progress);
+        nbt.setInteger("TotalProgress", totalProgress);
 
-    /**
-     * Since receiving energy will be done exactly the same on all machines,
-     * I'm doing it on the base class so it'll apply to all machines.
-     * <p>
-     * All documentation from now on is made by Team CoFH.
-     *
-     * @param from       Orientation the energy is received from.
-     * @param maxReceive Maximum amount of energy to receive.
-     * @param simulate   If TRUE, the charge will only be simulated.
-     * @return Amount of energy that was (or would have been, if simulated) received.
-     */
-    @Override
-    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
-        worldObj.markBlockForUpdate(pos);
-        return energyStorage.receiveEnergy(maxReceive, simulate);
+        nbt.setInteger("SideConfigFront", getConfigurationForSide(Sides.FRONT).ordinal());
+        nbt.setInteger("SideConfigBack", getConfigurationForSide(Sides.BACK).ordinal());
+        nbt.setInteger("SideConfigLeft", getConfigurationForSide(Sides.LEFT).ordinal());
+        nbt.setInteger("SideConfigRight", getConfigurationForSide(Sides.RIGHT).ordinal());
+        nbt.setInteger("SideConfigUp", getConfigurationForSide(Sides.UP).ordinal());
+        nbt.setInteger("SideConfigDown", getConfigurationForSide(Sides.DOWN).ordinal());
+
+        return nbt;
     }
 
     public void setEnergyStored(int energy) {

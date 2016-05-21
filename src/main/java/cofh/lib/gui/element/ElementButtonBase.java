@@ -3,6 +3,7 @@ package cofh.lib.gui.element;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 
 public abstract class ElementButtonBase extends ElementBase {
 
@@ -36,7 +37,7 @@ public abstract class ElementButtonBase extends ElementBase {
 	protected void playSound(int button) {
 
 		if (button == 0) {
-			GuiBase.playSound("random.click", 1.0F, 1.0F);
+			GuiBase.playSound("random.click", SoundCategory.NEUTRAL, 1.0F, 1.0F);
 		}
 	}
 

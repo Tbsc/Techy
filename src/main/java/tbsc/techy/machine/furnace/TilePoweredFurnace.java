@@ -1,12 +1,12 @@
 package tbsc.techy.machine.furnace;
 
 import cofh.api.energy.IEnergyContainerItem;
+import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import org.apache.commons.lang3.ArrayUtils;
 import tbsc.techy.ConfigData;
 import tbsc.techy.api.IBoosterItem;
@@ -32,7 +32,7 @@ import java.util.Random;
  * <p>
  * Created by tbsc on 4/22/16.
  */
-public class TilePoweredFurnace extends TileMachineBase {
+public class TilePoweredFurnace extends TileMachineBase implements IEnergyReceiver {
 
     /**
      * Contains values of configurations for sides.
@@ -166,34 +166,6 @@ public class TilePoweredFurnace extends TileMachineBase {
             // Checks if the new output slot stack size respects inventory stack limit and item stack limit
             return result <= getInventoryStackLimit() && result <= this.inventory[1].getMaxStackSize(); //Forge BugFix: Make it respect stack sizes properly.
         }
-    }
-
-    @Override
-    public void writeToNBT(NBTTagCompound nbt) {
-        super.writeToNBT(nbt);
-        nbt.setInteger("Progress", progress);
-        nbt.setInteger("TotalProgress", totalProgress);
-
-        nbt.setInteger("SideConfigFront", getConfigurationForSide(Sides.FRONT).ordinal());
-        nbt.setInteger("SideConfigBack", getConfigurationForSide(Sides.BACK).ordinal());
-        nbt.setInteger("SideConfigLeft", getConfigurationForSide(Sides.LEFT).ordinal());
-        nbt.setInteger("SideConfigRight", getConfigurationForSide(Sides.RIGHT).ordinal());
-        nbt.setInteger("SideConfigUp", getConfigurationForSide(Sides.UP).ordinal());
-        nbt.setInteger("SideConfigDown", getConfigurationForSide(Sides.DOWN).ordinal());
-    }
-
-    @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
-        progress = nbt.getInteger("Progress");
-        totalProgress = nbt.getInteger("TotalProgress");
-
-        setConfigurationForSide(Sides.FRONT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigFront")));
-        setConfigurationForSide(Sides.BACK, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigBack")));
-        setConfigurationForSide(Sides.LEFT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigLeft")));
-        setConfigurationForSide(Sides.RIGHT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigRight")));
-        setConfigurationForSide(Sides.UP, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigUp")));
-        setConfigurationForSide(Sides.DOWN, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigDown")));
     }
 
     /**
@@ -392,6 +364,23 @@ public class TilePoweredFurnace extends TileMachineBase {
     }
 
     /**
+     * Receives energy and marks the block for update
+     * <p>
+     * All documentation from now on is made by Team CoFH.
+     *
+     * @param from       Orientation the energy is received from.
+     * @param maxReceive Maximum amount of energy to receive.
+     * @param simulate   If TRUE, the charge will only be simulated.
+     * @return Amount of energy that was (or would have been, if simulated) received.
+     */
+    @Override
+    public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
+        markDirty();
+        return energyStorage.receiveEnergy(maxReceive, simulate);
+    }
+
+
+    /**
      * Returns the name of the TileEntity.
      *
      * @return name of the tile
@@ -407,8 +396,8 @@ public class TilePoweredFurnace extends TileMachineBase {
      * @return name of the tile
      */
     @Override
-    public IChatComponent getDisplayName() {
-        return new ChatComponentText(BlockInit.blockPoweredFurnace.getLocalizedName());
+    public ITextComponent getDisplayName() {
+        return new TextComponentString(BlockInit.blockPoweredFurnace.getLocalizedName());
     }
 
     @Override

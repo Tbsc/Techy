@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 
 import java.util.List;
 
@@ -47,23 +48,9 @@ public class EnergyHelper {
 		return isEnergyContainerItem(container) ? ((IEnergyContainerItem) container.getItem()).receiveEnergy(container, maxReceive, simulate) : 0;
 	}
 
-	public static int extractEnergyFromHeldContainer(EntityPlayer player, int maxExtract, boolean simulate) {
-
-		ItemStack container = player.getCurrentEquippedItem();
-
-		return isEnergyContainerItem(container) ? ((IEnergyContainerItem) container.getItem()).extractEnergy(container, maxExtract, simulate) : 0;
-	}
-
-	public static int insertEnergyIntoHeldContainer(EntityPlayer player, int maxReceive, boolean simulate) {
-
-		ItemStack container = player.getCurrentEquippedItem();
-
-		return isEnergyContainerItem(container) ? ((IEnergyContainerItem) container.getItem()).receiveEnergy(container, maxReceive, simulate) : 0;
-	}
-
 	public static boolean isPlayerHoldingEnergyContainerItem(EntityPlayer player) {
 
-		return isEnergyContainerItem(player.getCurrentEquippedItem());
+		return isEnergyContainerItem(player.getHeldItem(EnumHand.MAIN_HAND)) || isEnergyContainerItem(player.getHeldItem(EnumHand.OFF_HAND));
 	}
 
 	public static boolean isEnergyContainerItem(ItemStack container) {

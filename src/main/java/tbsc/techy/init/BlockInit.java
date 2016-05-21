@@ -1,5 +1,6 @@
 package tbsc.techy.init;
 
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -11,6 +12,8 @@ import tbsc.techy.machine.crusher.BlockCrusher;
 import tbsc.techy.machine.crusher.TileCrusher;
 import tbsc.techy.machine.furnace.BlockPoweredFurnace;
 import tbsc.techy.machine.furnace.TilePoweredFurnace;
+import tbsc.techy.machine.generator.TileGeneratorBase;
+import tbsc.techy.machine.generator.coal.BlockCoalGenerator;
 import tbsc.techy.tile.pipe.TilePipeEnergy;
 
 /**
@@ -28,6 +31,7 @@ public class BlockInit {
     public static BlockMachineBase blockMachineBaseAdvanced;
     public static BlockPipeEnergy blockPipeEnergy;
     public static BlockBase blockPixelTest;
+    public static BlockBaseFacingMachine blockCoalGenerator;
 
     /**
      * Gets called on preInit stage and loads all of the blocks and TileEntities.
@@ -40,18 +44,29 @@ public class BlockInit {
         blockMachineBaseAdvanced = new BlockMachineBase("blockMachineBaseAdvanced");
         blockPipeEnergy = new BlockPipeEnergy();
         blockPixelTest = new BlockMachineBase("blockPixelTest");
+        blockCoalGenerator = new BlockCoalGenerator();
 
-        GameRegistry.registerBlock(blockPoweredFurnace);
-        GameRegistry.registerBlock(blockCrusher);
-        GameRegistry.registerBlock(blockMachineBaseBasic);
-        GameRegistry.registerBlock(blockMachineBaseImproved);
-        GameRegistry.registerBlock(blockMachineBaseAdvanced);
-        GameRegistry.registerBlock(blockPipeEnergy);
-        GameRegistry.registerBlock(blockPixelTest);
+        GameRegistry.register(blockPoweredFurnace);
+        GameRegistry.register(new ItemBlock(blockPoweredFurnace), blockPoweredFurnace.getRegistryName());
+        GameRegistry.register(blockCrusher);
+        GameRegistry.register(new ItemBlock(blockCrusher), blockCrusher.getRegistryName());
+        GameRegistry.register(blockMachineBaseBasic);
+        GameRegistry.register(new ItemBlock(blockMachineBaseBasic), blockMachineBaseBasic.getRegistryName());
+        GameRegistry.register(blockMachineBaseImproved);
+        GameRegistry.register(new ItemBlock(blockMachineBaseImproved), blockMachineBaseImproved.getRegistryName());
+        GameRegistry.register(blockMachineBaseAdvanced);
+        GameRegistry.register(new ItemBlock(blockMachineBaseAdvanced), blockMachineBaseAdvanced.getRegistryName());
+        GameRegistry.register(blockPipeEnergy);
+        GameRegistry.register(new ItemBlock(blockPipeEnergy), blockPipeEnergy.getRegistryName());
+        GameRegistry.register(blockPixelTest);
+        GameRegistry.register(new ItemBlock(blockPixelTest), blockPixelTest.getRegistryName());
+        GameRegistry.register(blockCoalGenerator);
+        GameRegistry.register(new ItemBlock(blockCoalGenerator), blockCoalGenerator.getRegistryName());
 
         GameRegistry.registerTileEntity(TilePoweredFurnace.class, "tilePoweredFurnace");
         GameRegistry.registerTileEntity(TileCrusher.class, "tileCrusher");
         GameRegistry.registerTileEntity(TilePipeEnergy.class, "pipeEnergy");
+        GameRegistry.registerTileEntity(TileGeneratorBase.class, "tileCoalGenerator");
     }
 
     /**
@@ -67,6 +82,7 @@ public class BlockInit {
         blockMachineBaseAdvanced.initModel();
         blockPipeEnergy.initModel();
         blockPixelTest.initModel();
+        blockCoalGenerator.initModel();
     }
 
     @SideOnly(Side.CLIENT)

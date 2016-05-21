@@ -3,15 +3,12 @@ package tbsc.techy.init;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import tbsc.techy.Techy;
 import tbsc.techy.client.gui.TechyGuiHandler;
-import tbsc.techy.event.ClientEventHandler;
 import tbsc.techy.event.GeneralEventHandler;
 import tbsc.techy.item.ItemDusts;
 import tbsc.techy.recipe.CrusherRecipes;
@@ -38,9 +35,6 @@ public class MiscInit {
      */
     public static void init() {
         MinecraftForge.EVENT_BUS.register(new GeneralEventHandler());
-        if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-            MinecraftForge.EVENT_BUS.register(new ClientEventHandler());
-        }
         NetworkRegistry.INSTANCE.registerGuiHandler(Techy.instance, new TechyGuiHandler());
 
         // Adding dusts to ore dictionary
@@ -68,7 +62,7 @@ public class MiscInit {
                 "III",
                 "IFI",
                 "RRR",
-                'F', Items.flint_and_steel, 'I', "ingotGold", 'R', "dustRedstone"));
+                'F', Items.FLINT_AND_STEEL, 'I', "ingotGold", 'R', "dustRedstone"));
 
         // ITEMS //
 

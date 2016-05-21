@@ -7,8 +7,8 @@ import com.google.common.collect.Multimap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.util.ObjectIntIdentityMap;
-import net.minecraft.util.RegistryNamespaced;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.registry.RegistryNamespaced;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -81,7 +81,7 @@ public class RegistryUtils {
 			if (obj instanceof Item) {
 				RegistryDelegate<Item> delegate = ((Item) obj).delegate;
 				ReflectionHelper.setPrivateValue(DelegateClass, delegate, repl, "referant");
-				ReflectionHelper.setPrivateValue(DelegateClass, ((Item) repl).delegate, delegate.getResourceName(), "name");
+				ReflectionHelper.setPrivateValue(DelegateClass, ((Item) repl).delegate, delegate.name(), "name");
 			}
 		}
 

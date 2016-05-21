@@ -11,7 +11,7 @@ import net.minecraft.block.material.Material;
 public class BlockMachineBase extends BlockBase {
 
     public BlockMachineBase(String unlocalizedName) {
-        super(Material.circuits, unlocalizedName);
+        super(Material.CIRCUITS, unlocalizedName);
         setHardness(5.0F);
     }
 

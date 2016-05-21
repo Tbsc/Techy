@@ -2,29 +2,29 @@ package tbsc.techy.block.pipe;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tbsc.techy.Techy;
+import tbsc.techy.api.PositionUtil;
 import tbsc.techy.block.BlockBaseMachine;
+import tbsc.techy.tile.pipe.TilePipeBase;
 
 /**
- * Block for the basic pipe. It is protected because it isn't an actual pipe, but rather
- * it should be extended as real pipes.
+ * Base block for pipes. It is protected because it isn't an actual pipe, but rather
+ * should be extended as real pipes.
  *
  * Created by tbsc on 5/9/16.
  */
@@ -37,9 +37,16 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
     public static final PropertyConnection UP_CONNECTION = PropertyConnection.create("up_connection");
     public static final PropertyConnection DOWN_CONNECTION = PropertyConnection.create("down_connection");
 
-    protected BlockPipeBase(String registryName, int tileInvSize) {
-        super(Material.circuits, registryName, tileInvSize);
+    /**
+     * Used to know the type of class a block needs to be a sub type of to connect to
+     */
+    protected Class<?> connectiblePipeClass;
+
+    protected BlockPipeBase(String registryName, int tileInvSize, Class<?> connectiblePipeClass) {
+        super(Material.CIRCUITS, registryName, tileInvSize);
         setHardness(2.0F);
+
+        this.connectiblePipeClass = connectiblePipeClass;
     }
 
     /**
@@ -65,7 +72,7 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
     public void initItemModel() {
         // For our item model we want to use a normal json model. This has to be called in
         // ClientProxy.init (not preInit) so that's why it is a separate method.
-        Item itemBlock = GameRegistry.findItem(Techy.MODID, getRegistryName());
+        Item itemBlock = Item.REGISTRY.getObject(getRegistryName());
         ModelResourceLocation itemModelResourceLocation = new ModelResourceLocation(getRegistryName(), "inventory");
         Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(itemBlock, 0, itemModelResourceLocation);
     }
@@ -82,6 +89,11 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         world.markBlockRangeForRenderUpdate(pos.add(-1, -1, -1), pos.add(1, 1, 1));
+        // Loops through all pipe neighbors, and adds this added pipe to the network
+        for (BlockPos neighbor : PositionUtil.getApplicableNeighbors(world, pos, connectiblePipeClass)) {
+            TilePipeBase pipe = (TilePipeBase) world.getTileEntity(neighbor);
+            pipe.forwardPipeInNetwork(pos);
+        }
     }
 
     /**
@@ -93,7 +105,7 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
         return false;
     }
 
@@ -102,7 +114,7 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
      * @return false
      */
     @Override
-    public boolean isBlockNormalCube() {
+    public boolean isBlockNormalCube(IBlockState state) {
         return false;
     }
 
@@ -111,7 +123,7 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
      * @return false
      */
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
@@ -147,7 +159,7 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
      * @return block state container
      */
     @Override
-    protected BlockState createBlockState() {
+    protected BlockStateContainer createBlockState() {
         IUnlistedProperty[] unlistedProps = new IUnlistedProperty[] { NORTH_CONNECTION, SOUTH_CONNECTION, WEST_CONNECTION, EAST_CONNECTION, UP_CONNECTION, DOWN_CONNECTION };
         IProperty[] props = new IProperty[0];
         return new ExtendedBlockState(this, props, unlistedProps);

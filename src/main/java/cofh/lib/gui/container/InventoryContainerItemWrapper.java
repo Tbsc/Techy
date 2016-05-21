@@ -6,7 +6,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
 
 public class InventoryContainerItemWrapper implements IInventory {
 
@@ -206,7 +206,7 @@ public class InventoryContainerItemWrapper implements IInventory {
 	}
 
 	@Override
-	public IChatComponent getDisplayName() {
+	public ITextComponent getDisplayName() {
 
 		return null;
 	}

@@ -1,9 +1,15 @@
 package cofh.lib.audio;
 
 import net.minecraft.client.audio.ISound;
+import net.minecraft.client.audio.Sound;
+import net.minecraft.client.audio.SoundEventAccessor;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
 
 /**
  * Generic ISound class with lots of constructor functionality. Required because - of course - Mojang has no generic that lets you specify *any* arguments for
@@ -17,6 +23,7 @@ public class SoundBase implements ISound {
 
 	protected AttenuationType attenuation;
 	protected final ResourceLocation sound;
+	protected final SoundCategory category;
 	protected float volume;
 	protected float pitch;
 	protected float x;
@@ -25,76 +32,77 @@ public class SoundBase implements ISound {
 	protected boolean repeat;
 	protected int repeatDelay;
 
-	public SoundBase(String sound) {
+	public SoundBase(String sound, SoundCategory category) {
 
-		this(sound, 0);
+		this(sound, category, 0);
 	}
 
-	public SoundBase(String sound, float volume) {
+	public SoundBase(String sound, SoundCategory category, float volume) {
 
-		this(sound, volume, 0);
+		this(sound, category, volume, 0);
 	}
 
-	public SoundBase(String sound, float volume, float pitch) {
+	public SoundBase(String sound, SoundCategory category, float volume, float pitch) {
 
-		this(sound, volume, pitch, false, 0);
+		this(sound, category, volume, pitch, false, 0);
 	}
 
-	public SoundBase(String sound, float volume, float pitch, boolean repeat, int repeatDelay) {
+	public SoundBase(String sound, SoundCategory category, float volume, float pitch, boolean repeat, int repeatDelay) {
 
-		this(sound, volume, pitch, repeat, repeatDelay, 0, 0, 0, AttenuationType.NONE);
+		this(sound, category, volume, pitch, repeat, repeatDelay, 0, 0, 0, AttenuationType.NONE);
 	}
 
-	public SoundBase(String sound, float volume, float pitch, double x, double y, double z) {
+	public SoundBase(String sound, SoundCategory category, float volume, float pitch, double x, double y, double z) {
 
-		this(sound, volume, pitch, false, 0, x, y, z);
+		this(sound, category, volume, pitch, false, 0, x, y, z);
 	}
 
-	public SoundBase(String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
+	public SoundBase(String sound, SoundCategory category, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
 
-		this(sound, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
+		this(sound, category, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
 	}
 
-	public SoundBase(String sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z, AttenuationType attenuation) {
+	public SoundBase(String sound, SoundCategory category, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z, AttenuationType attenuation) {
 
-		this(new ResourceLocation(sound), volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
+		this(new ResourceLocation(sound), category, volume, pitch, repeat, repeatDelay, x, y, z, attenuation);
 	}
 
-	public SoundBase(ResourceLocation sound) {
+	public SoundBase(ResourceLocation sound, SoundCategory category) {
 
-		this(sound, 0);
+		this(sound, category, 0);
 	}
 
-	public SoundBase(ResourceLocation sound, float volume) {
+	public SoundBase(ResourceLocation sound, SoundCategory category, float volume) {
 
-		this(sound, volume, 0);
+		this(sound, category, volume, 0);
 	}
 
-	public SoundBase(ResourceLocation sound, float volume, float pitch) {
+	public SoundBase(ResourceLocation sound, SoundCategory category, float volume, float pitch) {
 
-		this(sound, volume, pitch, false, 0);
+		this(sound, category, volume, pitch, false, 0);
 	}
 
-	public SoundBase(ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay) {
+	public SoundBase(ResourceLocation sound, SoundCategory category, float volume, float pitch, boolean repeat, int repeatDelay) {
 
-		this(sound, volume, pitch, repeat, repeatDelay, 0, 0, 0, AttenuationType.NONE);
+		this(sound, category, volume, pitch, repeat, repeatDelay, 0, 0, 0, AttenuationType.NONE);
 	}
 
-	public SoundBase(ResourceLocation sound, float volume, float pitch, double x, double y, double z) {
+	public SoundBase(ResourceLocation sound, SoundCategory category, float volume, float pitch, double x, double y, double z) {
 
-		this(sound, volume, pitch, false, 0, x, y, z);
+		this(sound, category, volume, pitch, false, 0, x, y, z);
 	}
 
-	public SoundBase(ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
+	public SoundBase(ResourceLocation sound, SoundCategory category, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z) {
 
-		this(sound, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
+		this(sound, category, volume, pitch, repeat, repeatDelay, x, y, z, AttenuationType.LINEAR);
 	}
 
-	public SoundBase(ResourceLocation sound, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z,
+	public SoundBase(ResourceLocation sound, SoundCategory category, float volume, float pitch, boolean repeat, int repeatDelay, double x, double y, double z,
 			AttenuationType attenuation) {
 
 		this.attenuation = attenuation;
 		this.sound = sound;
+		this.category = category;
 		this.volume = volume;
 		this.pitch = pitch;
 		this.x = (float) x;
@@ -108,6 +116,7 @@ public class SoundBase implements ISound {
 
 		this.attenuation = other.attenuation;
 		this.sound = other.sound;
+		this.category = other.category;
 		this.volume = other.volume;
 		this.pitch = other.pitch;
 		this.x = other.x;
@@ -127,6 +136,22 @@ public class SoundBase implements ISound {
 	public ResourceLocation getSoundLocation() {
 
 		return sound;
+	}
+
+	@Nullable
+	@Override
+	public SoundEventAccessor createAccessor(SoundHandler handler) {
+		return handler.getAccessor(sound);
+	}
+
+	@Override
+	public Sound getSound() {
+		return new Sound(sound.toString(), volume, pitch, 1, Sound.Type.FILE, false);
+	}
+
+	@Override
+	public SoundCategory getCategory() {
+		return category;
 	}
 
 	@Override

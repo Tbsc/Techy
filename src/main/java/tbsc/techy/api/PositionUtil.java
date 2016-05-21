@@ -2,10 +2,12 @@ package tbsc.techy.api;
 
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import org.apache.commons.lang3.ArrayUtils;
+
+import java.util.List;
 
 /**
  * Utility class for checking position
@@ -62,6 +64,25 @@ public class PositionUtil {
             }
         }
         return applicableNeighbors;
+    }
+
+    /**
+     * Returns the closest block from listOfBlocks to thisBlock.
+     * @param thisBlock block to check from
+     * @param listOfBlocks loops through list to find closest
+     * @return closest block pos from list to block
+     */
+    public static BlockPos getClosest(BlockPos thisBlock, List<BlockPos> listOfBlocks) {
+        BlockPos currentClosest = null;
+        for (BlockPos pos : listOfBlocks) {
+            double dstntSq = thisBlock.distanceSq(pos);
+            if (currentClosest != null) {
+                if (dstntSq < pos.distanceSq(currentClosest)) {
+                    currentClosest = pos;
+                }
+            } else currentClosest = pos;
+        }
+        return currentClosest;
     }
 
 }
