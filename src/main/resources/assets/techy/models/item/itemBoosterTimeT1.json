@@ -1,38 +1,6 @@
 {
-  "parent": "builtin/generated",
+  "parent": "Techy:item/techyBase",
   "textures": {
     "layer0": "Techy:items/itemBoosterTimeT1"
-  },
-  "display": {
-    "thirdperson": {
-      "rotation": [ 298, 0, 0 ],
-      "translation": [ 0.00, 1.75, -2.50 ],
-      "scale": [ 0.50, 0.50, 0.50 ]
-    },
-    "firstperson": {
-      "rotation": [ 6, -80, -0 ],
-      "translation": [ 1.00, 1.00, -2.25 ],
-      "scale": [ 1.00, 1.00, 1.00 ]
-    },
-    "gui": {
-      "rotation": [ 0, 0, 0 ],
-      "translation": [ 0.00, 0.00, 0.00 ],
-      "scale": [ 1.00, 1.00, 1.00 ]
-    },
-    "head": {
-      "rotation": [ 0, 0, 0 ],
-      "translation": [ 0.00, 0.00, 0.00 ],
-      "scale": [ 1.00, 1.00, 1.00 ]
-    },
-    "fixed": {
-      "rotation": [ 0, 0, 0 ],
-      "translation": [ 0.00, 0.00, 0.00 ],
-      "scale": [ 1.00, 1.00, 1.00 ]
-    },
-    "ground": {
-      "rotation": [ 270, 0, 0 ],
-      "translation": [ 0.00, -1.75, 0.00 ],
-      "scale": [ 1.00, 1.00, 1.00 ]
-    }
   }
 }
