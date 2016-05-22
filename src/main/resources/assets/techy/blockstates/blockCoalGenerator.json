@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "Techy:blockPoweredFurnace"
+    "model": "Techy:blockCoalGenerator"
   },
   "variants": {
     "normal": [{}],
@@ -18,7 +18,7 @@
       "false": {},
       "true": {
         "textures": {
-          "front": "Techy:blocks/blockPoweredFurnaceFrontWorking"
+          "front": "Techy:blocks/blockCoalGeneratorWorking"
         }
       }
     }

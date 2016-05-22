@@ -32,6 +32,7 @@ item.Techy:itemBoosterBonus.name=Bonus Booster
 ### Blocks ###
 tile.Techy:blockPoweredFurnace.name=Powered Furnace
 tile.Techy:blockCrusher.name=Crusher
+tile.Techy:blockCoalGenerator.name=Coal Generator
 tile.Techy:blockMachineBaseBasic.name=Basic Machine Base
 tile.Techy:blockMachineBaseImproved.name=Improved Machine Base
 tile.Techy:blockMachineBaseAdvanced.name=Advanced Machine Base
