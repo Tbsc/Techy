@@ -1,9 +1,11 @@
 package tbsc.techy.proxy;
 
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.event.FMLInterModComms;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import tbsc.techy.block.pipe.render.PipeEnergyBakedModel;
 import tbsc.techy.block.pipe.render.PipeEnergyLoader;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.init.ItemInit;
@@ -28,14 +30,16 @@ public class ClientProxy extends CommonProxy {
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public void initModels() {
+    public void preInitClient() {
         ItemInit.initModels();
         BlockInit.initModels();
     }
 
     @Override
-    public void initItemModels() {
+    @SideOnly(Side.CLIENT)
+    public void initClient() {
         BlockInit.initItemModels();
+        Minecraft.getMinecraft().getTextureMapBlocks().registerSprite(PipeEnergyBakedModel.BAKED_MODEL);
     }
 
 }

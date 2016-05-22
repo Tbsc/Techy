@@ -7,9 +7,9 @@ package tbsc.techy.proxy;
  */
 public interface IProxy {
 
-    void initModels();
+    void preInitClient();
 
-    void initItemModels();
+    void initClient();
 
     void preInit();
 

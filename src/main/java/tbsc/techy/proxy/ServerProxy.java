@@ -8,12 +8,12 @@ package tbsc.techy.proxy;
 public class ServerProxy extends CommonProxy {
 
     @Override
-    public void initModels() {
+    public void preInitClient() {
         // NO-OP
     }
 
     @Override
-    public void initItemModels() {
+    public void initClient() {
 
     }
 

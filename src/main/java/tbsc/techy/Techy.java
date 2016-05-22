@@ -38,6 +38,7 @@ public class Techy {
      */
     public static final int POWERED_FURNACE_GUI_ID = 0;
     public static final int CRUSHER_GUI_ID = 1;
+    public static final int COAL_GENERATOR_GUI_ID = 2;
 
     /**
      * Instance of this class
@@ -86,7 +87,7 @@ public class Techy {
         BlockInit.init();
         ItemInit.init();
         MiscInit.init();
-        proxy.initModels();
+        proxy.preInitClient();
         proxy.preInit();
 
         config = new Configuration(event.getSuggestedConfigurationFile());
@@ -95,7 +96,7 @@ public class Techy {
 
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        proxy.initItemModels();
+        proxy.initClient();
     }
 
     /**
