@@ -30,6 +30,6 @@ public class GuiCrusher extends GuiMachineBase {
     @Override
     protected void drawGuiContainerBackgroundLayer(float gameTicks, int x, int y) {
         super.drawGuiContainerBackgroundLayer(gameTicks, x, y);
-        addElement(new ElementProgressBar(this, 72, 37, 22, 16, new ResourceLocation("Techy:textures/gui/element/furnaceProgressBar.png"), 0, 0, 22, 0, container.tileBase.progress, 17, container.tileBase.totalProgress));
+        addElement(new ElementProgressBar(this, 72, 37, 22, 16, new ResourceLocation("Techy:textures/gui/element/furnaceProgressBar.png"), 0, 0, 22, 0, true, container.tileBase.progress, 17, container.tileBase.totalProgress));
     }
 }

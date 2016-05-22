@@ -18,9 +18,10 @@ public class ElementProgressBar extends ElementBase {
     public ResourceLocation barLocation;
     public int notWorkingStartX, workingStartX, barWidth,
                notWorkingStartY, workingStartY, barHeight, totalProgress;
+    public boolean isHorizontal;
     public ElementProgressBar(GuiBase gui, int posX, int posY, int width, int height, ResourceLocation barLocation,
                               int notWorkingStartX, int notWorkingStartY, int workingStartX,
-                              int workingStartY, int barWidth, int barHeight, int totalProgress) {
+                              int workingStartY, boolean isHorizontal, int barWidth, int barHeight, int totalProgress) {
         super(gui, posX, posY, width, height);
         mc = Minecraft.getMinecraft();
         this.barLocation = barLocation;
@@ -31,16 +32,26 @@ public class ElementProgressBar extends ElementBase {
         this.barWidth = barWidth;
         this.barHeight = barHeight;
         this.totalProgress = totalProgress;
+        this.isHorizontal = isHorizontal;
     }
 
     @Override
     public void drawBackground(int mouseX, int mouseY, float gameTicks) {
         mc.getTextureManager().bindTexture(barLocation);
         drawTexturedModalRect(posX, posY, notWorkingStartX, notWorkingStartY, sizeX, sizeY); // sizeX - width & sizeY - height from constructor
-        if (barWidth > 0) { // Prevents dividing by zero
-            if (totalProgress != 0) {
-                int percentage = barWidth * sizeX / totalProgress;
-                drawTexturedModalRect(posX, posY, workingStartX, workingStartY, percentage, barHeight);
+        if (isHorizontal) {
+            if (barWidth > 0) { // Prevents dividing by zero
+                if (totalProgress != 0) {
+                    int percentage = barWidth * sizeX / totalProgress;
+                    drawTexturedModalRect(posX, posY, workingStartX, workingStartY, percentage, barHeight);
+                }
+            }
+        } else {
+            if (barHeight > 0) { // Prevents dividing by zero
+                if (totalProgress != 0) {
+                    int percentage = barHeight * sizeY / totalProgress;
+                    drawTexturedModalRect(posX, posY, workingStartX, workingStartY, barWidth, percentage);
+                }
             }
         }
     }
