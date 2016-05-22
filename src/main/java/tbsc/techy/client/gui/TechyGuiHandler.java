@@ -5,6 +5,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import tbsc.techy.Techy;
+import tbsc.techy.init.BlockInit;
 import tbsc.techy.machine.crusher.ContainerCrusher;
 import tbsc.techy.machine.crusher.GuiCrusher;
 import tbsc.techy.machine.crusher.TileCrusher;
@@ -12,8 +13,14 @@ import tbsc.techy.machine.furnace.BlockPoweredFurnace;
 import tbsc.techy.machine.furnace.ContainerPoweredFurnace;
 import tbsc.techy.machine.furnace.GuiPoweredFurnace;
 import tbsc.techy.machine.furnace.TilePoweredFurnace;
+import tbsc.techy.machine.generator.ContainerGeneratorBase;
+import tbsc.techy.machine.generator.GuiGeneratorBase;
+import tbsc.techy.tile.TileMachineBase;
 
 /**
+ * Gui handler for Techy's GUIs.
+ * What it does is depending on the ID given, return the correct GUI to open.
+ *
  * Created by tbsc on 3/29/16.
  */
 public class TechyGuiHandler implements IGuiHandler {
@@ -36,6 +43,9 @@ public class TechyGuiHandler implements IGuiHandler {
         if (ID == Techy.CRUSHER_GUI_ID) {
             return new ContainerCrusher(player.inventory, (TileCrusher) world.getTileEntity(new BlockPos(x, y, z)));
         }
+        if (ID == Techy.COAL_GENERATOR_GUI_ID) {
+            return new ContainerGeneratorBase(player.inventory, (TileMachineBase) world.getTileEntity(new BlockPos(x, y, z)), BlockInit.blockCoalGenerator.tileInvSize);
+        }
         return null;
     }
 
@@ -56,6 +66,9 @@ public class TechyGuiHandler implements IGuiHandler {
         }
         if (ID == Techy.CRUSHER_GUI_ID) {
             return new GuiCrusher(player.inventory, (TileCrusher) world.getTileEntity(new BlockPos(x, y, z)));
+        }
+        if (ID == Techy.COAL_GENERATOR_GUI_ID) {
+            return new GuiGeneratorBase(new ContainerGeneratorBase(player.inventory, (TileMachineBase) world.getTileEntity(new BlockPos(x, y, z)), BlockInit.blockCoalGenerator.tileInvSize));
         }
         return null;
     }
