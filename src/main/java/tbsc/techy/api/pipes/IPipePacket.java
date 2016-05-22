@@ -9,7 +9,7 @@ import net.minecraft.util.math.BlockPos;
  *
  * Created by tbsc on 5/14/2016.
  */
-public interface IPipeRoutable<T> {
+public interface IPipePacket<T> {
 
     /**
      * When something flows through pipes, it needs to know where to go,
@@ -43,14 +43,14 @@ public interface IPipeRoutable<T> {
      * pipe.
      * @return object of what's routed through the pipe
      */
-    T getRoutedObject();
+    T getPacketContents();
 
     /**
      * Creates a human readable string from an instance of this class
      * @return human readable string
      */
     default String toReadableString() {
-        return "Origin: " + getOrigin().toString() + ", Destination: " + getDestination().toString() + ", Routed Object: " + getRoutedObject();
+        return "Origin: " + getOrigin().toString() + ", Destination: " + getDestination().toString() + ", Routed Object: " + getPacketContents();
     }
 
 }

@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import tbsc.techy.api.PositionUtil;
-import tbsc.techy.api.pipes.IPipeRoutable;
+import tbsc.techy.api.pipes.IPipePacket;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ public abstract class TilePipeBase extends TileEntity implements ITickable {
      * Map for checking what is going to be routed.
      * The value is the amount of ticks elapsed to route.
      */
-    public Map<IPipeRoutable, Integer> toBeRouted = new HashMap<>();
+    public Map<IPipePacket, Integer> toBeRouted = new HashMap<>();
     /**
      * Map that contains all of the pipes in the network by position, and
      * (sq) distance from this pipe
@@ -46,7 +46,7 @@ public abstract class TilePipeBase extends TileEntity implements ITickable {
 
     @Override
     public void update() {
-        for (IPipeRoutable routable : toBeRouted.keySet()) {
+        for (IPipePacket routable : toBeRouted.keySet()) {
             int ticksElapsed = toBeRouted.get(routable);
             ++ticksElapsed;
             if (ticksElapsed >= transferDelay) {
@@ -67,14 +67,14 @@ public abstract class TilePipeBase extends TileEntity implements ITickable {
      * @param routable what to send
      * @param receiver where to send, NOTE: it should be the adjacent pipe!
      */
-    protected abstract void sendPipeRoutable(IPipeRoutable routable, BlockPos receiver);
+    protected abstract void sendPipeRoutable(IPipePacket routable, BlockPos receiver);
 
     /**
      * Used by other pipes to make pipes receive stuff
      * @param routable what to receive
      * @param sender who sent it, NOTE: it should be the adjacent pipe!
      */
-    protected abstract void receivePipeRoutable(IPipeRoutable routable, BlockPos sender);
+    protected abstract void receivePipeRoutable(IPipePacket routable, BlockPos sender);
 
     /**
      * This method is called every tick, and what it does is attempt to extract from nearby
@@ -87,7 +87,7 @@ public abstract class TilePipeBase extends TileEntity implements ITickable {
      * The routable has reached its destination, so let the pipe insert it into the destination.
      * @param routable the routable
      */
-    protected abstract void insertRoutable(IPipeRoutable routable);
+    protected abstract void insertRoutable(IPipePacket routable);
 
     /**
      * Called by the block itself when a neighbor block change has happened, and it notifies all of the other

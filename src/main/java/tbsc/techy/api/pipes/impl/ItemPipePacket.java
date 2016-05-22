@@ -2,19 +2,19 @@ package tbsc.techy.api.pipes.impl;
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import tbsc.techy.api.pipes.IPipeRoutable;
+import tbsc.techy.api.pipes.IPipePacket;
 
 /**
  * Implementation for item pipes, transfers items in the form of an {@link ItemStack}
  *
  * Created by tbsc on 5/17/16.
  */
-public class ItemPipeRoutable implements IPipeRoutable<ItemStack> {
+public class ItemPipePacket implements IPipePacket<ItemStack> {
 
     private BlockPos origin, destination;
     private ItemStack routedStack;
 
-    private ItemPipeRoutable(BlockPos origin, BlockPos destination, ItemStack routedStack) {
+    private ItemPipePacket(BlockPos origin, BlockPos destination, ItemStack routedStack) {
         this.origin = origin;
         this.destination = destination;
         this.routedStack = routedStack;
@@ -31,7 +31,7 @@ public class ItemPipeRoutable implements IPipeRoutable<ItemStack> {
     }
 
     @Override
-    public ItemStack getRoutedObject() {
+    public ItemStack getPacketContents() {
         return routedStack;
     }
 

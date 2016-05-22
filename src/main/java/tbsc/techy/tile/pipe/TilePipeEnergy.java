@@ -7,8 +7,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.FMLLog;
-import tbsc.techy.api.pipes.IPipeRoutable;
-import tbsc.techy.api.pipes.impl.EnergyPipeRoutable;
+import tbsc.techy.api.pipes.IPipePacket;
+import tbsc.techy.api.pipes.impl.EnergyPipePacket;
 import tbsc.techy.block.pipe.BlockPipeEnergy;
 
 /**
@@ -26,7 +26,7 @@ public class TilePipeEnergy extends TilePipeBase {
     }
 
     @Override
-    protected void sendPipeRoutable(IPipeRoutable routable, BlockPos receiver) {
+    protected void sendPipeRoutable(IPipePacket routable, BlockPos receiver) {
         TileEntity tile = worldObj.getTileEntity(receiver);
         if (tile instanceof TilePipeBase) {
             TilePipeBase pipe = (TilePipeBase) tile;
@@ -36,7 +36,7 @@ public class TilePipeEnergy extends TilePipeBase {
     }
 
     @Override
-    protected void receivePipeRoutable(IPipeRoutable routable, BlockPos sender) {
+    protected void receivePipeRoutable(IPipePacket routable, BlockPos sender) {
         toBeRouted.put(routable, transferDelay);
     }
 
@@ -54,7 +54,7 @@ public class TilePipeEnergy extends TilePipeBase {
                         FMLLog.info("Found destination at " + destination.toString());
                         int extractedEnergy = ((IEnergyProvider) tile).extractEnergy(side, maxTransfer, false);
                         FMLLog.info("Extracted " + extractedEnergy + " from tile");
-                        IPipeRoutable routable = EnergyPipeRoutable.create(pos, destination, extractedEnergy);
+                        IPipePacket routable = EnergyPipePacket.create(pos, destination, extractedEnergy);
                         receivePipeRoutable(routable, pos);
                         FMLLog.info("Sent " + routable.toReadableString());
                     }
@@ -64,7 +64,7 @@ public class TilePipeEnergy extends TilePipeBase {
     }
 
     @Override
-    protected void insertRoutable(IPipeRoutable routable) {
+    protected void insertRoutable(IPipePacket routable) {
         TileEntity tile = worldObj.getTileEntity(routable.getDestination());
         if (tile != null) {
             IEnergyReceiver receiver = (IEnergyReceiver) tile;
@@ -73,7 +73,7 @@ public class TilePipeEnergy extends TilePipeBase {
                 BlockPos neighbor = routable.getDestination().offset(side);
                 if (neighbor == pos) insertSide = side;
             }
-            receiver.receiveEnergy(insertSide, (int) routable.getRoutedObject(), false);
+            receiver.receiveEnergy(insertSide, (int) routable.getPacketContents(), false);
         } else {
             FMLLog.info("Energy was sent to an invalid destination?!");
         }
