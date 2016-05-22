@@ -31,6 +31,12 @@ public abstract class TileGeneratorBase extends TileMachineBase {
 
     protected TileGeneratorBase(int capacity, int maxReceive, int invSize, int cookTime) {
         super(capacity, maxReceive, invSize, cookTime);
+        sideConfigMap.put(Sides.FRONT, SideConfiguration.INPUT);
+        sideConfigMap.put(Sides.BACK, SideConfiguration.INPUT);
+        sideConfigMap.put(Sides.UP, SideConfiguration.INPUT);
+        sideConfigMap.put(Sides.DOWN, SideConfiguration.INPUT);
+        sideConfigMap.put(Sides.LEFT, SideConfiguration.INPUT);
+        sideConfigMap.put(Sides.RIGHT, SideConfiguration.INPUT);
     }
 
     @Override
@@ -113,7 +119,7 @@ public abstract class TileGeneratorBase extends TileMachineBase {
      * @param item if energy can be generated from this
      * @return if energy can be generated from it
      */
-    protected abstract boolean canGenerateFromItem(ItemStack item);
+    public abstract boolean canGenerateFromItem(ItemStack item);
 
     /**
      * Returns the amount of time an item inputted should burn for

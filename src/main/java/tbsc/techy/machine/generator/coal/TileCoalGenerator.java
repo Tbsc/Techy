@@ -19,7 +19,7 @@ public class TileCoalGenerator extends TileGeneratorBase implements IEnergyProvi
     }
 
     @Override
-    protected boolean canGenerateFromItem(ItemStack item) {
+    public boolean canGenerateFromItem(ItemStack item) {
         return item.getItem() == Items.COAL;
     }
 
