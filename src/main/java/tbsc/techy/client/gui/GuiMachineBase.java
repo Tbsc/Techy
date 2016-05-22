@@ -65,7 +65,7 @@ public abstract class GuiMachineBase extends GuiBase {
             } else {
                 tooltip.add(container.tileBase.getEnergyStored(EnumFacing.DOWN) + " / " + container.tileBase.getMaxEnergyStored(EnumFacing.DOWN) + " RF");
             }
-            tooltip.add(container.tileBase.energyConsumptionPerTick + " RF/t Consumed");
+            tooltip.add(container.tileBase.energyConsumptionPerTick + " RF/t");
         }
     }
 
