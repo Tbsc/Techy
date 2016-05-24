@@ -1,8 +1,12 @@
 package tbsc.techy.machine.generator;
 
+import cofh.api.energy.IEnergyProvider;
+import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import org.apache.commons.lang3.ArrayUtils;
@@ -22,7 +26,7 @@ import java.util.EnumMap;
  *
  * Created by tbsc on 5/20/16.
  */
-public abstract class TileGeneratorBase extends TileMachineBase {
+public abstract class TileGeneratorBase extends TileMachineBase implements IEnergyProvider {
 
     /**
      * Works almost the same as {@link tbsc.techy.machine.furnace.TilePoweredFurnace#sideConfigMap},
@@ -45,7 +49,7 @@ public abstract class TileGeneratorBase extends TileMachineBase {
         handleRedstone();
         handleEnergyItems();
         handleBoosters();
-        if (handleProcessing()) {
+        if (handleProcessing() || handleExtraction()) {
             markDirty();
         }
     }
@@ -112,6 +116,33 @@ public abstract class TileGeneratorBase extends TileMachineBase {
         }
 
         return markDirty;
+    }
+
+    /**
+     * Attempts to insert energy to nearby {@link cofh.api.energy.IEnergyReceiver}s.
+     * @return Whether it should mark the block as dirty
+     */
+    protected boolean handleExtraction() {
+        boolean markDirty = false;
+
+        for (EnumFacing side : EnumFacing.VALUES) {
+            BlockPos offset = pos.offset(side);
+            TileEntity tile = worldObj.getTileEntity(offset);
+            if (tile != null) {
+                if (tile instanceof IEnergyReceiver) {
+                    IEnergyReceiver receiver = (IEnergyReceiver) tile;
+                    receiver.receiveEnergy(side.getOpposite(), extractEnergy(side.getOpposite(), energyStorage.getMaxExtract(), false), false);
+                    markDirty = true;
+                }
+            }
+        }
+
+        return markDirty;
+    }
+
+    @Override
+    public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
+        return energyStorage.extractEnergy(maxExtract, simulate);
     }
 
     /**
