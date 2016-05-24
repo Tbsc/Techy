@@ -1,6 +1,7 @@
 package tbsc.techy.machine.generator;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
@@ -59,18 +60,15 @@ public abstract class TileGeneratorBase extends TileMachineBase {
         boolean markDirty = false;
 
         for (int i : getInputSlots()) {
-            if (inventory[i] != null) {
-                if (canGenerateFromItem(inventory[0]) && canOperate() && shouldOperate()) {
-                    if (!isRunning) {
+            if (!isRunning) {
+                if (inventory[i] != null) {
+                    if (canGenerateFromItem(inventory[0]) && canOperate() && shouldOperate()) {
                         double timePercentage = timeModifier / 100;
                         totalProgress = (int) timePercentage * getBurnTimeFromItem(inventory[0]);
 
                         // NOTE: This sets {@link #energyConsumptionPerTick} to the amount of energy to be given every tick
                         energyConsumptionPerTick = getEnergyUsage(inventory[0]);
-
-                        if (worldObj.getBlockState(pos).getBlock() == null) {
-                            BlockBaseFacingMachine.setWorkingState(true, worldObj, pos);
-                        }
+                        BlockBaseFacingMachine.setWorkingState(true, worldObj, pos);
                         setOperationStatus(true);
 
                         --inventory[0].stackSize;
@@ -79,23 +77,11 @@ public abstract class TileGeneratorBase extends TileMachineBase {
                         }
 
                         markDirty = true;
-                    }
-
-                    ++progress;
-
-                    // Not enough room for added energy
-                    if (energyConsumptionPerTick + getEnergyStored(EnumFacing.DOWN) <= getMaxEnergyStored(EnumFacing.DOWN)) {
-                        setEnergyStored(getEnergyStored(EnumFacing.DOWN) + energyConsumptionPerTick);
-                    }
-
-                    if (progress >= totalProgress) {
-                        doOperation();
-                        if (worldObj.getBlockState(pos).getBlock() == null) {
+                    } else {
+                        stopOperating(true);
+                        if (BlockBaseFacingMachine.getWorkingState(worldObj, pos)) {
                             BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
                         }
-                        progress = totalProgress = 0;
-                        setOperationStatus(false);
-                        markDirty = true;
                     }
                 } else {
                     stopOperating(true);
@@ -103,10 +89,24 @@ public abstract class TileGeneratorBase extends TileMachineBase {
                         BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
                     }
                 }
-            } else {
-                stopOperating(true);
-                if (BlockBaseFacingMachine.getWorkingState(worldObj, pos)) {
+            }
+        }
+
+        if (shouldOperate()) {
+            if (isOperating()) {
+                ++progress;
+
+                // Not enough room for added energy
+                if (energyConsumptionPerTick + getEnergyStored(EnumFacing.DOWN) <= getMaxEnergyStored(EnumFacing.DOWN)) {
+                    setEnergyStored(getEnergyStored(EnumFacing.DOWN) + energyConsumptionPerTick);
+                }
+
+                if (progress >= totalProgress) {
+                    doOperation();
                     BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                    progress = totalProgress = 0;
+                    setOperationStatus(false);
+                    markDirty = true;
                 }
             }
         }
@@ -134,8 +134,20 @@ public abstract class TileGeneratorBase extends TileMachineBase {
     }
 
     @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+        return super.writeToNBT(nbt);
+    }
+
+    @Override
     public boolean canOperate() {
-        return false;
+        if (inventory[0] == null) {
+            return false;
+        } else {
+            if (!canGenerateFromItem(inventory[0])) {
+                return false;
+            }
+            return getEnergyUsage(inventory[0]) + getEnergyStored(EnumFacing.DOWN) < getMaxEnergyStored(EnumFacing.DOWN);
+        }
     }
 
     @Override
