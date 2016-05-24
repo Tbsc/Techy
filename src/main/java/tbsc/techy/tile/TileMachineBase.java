@@ -372,6 +372,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
+        nbt = energyStorage.writeToNBT(nbt);
         NBTTagList list = new NBTTagList();
         for (int i = 0; i < this.getSizeInventory(); ++i) {
             if (this.getStackInSlot(i) != null) {
@@ -382,7 +383,6 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
             }
         }
         nbt.setTag("Items", list);
-        energyStorage.writeToNBT(nbt);
         nbt.setInteger("Progress", progress);
         nbt.setInteger("TotalProgress", totalProgress);
 
