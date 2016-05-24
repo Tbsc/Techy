@@ -3,6 +3,8 @@ package tbsc.techy.machine.generator;
 import net.minecraft.util.ResourceLocation;
 import tbsc.techy.Techy;
 import tbsc.techy.client.gui.GuiMachineBase;
+import tbsc.techy.client.gui.element.ElementProgressBar;
+import tbsc.techy.client.gui.element.ElementSlotRender;
 import tbsc.techy.container.ContainerBase;
 import tbsc.techy.init.BlockInit;
 
@@ -14,12 +16,21 @@ import tbsc.techy.init.BlockInit;
 public class GuiGeneratorBase extends GuiMachineBase {
 
     public GuiGeneratorBase(ContainerBase containerBase) {
-        super(containerBase, BlockInit.blockCoalGenerator.tileInvSize, new ResourceLocation(Techy.MODID + ":textures/gui/container/guiCoalGenerator.png"));
+        super(containerBase, BlockInit.blockCoalGenerator.tileInvSize, new ResourceLocation(Techy.MODID + ":textures/gui/container/guiItemGenerator.png"));
     }
 
     @Override
     public void initGui() {
         super.initGui();
+        addElement(new ElementSlotRender(this, -21, 15));
+        addElement(new ElementSlotRender(this, -21, 35));
+        addElement(new ElementSlotRender(this, -21, 55));
+        addElement(new ElementSlotRender(this, -21, 75));
     }
 
+    @Override
+    protected void drawGuiContainerBackgroundLayer(float partialTick, int x, int y) {
+        super.drawGuiContainerBackgroundLayer(partialTick, x, y);
+        addElement(new ElementProgressBar(this, 75, 57, 13, 13, new ResourceLocation("Techy:textures/gui/container/guiItemGenerator.png"), 75, 57, 176, 0, false, 13, container.tileBase.progress, container.tileBase.totalProgress));
+    }
 }
