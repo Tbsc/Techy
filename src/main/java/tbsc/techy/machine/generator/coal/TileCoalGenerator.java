@@ -25,7 +25,7 @@ public class TileCoalGenerator extends TileGeneratorBase implements IEnergyProvi
 
     @Override
     protected int getBurnTimeFromItem(ItemStack item) {
-        return 1600;
+        return 400;
     }
 
     @Override
