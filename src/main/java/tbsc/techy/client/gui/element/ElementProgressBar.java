@@ -21,7 +21,7 @@ public class ElementProgressBar extends ElementBase {
     public boolean isHorizontal;
     public ElementProgressBar(GuiBase gui, int posX, int posY, int width, int height, ResourceLocation barLocation,
                               int notWorkingStartX, int notWorkingStartY, int workingStartX,
-                              int workingStartY, boolean isHorizontal, int barWidth, int barHeight, int totalProgress) {
+                              int workingStartY, boolean isHorizontal, int currentWidth, int currentHeight, int totalProgress) {
         super(gui, posX, posY, width, height);
         mc = Minecraft.getMinecraft();
         this.barLocation = barLocation;
@@ -29,8 +29,8 @@ public class ElementProgressBar extends ElementBase {
         this.notWorkingStartY = notWorkingStartY;
         this.workingStartX = workingStartX;
         this.workingStartY = workingStartY;
-        this.barWidth = barWidth;
-        this.barHeight = barHeight;
+        this.barWidth = currentWidth;
+        this.barHeight = currentHeight;
         this.totalProgress = totalProgress;
         this.isHorizontal = isHorizontal;
     }
@@ -50,7 +50,7 @@ public class ElementProgressBar extends ElementBase {
             if (barHeight > 0) { // Prevents dividing by zero
                 if (totalProgress != 0) {
                     int percentage = barHeight * sizeY / totalProgress;
-                    drawTexturedModalRect(posX, posY, workingStartX, workingStartY, barWidth, percentage);
+                    drawTexturedModalRect(posX, posY + sizeY - percentage, workingStartX, sizeX - workingStartY, barWidth, percentage);
                 }
             }
         }
