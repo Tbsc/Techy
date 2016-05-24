@@ -31,6 +31,6 @@ public class GuiGeneratorBase extends GuiMachineBase {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTick, int x, int y) {
         super.drawGuiContainerBackgroundLayer(partialTick, x, y);
-        addElement(new ElementProgressBar(this, 75, 57, 13, 13, new ResourceLocation("Techy:textures/gui/container/guiItemGenerator.png"), 75, 57, 176, 0, false, 13, container.tileBase.progress, container.tileBase.totalProgress));
+        addElement(new ElementProgressBar(this, 102, 32, 13, 13, new ResourceLocation("Techy:textures/gui/container/guiItemGenerator.png"), 102, 33, 176, 0, true, container.tileBase.progress, 13, container.tileBase.totalProgress));
     }
 }
