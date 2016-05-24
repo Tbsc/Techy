@@ -19,7 +19,7 @@ public class ContainerGeneratorBase extends ContainerBase {
 
     @Override
     protected void addBlockSlots() {
-        addSlotToContainer(new Slot(tileBase, getNextAvailableSlot(), 10, 10));
+        addSlotToContainer(new Slot(tileBase, getNextAvailableSlot(), 74, 31));
         addSlotToContainer(new SlotBooster(tileBase, getNextAvailableSlot(), -20, 16));
         addSlotToContainer(new SlotBooster(tileBase, getNextAvailableSlot(), -20, 36));
         addSlotToContainer(new SlotBooster(tileBase, getNextAvailableSlot(), -20, 56));
