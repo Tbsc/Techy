@@ -1,4 +1,3 @@
-
 // For those who want the bleeding edge
 buildscript {
     repositories {
@@ -26,6 +25,8 @@ plugins {
 version = config.mod_version
 group= "tbsc.techy"
 archivesBaseName = "Techy"
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 minecraft {
     version = "${config.mc_version}-${config.forge_version}"
@@ -60,7 +61,7 @@ dependencies {
 
     // the 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
     //provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
+    provided files("./run/mods/Waila-1.7.0-B3_1.9.4.jar")
     // the deobf configurations:  'deobfCompile' and 'deobfProvided' are the same as the normal compile and provided,
     // except that these dependencies get remapped to your current MCP mappings
     //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
