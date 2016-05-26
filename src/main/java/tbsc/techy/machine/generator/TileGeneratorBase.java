@@ -131,8 +131,10 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
             if (tile != null) {
                 if (tile instanceof IEnergyReceiver) {
                     IEnergyReceiver receiver = (IEnergyReceiver) tile;
-                    receiver.receiveEnergy(side.getOpposite(), extractEnergy(side.getOpposite(), energyStorage.getMaxExtract(), false), false);
-                    markDirty = true;
+                    if (receiver.getEnergyStored(side.getOpposite()) + extractEnergy(side, energyStorage.getMaxExtract(), true) <= receiver.getMaxEnergyStored(side.getOpposite())) {
+                        receiver.receiveEnergy(side.getOpposite(), extractEnergy(side.getOpposite(), energyStorage.getMaxExtract(), false), false);
+                        markDirty = true;
+                    }
                 }
             }
         }
