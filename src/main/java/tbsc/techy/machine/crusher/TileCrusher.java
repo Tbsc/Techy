@@ -7,7 +7,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import tbsc.techy.ConfigData;
 import tbsc.techy.api.IBoosterItem;
@@ -18,7 +17,6 @@ import tbsc.techy.recipe.StackRecipeInput;
 import tbsc.techy.tile.TileMachineBase;
 
 import javax.annotation.Nonnull;
-import java.util.EnumMap;
 import java.util.Random;
 
 /**
@@ -28,17 +26,15 @@ import java.util.Random;
  */
 public class TileCrusher extends TileMachineBase implements IEnergyReceiver {
 
-    public EnumMap<Sides, SideConfiguration> sideConfigMap = new EnumMap<>(Sides.class);
-
     public TileCrusher() {
         super(50000, 700, BlockCrusher.tileInvSize, ConfigData.crusherDefaultProceessTime);
 
-        sideConfigMap.put(Sides.UP, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.DOWN, SideConfiguration.OUTPUT);
-        sideConfigMap.put(Sides.FRONT, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.BACK, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.LEFT, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.RIGHT, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.UP, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.DOWN, SideConfiguration.OUTPUT);
+        setConfigurationForSide(Sides.FRONT, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.BACK, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.LEFT, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.RIGHT, SideConfiguration.INPUT);
     }
 
     @Override
@@ -222,123 +218,6 @@ public class TileCrusher extends TileMachineBase implements IEnergyReceiver {
     }
 
     @Override
-    public int getOperationProgress() {
-        return progress;
-    }
-
-    @Override
-    public int getOperationTotalProgress() {
-        return totalProgress;
-    }
-
-    @Override
-    public SideConfiguration getConfigurationForSide(Sides side) {
-        return sideConfigMap.get(side);
-    }
-
-    @Override
-    public void setConfigurationForSide(Sides side, SideConfiguration sideConfig) {
-        sideConfigMap.put(side, sideConfig);
-    }
-
-    @Override
-    public int[] getSlotsForConfiguration(SideConfiguration sideConfig) {
-        switch (sideConfig) {
-            case INPUT:
-                return getInputSlots();
-            case OUTPUT:
-                return getOutputSlots();
-            case IO:
-                return ArrayUtils.addAll(getInputSlots(), getOutputSlots());
-            default:
-                return new int[0];
-        }
-    }
-
-    @Override
-    public int[] getSlotsForFace(EnumFacing side) {
-        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockCrusher.FACING);
-        if (frontOfBlock == side) { // FRONT
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.FRONT));
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // LEFT
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.LEFT));
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // BACK
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.BACK));
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // RIGHT
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.RIGHT));
-        }
-        if (side == EnumFacing.UP) { // UP
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.UP));
-        }
-        if (side == EnumFacing.DOWN) { // DOWN
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.DOWN));
-        }
-        return new int[0];
-    }
-
-    @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing side) {
-        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockCrusher.FACING);
-        boolean sideAllows = false;
-        if (frontOfBlock == side) { // FRONT
-            sideAllows = getConfigurationForSide(Sides.FRONT).allowsInput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // LEFT
-            sideAllows = getConfigurationForSide(Sides.LEFT).allowsInput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // BACK
-            sideAllows = getConfigurationForSide(Sides.BACK).allowsInput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // RIGHT
-            sideAllows = getConfigurationForSide(Sides.RIGHT).allowsInput();
-        }
-        if (side == EnumFacing.UP) { // UP
-            sideAllows = getConfigurationForSide(Sides.UP).allowsInput();
-        }
-        if (side == EnumFacing.DOWN) { // DOWN
-            sideAllows = getConfigurationForSide(Sides.DOWN).allowsInput();
-        }
-        return sideAllows && ArrayUtils.contains(getInputSlots(), index);
-    }
-
-    @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing side) {
-        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockCrusher.FACING);
-        boolean sideAllows = false;
-        if (frontOfBlock == side) { // FRONT
-            sideAllows = getConfigurationForSide(Sides.FRONT).allowsOutput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // LEFT
-            sideAllows = getConfigurationForSide(Sides.LEFT).allowsOutput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // BACK
-            sideAllows = getConfigurationForSide(Sides.BACK).allowsOutput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // RIGHT
-            sideAllows = getConfigurationForSide(Sides.RIGHT).allowsOutput();
-        }
-        if (side == EnumFacing.UP) { // UP
-            sideAllows = getConfigurationForSide(Sides.UP).allowsOutput();
-        }
-        if (side == EnumFacing.DOWN) { // DOWN
-            sideAllows = getConfigurationForSide(Sides.DOWN).allowsOutput();
-        }
-        return sideAllows && ArrayUtils.contains(getOutputSlots(), index);
-    }
-
-    @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         switch (index) {
             case 0:
@@ -354,40 +233,6 @@ public class TileCrusher extends TileMachineBase implements IEnergyReceiver {
             default:
                 return false;
         }
-    }
-
-    @Override
-    public int getField(int id) {
-        switch (id) {
-            case 0:
-                return getEnergyStored(EnumFacing.DOWN);
-            case 1:
-                return progress;
-            case 2:
-                return totalProgress;
-            default:
-                return 0;
-        }
-    }
-
-    @Override
-    public void setField(int id, int value) {
-        switch (id) {
-            case 0:
-                setEnergyStored(value);
-                break;
-            case 1:
-                progress = value;
-                break;
-            case 2:
-                totalProgress = value;
-                break;
-        }
-    }
-
-    @Override
-    public int getFieldCount() {
-        return 2;
     }
 
     @Override

@@ -3,19 +3,16 @@ package tbsc.techy.machine.generator;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import org.apache.commons.lang3.ArrayUtils;
 import tbsc.techy.api.IBoosterItem;
 import tbsc.techy.api.SideConfiguration;
 import tbsc.techy.api.Sides;
 import tbsc.techy.block.BlockBaseFacingMachine;
 import tbsc.techy.init.BlockInit;
-import tbsc.techy.machine.furnace.BlockPoweredFurnace;
 import tbsc.techy.tile.TileMachineBase;
 
 import javax.annotation.Nonnull;
@@ -36,12 +33,12 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
 
     protected TileGeneratorBase(int capacity, int maxReceive, int invSize, int cookTime) {
         super(capacity, maxReceive, invSize, cookTime);
-        sideConfigMap.put(Sides.FRONT, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.BACK, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.UP, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.DOWN, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.LEFT, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.RIGHT, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.FRONT, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.BACK, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.UP, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.DOWN, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.LEFT, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.RIGHT, SideConfiguration.INPUT);
     }
 
     @Override
@@ -83,14 +80,18 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
                         markDirty = true;
                     } else {
                         stopOperating(true);
-                        if (BlockBaseFacingMachine.getWorkingState(worldObj, pos)) {
-                            BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                        if (worldObj.getBlockState(pos) != null) {
+                            if (BlockBaseFacingMachine.getWorkingState(worldObj, pos)) {
+                                BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                            }
                         }
                     }
                 } else {
                     stopOperating(true);
-                    if (BlockBaseFacingMachine.getWorkingState(worldObj, pos)) {
-                        BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                    if (worldObj.getBlockState(pos) != null) {
+                        if (BlockBaseFacingMachine.getWorkingState(worldObj, pos)) {
+                            BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                        }
                     }
                 }
             }
@@ -144,6 +145,7 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
 
     @Override
     public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
+        this.markDirty();
         return energyStorage.extractEnergy(maxExtract, simulate);
     }
 
@@ -167,11 +169,6 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        return super.writeToNBT(nbt);
-    }
-
-    @Override
     public boolean canOperate() {
         if (inventory[0] == null) {
             return false;
@@ -181,16 +178,6 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
             }
             return getEnergyUsage(inventory[0]) + getEnergyStored(EnumFacing.DOWN) < getMaxEnergyStored(EnumFacing.DOWN);
         }
-    }
-
-    @Override
-    public int getOperationProgress() {
-        return progress;
-    }
-
-    @Override
-    public int getOperationTotalProgress() {
-        return totalProgress;
     }
 
     @Nonnull
@@ -241,128 +228,6 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
     @Override
     public abstract int getEnergyUsage(ItemStack input);
 
-    /**
-     * Returns the side config for the side given.
-     * @param side the side to check
-     * @return config for the side
-     */
-    @Override
-    public SideConfiguration getConfigurationForSide(Sides side) {
-        return sideConfigMap.get(side);
-    }
-
-    /**
-     * Sets in the class the side config for the side given
-     * @param side to change
-     * @param sideConfig what to change
-     */
-    @Override
-    public void setConfigurationForSide(Sides side, SideConfiguration sideConfig) {
-        sideConfigMap.put(side, sideConfig);
-    }
-
-    /**
-     * For the configuration given, return the slots this configuration should access
-     * @param sideConfig configuration for side
-     * @return slots for configuration
-     */
-    @Override
-    public int[] getSlotsForConfiguration(SideConfiguration sideConfig) {
-        switch (sideConfig) {
-            case INPUT:
-                return getInputSlots();
-            case OUTPUT:
-                return getOutputSlots();
-            case IO:
-                return ArrayUtils.addAll(getInputSlots(), getOutputSlots());
-            default:
-                return new int[0];
-        }
-    }
-
-    @Override
-    public int[] getSlotsForFace(EnumFacing side) {
-        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockPoweredFurnace.FACING);
-        if (frontOfBlock == side) { // FRONT
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.FRONT));
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // LEFT
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.LEFT));
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // BACK
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.BACK));
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // RIGHT
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.RIGHT));
-        }
-        if (side == EnumFacing.UP) { // UP
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.UP));
-        }
-        if (side == EnumFacing.DOWN) { // DOWN
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.DOWN));
-        }
-        return new int[0];
-    }
-
-    @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing side) {
-        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockPoweredFurnace.FACING);
-        boolean sideAllows = false;
-        if (frontOfBlock == side) { // FRONT
-            sideAllows = getConfigurationForSide(Sides.FRONT).allowsInput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // LEFT
-            sideAllows = getConfigurationForSide(Sides.LEFT).allowsInput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // BACK
-            sideAllows = getConfigurationForSide(Sides.BACK).allowsInput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // RIGHT
-            sideAllows = getConfigurationForSide(Sides.RIGHT).allowsInput();
-        }
-        if (side == EnumFacing.UP) { // UP
-            sideAllows = getConfigurationForSide(Sides.UP).allowsInput();
-        }
-        if (side == EnumFacing.DOWN) { // DOWN
-            sideAllows = getConfigurationForSide(Sides.DOWN).allowsInput();
-        }
-        return sideAllows && ArrayUtils.contains(getInputSlots(), index);
-    }
-
-    @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing side) {
-        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockPoweredFurnace.FACING);
-        boolean sideAllows = false;
-        if (frontOfBlock == side) { // FRONT
-            sideAllows = getConfigurationForSide(Sides.FRONT).allowsOutput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // LEFT
-            sideAllows = getConfigurationForSide(Sides.LEFT).allowsOutput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // BACK
-            sideAllows = getConfigurationForSide(Sides.BACK).allowsOutput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // RIGHT
-            sideAllows = getConfigurationForSide(Sides.RIGHT).allowsOutput();
-        }
-        if (side == EnumFacing.UP) { // UP
-            sideAllows = getConfigurationForSide(Sides.UP).allowsOutput();
-        }
-        if (side == EnumFacing.DOWN) { // DOWN
-            sideAllows = getConfigurationForSide(Sides.DOWN).allowsOutput();
-        }
-        return sideAllows && ArrayUtils.contains(getOutputSlots(), index);
-    }
-
     @Override
     public boolean isItemValidForSlot(int index, ItemStack stack) {
         switch (index) {
@@ -373,52 +238,6 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
             default:
                 return false;
         }
-    }
-
-    /**
-     * Returns int value based on id given.
-     * ID 0 - energy stored
-     * ID 1 - max energy stored
-     * @param id to check
-     * @return value for id given
-     */
-    @Override
-    public int getField(int id) {
-        switch (id) {
-            case 0:
-                return getEnergyStored(EnumFacing.DOWN);
-            case 1:
-                return getMaxEnergyStored(EnumFacing.DOWN);
-            default:
-                return 0;
-        }
-    }
-
-    /**
-     * Sets the value of something based on the id given
-     * ID 0 - energy stored
-     * ID 1 - max energy stored
-     * @param id to change
-     * @param value to set
-     */
-    @Override
-    public void setField(int id, int value) {
-        switch (id) {
-            case 0:
-                setEnergyStored(value);
-                break;
-            case 1:
-                energyStorage.setCapacity(value);
-        }
-    }
-
-    /**
-     * Amount of fields available
-     * @return amount of fields
-     */
-    @Override
-    public int getFieldCount() {
-        return 1;
     }
 
     @Override

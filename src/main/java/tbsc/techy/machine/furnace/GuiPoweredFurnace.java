@@ -1,10 +1,12 @@
 package tbsc.techy.machine.furnace;
 
-import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import tbsc.techy.client.gui.GuiMachineBase;
 import tbsc.techy.client.gui.element.ElementProgressBar;
 import tbsc.techy.client.gui.element.ElementSlotRender;
+import tbsc.techy.tile.TileMachineBase;
 
 /**
  * GUI for the powered furnace.
@@ -14,8 +16,8 @@ import tbsc.techy.client.gui.element.ElementSlotRender;
  */
 public class GuiPoweredFurnace extends GuiMachineBase {
 
-    public GuiPoweredFurnace(IInventory playerInv, TilePoweredFurnace tile) {
-        super(new ContainerPoweredFurnace(playerInv, tile, BlockPoweredFurnace.tileInvSize), BlockPoweredFurnace.tileInvSize, new ResourceLocation("Techy:textures/gui/container/guiPoweredFurnace.png"));
+    public GuiPoweredFurnace(ContainerPoweredFurnace container, BlockPos machine, World world) {
+        super(container, machine, world, BlockPoweredFurnace.tileInvSize, new ResourceLocation("Techy:textures/gui/container/guiPoweredFurnace.png"));
     }
 
     @Override
@@ -30,7 +32,10 @@ public class GuiPoweredFurnace extends GuiMachineBase {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTick) {
         super.drawScreen(mouseX, mouseY, partialTick);
-        addElement(new ElementProgressBar(this, 80, 37, 22, 16, new ResourceLocation("Techy:textures/gui/element/furnaceProgressBar.png"), 0, 0, 22, 0, true, ((TilePoweredFurnace) container.tileBase).progress, 17, ((TilePoweredFurnace) container.tileBase).totalProgress));
+        TileMachineBase tile = (TileMachineBase) world.getTileEntity(machine);
+        if (tile != null) {
+            addElement(new ElementProgressBar(this, 80, 37, 22, 16, new ResourceLocation("Techy:textures/gui/element/furnaceProgressBar.png"), 0, 0, 22, 0, true, tile.getField(1), 13, tile.getField(2)));
+        }
     }
 
 }

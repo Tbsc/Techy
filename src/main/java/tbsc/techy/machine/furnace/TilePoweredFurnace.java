@@ -4,10 +4,8 @@ import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
-import org.apache.commons.lang3.ArrayUtils;
 import tbsc.techy.ConfigData;
 import tbsc.techy.api.IBoosterItem;
 import tbsc.techy.api.SideConfiguration;
@@ -18,7 +16,6 @@ import tbsc.techy.recipe.StackRecipeInput;
 import tbsc.techy.tile.TileMachineBase;
 
 import javax.annotation.Nonnull;
-import java.util.EnumMap;
 import java.util.Random;
 
 /**
@@ -34,22 +31,15 @@ import java.util.Random;
  */
 public class TilePoweredFurnace extends TileMachineBase implements IEnergyReceiver {
 
-    /**
-     * Contains values of configurations for sides.
-     * Since it is an {@link EnumMap}, it can *NOT* contain more than 1 enum
-     * value per key, therefore there are always exactly 6 keys, the 6 sides.
-     */
-    public EnumMap<Sides, SideConfiguration> sideConfigMap = new EnumMap<>(Sides.class);
-
     public TilePoweredFurnace() {
         super(40000, 640, BlockPoweredFurnace.tileInvSize, ConfigData.furnaceDefaultCookTime);
 
-        sideConfigMap.put(Sides.UP, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.DOWN, SideConfiguration.OUTPUT);
-        sideConfigMap.put(Sides.FRONT, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.BACK, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.LEFT, SideConfiguration.INPUT);
-        sideConfigMap.put(Sides.RIGHT, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.UP, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.DOWN, SideConfiguration.OUTPUT);
+        setConfigurationForSide(Sides.FRONT, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.BACK, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.LEFT, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.RIGHT, SideConfiguration.INPUT);
     }
 
     /**
@@ -169,113 +159,6 @@ public class TilePoweredFurnace extends TileMachineBase implements IEnergyReceiv
     }
 
     /**
-     * Returns the side config for the side given.
-     * @param side the side to check
-     * @return config for the side
-     */
-    @Override
-    public SideConfiguration getConfigurationForSide(Sides side) {
-        return sideConfigMap.get(side);
-    }
-
-    /**
-     * Sets in the class the side config for the side given
-     * @param side to change
-     * @param sideConfig what to change
-     */
-    @Override
-    public void setConfigurationForSide(Sides side, SideConfiguration sideConfig) {
-        sideConfigMap.put(side, sideConfig);
-    }
-
-    /**
-     * For the configuration given, return the slots this configuration should access
-     * @param sideConfig configuration for side
-     * @return slots for configuration
-     */
-    @Override
-    public int[] getSlotsForConfiguration(SideConfiguration sideConfig) {
-        switch (sideConfig) {
-            case INPUT:
-                return getInputSlots();
-            case OUTPUT:
-                return getOutputSlots();
-            case IO:
-                return ArrayUtils.addAll(getInputSlots(), getOutputSlots());
-            default:
-                return new int[0];
-        }
-    }
-
-    /**
-     * Not used right now, will be used sometime later (I don't know for what)
-     * @return
-     */
-    public static ResourceLocation getMachineFrontTexture() {
-        return new ResourceLocation("Techy:textures/blocks/blockPoweredFurnaceFront.png");
-    }
-
-    @Override
-    public int getOperationProgress() {
-        return progress;
-    }
-
-    @Override
-    public int getOperationTotalProgress() {
-        return totalProgress;
-    }
-
-    /**
-     * Used for server/client communication, for transferring int fields between sides.
-     *
-     * @param id ID of field to get
-     * @return the value for that field, unused right now
-     */
-    @Override
-    public int getField(int id) {
-        switch (id) {
-            case 0:
-                return getEnergyStored(EnumFacing.DOWN);
-            case 1:
-                return getOperationProgress();
-            case 2:
-                return getOperationTotalProgress();
-        }
-        return 0;
-    }
-
-    /**
-     * Sets the value of the specified field ID to the value specified
-     *
-     * @param id    of field
-     * @param value of field
-     */
-    @Override
-    public void setField(int id, int value) {
-        switch (id) {
-            case 0:
-                this.setEnergyStored(value);
-                break;
-            case 1:
-                progress = value;
-                break;
-            case 2:
-                totalProgress = value;
-                break;
-        }
-    }
-
-    /**
-     * Returns how many field there are
-     *
-     * @return amount of fields
-     */
-    @Override
-    public int getFieldCount() {
-        return 0;
-    }
-
-    /**
      * Returns the slot ID array of the energy container slot
      * It needs to return an array in case there is no energy slot, therefore it should
      * return an empty array.
@@ -379,7 +262,6 @@ public class TilePoweredFurnace extends TileMachineBase implements IEnergyReceiv
         return energyStorage.receiveEnergy(maxReceive, simulate);
     }
 
-
     /**
      * Returns the name of the TileEntity.
      *
@@ -398,89 +280,6 @@ public class TilePoweredFurnace extends TileMachineBase implements IEnergyReceiv
     @Override
     public ITextComponent getDisplayName() {
         return new TextComponentString(BlockInit.blockPoweredFurnace.getLocalizedName());
-    }
-
-    @Override
-    public int[] getSlotsForFace(EnumFacing side) {
-        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockPoweredFurnace.FACING);
-        if (frontOfBlock == side) { // FRONT
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.FRONT));
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // LEFT
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.LEFT));
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // BACK
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.BACK));
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // RIGHT
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.RIGHT));
-        }
-        if (side == EnumFacing.UP) { // UP
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.UP));
-        }
-        if (side == EnumFacing.DOWN) { // DOWN
-            return getSlotsForConfiguration(getConfigurationForSide(Sides.DOWN));
-        }
-        return new int[0];
-    }
-
-    @Override
-    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing side) {
-        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockPoweredFurnace.FACING);
-        boolean sideAllows = false;
-        if (frontOfBlock == side) { // FRONT
-            sideAllows = getConfigurationForSide(Sides.FRONT).allowsInput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // LEFT
-            sideAllows = getConfigurationForSide(Sides.LEFT).allowsInput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // BACK
-            sideAllows = getConfigurationForSide(Sides.BACK).allowsInput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // RIGHT
-            sideAllows = getConfigurationForSide(Sides.RIGHT).allowsInput();
-        }
-        if (side == EnumFacing.UP) { // UP
-            sideAllows = getConfigurationForSide(Sides.UP).allowsInput();
-        }
-        if (side == EnumFacing.DOWN) { // DOWN
-            sideAllows = getConfigurationForSide(Sides.DOWN).allowsInput();
-        }
-        return sideAllows && ArrayUtils.contains(getInputSlots(), index);
-    }
-
-    @Override
-    public boolean canExtractItem(int index, ItemStack stack, EnumFacing side) {
-        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockPoweredFurnace.FACING);
-        boolean sideAllows = false;
-        if (frontOfBlock == side) { // FRONT
-            sideAllows = getConfigurationForSide(Sides.FRONT).allowsOutput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // LEFT
-            sideAllows = getConfigurationForSide(Sides.LEFT).allowsOutput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // BACK
-            sideAllows = getConfigurationForSide(Sides.BACK).allowsOutput();
-        }
-        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-        if (frontOfBlock == side) { // RIGHT
-            sideAllows = getConfigurationForSide(Sides.RIGHT).allowsOutput();
-        }
-        if (side == EnumFacing.UP) { // UP
-            sideAllows = getConfigurationForSide(Sides.UP).allowsOutput();
-        }
-        if (side == EnumFacing.DOWN) { // DOWN
-            sideAllows = getConfigurationForSide(Sides.DOWN).allowsOutput();
-        }
-        return sideAllows && ArrayUtils.contains(getOutputSlots(), index);
     }
 
 }

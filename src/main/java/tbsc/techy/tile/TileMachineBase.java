@@ -13,6 +13,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 import tbsc.techy.api.IBoosterItem;
 import tbsc.techy.api.IOperator;
@@ -21,6 +22,7 @@ import tbsc.techy.api.Sides;
 import tbsc.techy.block.BlockBaseFacingMachine;
 
 import javax.annotation.Nonnull;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -97,6 +99,11 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
      * it shouldn't
      */
     protected boolean preventOperation = false;
+
+    /**
+     * Contains all of the data for side configuration
+     */
+    public EnumMap<Sides, SideConfiguration> sideConfigMap = new EnumMap<>(Sides.class);
 
     public EnergyStorage energyStorage;
     protected boolean isRunning;
@@ -237,6 +244,16 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         setOperationStatus(false);
     }
 
+    @Override
+    public int getOperationProgress() {
+        return progress;
+    }
+
+    @Override
+    public int getOperationTotalProgress() {
+        return totalProgress;
+    }
+
     public void spawnXPOrb(int xpAmount, int stackSize) {
         if (xpAmount == 0.0F) {
             stackSize = 0;
@@ -352,7 +369,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
             int slot = stackTag.getByte("Slot") & 255;
             this.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(stackTag));
         }
-        energyStorage.readFromNBT(nbt);
+        setEnergyStored(nbt.getInteger("Energy"));
         progress = nbt.getInteger("Progress");
         totalProgress = nbt.getInteger("TotalProgress");
 
@@ -372,7 +389,6 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
-        nbt = energyStorage.writeToNBT(nbt);
         NBTTagList list = new NBTTagList();
         for (int i = 0; i < this.getSizeInventory(); ++i) {
             if (this.getStackInSlot(i) != null) {
@@ -385,6 +401,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         nbt.setTag("Items", list);
         nbt.setInteger("Progress", progress);
         nbt.setInteger("TotalProgress", totalProgress);
+        nbt.setInteger("Energy", getEnergyStored(EnumFacing.DOWN));
 
         nbt.setInteger("SideConfigFront", getConfigurationForSide(Sides.FRONT).ordinal());
         nbt.setInteger("SideConfigBack", getConfigurationForSide(Sides.BACK).ordinal());
@@ -394,6 +411,156 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         nbt.setInteger("SideConfigDown", getConfigurationForSide(Sides.DOWN).ordinal());
 
         return nbt;
+    }
+
+    @Override
+    public int getField(int id) {
+        switch (id) {
+            case 0:
+                return getEnergyStored(EnumFacing.DOWN);
+            case 1:
+                return progress;
+            case 2:
+                return totalProgress;
+            case 3:
+                return energyConsumptionPerTick;
+            case 4:
+                return getMaxEnergyStored(EnumFacing.DOWN);
+            default:
+                return 0;
+        }
+    }
+
+    @Override
+    public void setField(int id, int value) {
+        switch (id) {
+            case 0:
+                setEnergyStored(value);
+                break;
+            case 1:
+                progress = value;
+                break;
+            case 2:
+                totalProgress = value;
+                break;
+            case 3:
+                energyConsumptionPerTick = value;
+                break;
+            case 4:
+                energyStorage.setCapacity(value);
+        }
+    }
+
+    @Override
+    public int getFieldCount() {
+        return 3;
+    }
+
+    @Override
+    public SideConfiguration getConfigurationForSide(Sides side) {
+        return sideConfigMap.get(side);
+    }
+
+    @Override
+    public void setConfigurationForSide(Sides side, SideConfiguration sideConfig) {
+        sideConfigMap.put(side, sideConfig);
+    }
+
+    @Override
+    public int[] getSlotsForConfiguration(SideConfiguration sideConfig) {
+        switch (sideConfig) {
+            case INPUT:
+                return getInputSlots();
+            case OUTPUT:
+                return getOutputSlots();
+            case IO:
+                return ArrayUtils.addAll(getInputSlots(), getOutputSlots());
+            default:
+                return new int[0];
+        }
+    }
+
+    @Override
+    public int[] getSlotsForFace(EnumFacing side) {
+        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockBaseFacingMachine.FACING);
+        if (frontOfBlock == side) { // FRONT
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.FRONT));
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // LEFT
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.LEFT));
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // BACK
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.BACK));
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // RIGHT
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.RIGHT));
+        }
+        if (side == EnumFacing.UP) { // UP
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.UP));
+        }
+        if (side == EnumFacing.DOWN) { // DOWN
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.DOWN));
+        }
+        return new int[0];
+    }
+
+    @Override
+    public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing side) {
+        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockBaseFacingMachine.FACING);
+        boolean sideAllows = false;
+        if (frontOfBlock == side) { // FRONT
+            sideAllows = getConfigurationForSide(Sides.FRONT).allowsInput();
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // LEFT
+            sideAllows = getConfigurationForSide(Sides.LEFT).allowsInput();
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // BACK
+            sideAllows = getConfigurationForSide(Sides.BACK).allowsInput();
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // RIGHT
+            sideAllows = getConfigurationForSide(Sides.RIGHT).allowsInput();
+        }
+        if (side == EnumFacing.UP) { // UP
+            sideAllows = getConfigurationForSide(Sides.UP).allowsInput();
+        }
+        if (side == EnumFacing.DOWN) { // DOWN
+            sideAllows = getConfigurationForSide(Sides.DOWN).allowsInput();
+        }
+        return sideAllows && ArrayUtils.contains(getInputSlots(), index);
+    }
+
+    @Override
+    public boolean canExtractItem(int index, ItemStack stack, EnumFacing side) {
+        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockBaseFacingMachine.FACING);
+        boolean sideAllows = false;
+        if (frontOfBlock == side) { // FRONT
+            sideAllows = getConfigurationForSide(Sides.FRONT).allowsOutput();
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // LEFT
+            sideAllows = getConfigurationForSide(Sides.LEFT).allowsOutput();
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // BACK
+            sideAllows = getConfigurationForSide(Sides.BACK).allowsOutput();
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // RIGHT
+            sideAllows = getConfigurationForSide(Sides.RIGHT).allowsOutput();
+        }
+        if (side == EnumFacing.UP) { // UP
+            sideAllows = getConfigurationForSide(Sides.UP).allowsOutput();
+        }
+        if (side == EnumFacing.DOWN) { // DOWN
+            sideAllows = getConfigurationForSide(Sides.DOWN).allowsOutput();
+        }
+        return sideAllows && ArrayUtils.contains(getOutputSlots(), index);
     }
 
     public void setEnergyStored(int energy) {

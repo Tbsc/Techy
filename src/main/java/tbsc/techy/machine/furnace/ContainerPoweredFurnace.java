@@ -15,8 +15,8 @@ import tbsc.techy.tile.TileMachineBase;
  */
 public class ContainerPoweredFurnace extends ContainerBase {
 
-    public ContainerPoweredFurnace(IInventory playerInv, TileMachineBase tileBase, int tileInvSize) {
-        super(playerInv, tileBase, tileInvSize);
+    public ContainerPoweredFurnace(IInventory playerInv, TileMachineBase tileBase) {
+        super(playerInv, tileBase, BlockPoweredFurnace.tileInvSize);
     }
 
     /**

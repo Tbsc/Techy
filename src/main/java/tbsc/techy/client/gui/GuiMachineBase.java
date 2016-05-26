@@ -3,10 +3,13 @@ package tbsc.techy.client.gui;
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.ElementEnergyStored;
 import cofh.lib.render.RenderHelper;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import tbsc.techy.client.gui.element.TabSides;
 import tbsc.techy.container.ContainerBase;
+import tbsc.techy.tile.TileBase;
+import tbsc.techy.tile.TileMachineBase;
 
 import java.util.List;
 
@@ -20,11 +23,13 @@ public abstract class GuiMachineBase extends GuiBase {
 
     public int tileInvSize;
     protected ResourceLocation guiTexture;
-    protected ContainerBase container;
+    protected BlockPos machine;
+    protected World world;
 
-    protected GuiMachineBase(ContainerBase containerBase, int tileInvSize, ResourceLocation guiTexture) {
+    protected GuiMachineBase(ContainerBase containerBase, BlockPos pos, World world, int tileInvSize, ResourceLocation guiTexture) {
         super(containerBase, guiTexture);
-        this.container = containerBase;
+        this.machine = pos;
+        this.world = world;
         this.tileInvSize = tileInvSize;
         this.guiTexture = guiTexture;
     }
@@ -32,7 +37,7 @@ public abstract class GuiMachineBase extends GuiBase {
     @Override
     public void initGui() {
         super.initGui();
-        addTab(new TabSides(this, xSize + 1, 0, 22 + 28, 22 + 28, container.tileBase));
+        addTab(new TabSides(this, xSize + 1, 0, 22 + 28, 22 + 28, (TileBase) world.getTileEntity(machine)));
     }
 
     /**
@@ -44,28 +49,33 @@ public abstract class GuiMachineBase extends GuiBase {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTick, int x, int y) {
         super.drawGuiContainerBackgroundLayer(partialTick, x, y);
+        TileMachineBase tile = (TileMachineBase) world.getTileEntity(machine);
+        if (tile != null) {
+            int i = (this.width - this.xSize) / 2;
+            int j = (this.height - this.ySize) / 2;
+            int posX = i + xSize - 24;
+            int posY = j + 12;
+            int percentage = tile.getField(0) * 42 / tile.getField(4);
 
-        int i = (this.width - this.xSize) / 2;
-        int j = (this.height - this.ySize) / 2;
-        int posX = i + xSize - 24;
-        int posY = j + 12;
-        int percentage = container.tileBase.getField(0) * 42 / container.tileBase.getMaxEnergyStored(EnumFacing.DOWN);
-
-        RenderHelper.bindTexture(ElementEnergyStored.DEFAULT_TEXTURE);
-        drawSizedTexturedModalRect(posX, posY, 0, 0, 16, 42, 32, 64);
-        drawSizedTexturedModalRect(posX, posY + 42 - percentage, 16, 42 - percentage, 16, percentage, 32, 64);
+            RenderHelper.bindTexture(ElementEnergyStored.DEFAULT_TEXTURE);
+            drawSizedTexturedModalRect(posX, posY, 0, 0, 16, 42, 32, 64);
+            drawSizedTexturedModalRect(posX, posY + 42 - percentage, 16, 42 - percentage, 16, percentage, 32, 64);
+        }
     }
 
     @Override
     public void addTooltips(List<String> tooltip) {
         super.addTooltips(tooltip);
-        if (mouseX >= xSize - 24 && mouseX <= xSize - 24 + 16 && mouseY >= 12 && mouseY <= 12 + 42) { // Mouse is currently on the energy bar
-            if (container.tileBase.getMaxEnergyStored(EnumFacing.DOWN) < 0) {
-                tooltip.add("Infinite RF");
-            } else {
-                tooltip.add(container.tileBase.getEnergyStored(EnumFacing.DOWN) + " / " + container.tileBase.getMaxEnergyStored(EnumFacing.DOWN) + " RF");
+        TileMachineBase tile = (TileMachineBase) world.getTileEntity(machine);
+        if (tile != null) {
+            if (mouseX >= xSize - 24 && mouseX <= xSize - 24 + 16 && mouseY >= 12 && mouseY <= 12 + 42) { // Mouse is currently on the energy bar
+                if (tile.getField(4) < 0) {
+                    tooltip.add("Infinite RF");
+                } else {
+                    tooltip.add(tile.getField(0) + " / " + tile.getField(4) + " RF");
+                }
+                tooltip.add(tile.getField(3) + " RF/t");
             }
-            tooltip.add(container.tileBase.energyConsumptionPerTick + " RF/t");
         }
     }
 
@@ -131,7 +141,10 @@ public abstract class GuiMachineBase extends GuiBase {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        fontRendererObj.drawString(container.tileBase.getName(), 8, 6, 0x404040);
+        TileBase tile = (TileBase) world.getTileEntity(machine);
+        if (tile != null) {
+            fontRendererObj.drawString(tile.getName(), 8, 6, 0x404040);
+        }
     }
 
 }

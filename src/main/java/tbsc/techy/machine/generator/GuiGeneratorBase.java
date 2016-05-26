@@ -1,12 +1,15 @@
 package tbsc.techy.machine.generator;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import tbsc.techy.Techy;
 import tbsc.techy.client.gui.GuiMachineBase;
 import tbsc.techy.client.gui.element.ElementProgressBar;
 import tbsc.techy.client.gui.element.ElementSlotRender;
 import tbsc.techy.container.ContainerBase;
 import tbsc.techy.init.BlockInit;
+import tbsc.techy.tile.TileMachineBase;
 
 /**
  * Gui for the coal generator
@@ -15,8 +18,8 @@ import tbsc.techy.init.BlockInit;
  */
 public class GuiGeneratorBase extends GuiMachineBase {
 
-    public GuiGeneratorBase(ContainerBase containerBase) {
-        super(containerBase, BlockInit.blockCoalGenerator.tileInvSize, new ResourceLocation(Techy.MODID + ":textures/gui/container/guiItemGenerator.png"));
+    public GuiGeneratorBase(ContainerBase containerBase, BlockPos machine, World world) {
+        super(containerBase, machine, world, BlockInit.blockCoalGenerator.tileInvSize, new ResourceLocation(Techy.MODID + ":textures/gui/container/guiItemGenerator.png"));
     }
 
     @Override
@@ -31,6 +34,9 @@ public class GuiGeneratorBase extends GuiMachineBase {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTick, int x, int y) {
         super.drawGuiContainerBackgroundLayer(partialTick, x, y);
-        addElement(new ElementProgressBar(this, 102, 32, 13, 13, new ResourceLocation("Techy:textures/gui/container/guiItemGenerator.png"), 102, 33, 176, 0, true, container.tileBase.progress, 13, container.tileBase.totalProgress));
+        TileMachineBase tile = (TileMachineBase) world.getTileEntity(machine);
+        if (tile != null) {
+            addElement(new ElementProgressBar(this, 102, 32, 13, 13, new ResourceLocation("Techy:textures/gui/container/guiItemGenerator.png"), 102, 33, 176, 0, true, tile.getField(1), 13, tile.getField(2)));
+        }
     }
 }
