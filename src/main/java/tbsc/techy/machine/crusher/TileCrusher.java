@@ -138,7 +138,7 @@ public class TileCrusher extends TileMachineBase implements IEnergyReceiver {
             // There is a recipe, then store the output in a variable
             ItemStack recipeOutput = CrusherRecipes.instance().getSmeltingResult(StackRecipeInput.of(inventory[0])).getLeft();
             // Not enough energy stored in tile
-            if ((energyModifier / 100) * CrusherRecipes.instance().getSmeltingEnergy(recipeOutput) >= getEnergyStored(EnumFacing.DOWN)) {
+            if ((energyModifier / 100) * CrusherRecipes.instance().getSmeltingEnergy(recipeOutput) >= getEnergyStored()) {
                 return false;
             }
             // If there is no item in output slot then it can smelt, returns true

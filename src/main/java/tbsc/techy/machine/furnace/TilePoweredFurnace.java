@@ -140,7 +140,7 @@ public class TilePoweredFurnace extends TileMachineBase implements IEnergyReceiv
             // There is a recipe, then store the output in a variable
             ItemStack recipeOutput = PoweredFurnaceRecipes.instance().getSmeltingResult(StackRecipeInput.of(inventory[0]));
             // Not enough energy stored in tile
-            if ((energyModifier / 100) * PoweredFurnaceRecipes.instance().getSmeltingEnergy(recipeOutput) >= getEnergyStored(EnumFacing.DOWN)) {
+            if ((energyModifier / 100) * PoweredFurnaceRecipes.instance().getSmeltingEnergy(recipeOutput) >= getEnergyStored()) {
                 return false;
             }
             // If there is no item in output slot then it can smelt, returns true

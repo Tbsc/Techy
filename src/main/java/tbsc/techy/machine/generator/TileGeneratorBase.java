@@ -1,5 +1,6 @@
 package tbsc.techy.machine.generator;
 
+import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.item.ItemStack;
@@ -16,7 +17,6 @@ import tbsc.techy.init.BlockInit;
 import tbsc.techy.tile.TileMachineBase;
 
 import javax.annotation.Nonnull;
-import java.util.EnumMap;
 
 /**
  * Base tile entity for generators
@@ -24,12 +24,6 @@ import java.util.EnumMap;
  * Created by tbsc on 5/20/16.
  */
 public abstract class TileGeneratorBase extends TileMachineBase implements IEnergyProvider {
-
-    /**
-     * Works almost the same as {@link tbsc.techy.machine.furnace.TilePoweredFurnace#sideConfigMap},
-     * so just check out that
-     */
-    public EnumMap<Sides, SideConfiguration> sideConfigMap = new EnumMap<>(Sides.class);
 
     protected TileGeneratorBase(int capacity, int maxReceive, int invSize, int cookTime) {
         super(capacity, maxReceive, invSize, cookTime);
@@ -43,12 +37,32 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
 
     @Override
     public void update() {
-        handleRedstone();
-        handleEnergyItems();
-        handleBoosters();
-        if (handleProcessing() || handleExtraction()) {
+        if (handleProcessing() || handleExtraction() || handleRedstone() || handleBoosters() || handleEnergyItems()) {
             markDirty();
         }
+    }
+
+    /**
+     * Extract energy to item energy containers in the energy slots.
+     * @return should mark dirty
+     * @author McJty - taken from RFTools' GitHub repo
+     */
+    @Override
+    protected boolean handleEnergyItems() {
+        if (getEnergySlots().length >= 1) {
+            for (int i = 0; i < getEnergySlots().length; ++i) {
+                ItemStack stack = inventory[getEnergySlots()[i]];
+                if (stack != null && stack.getItem() instanceof IEnergyContainerItem) {
+                    IEnergyContainerItem energyContainerItem = (IEnergyContainerItem) stack.getItem();
+                    int energyStored = getEnergyStored(EnumFacing.DOWN);
+                    int rfToGive = energyStorage.getMaxReceive() <= energyStored ? energyStorage.getMaxReceive() : energyStored;
+                    int received = energyContainerItem.receiveEnergy(stack, rfToGive, false);
+                    extractEnergy(EnumFacing.DOWN, received, false);
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -102,8 +116,8 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
                 ++progress;
 
                 // Not enough room for added energy
-                if (energyConsumptionPerTick + getEnergyStored(EnumFacing.DOWN) <= getMaxEnergyStored(EnumFacing.DOWN)) {
-                    setEnergyStored(getEnergyStored(EnumFacing.DOWN) + energyConsumptionPerTick);
+                if (energyConsumptionPerTick + getEnergyStored() <= getCapacity()) {
+                    energyStorage.modifyEnergyStored(getEnergyStored() + energyConsumptionPerTick);
                 }
 
                 if (progress >= totalProgress) {
@@ -176,7 +190,7 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
             if (!canGenerateFromItem(inventory[0])) {
                 return false;
             }
-            return getEnergyUsage(inventory[0]) + getEnergyStored(EnumFacing.DOWN) < getMaxEnergyStored(EnumFacing.DOWN);
+            return getEnergyUsage(inventory[0]) + getEnergyStored() < getCapacity();
         }
     }
 

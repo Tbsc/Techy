@@ -1,18 +1,20 @@
 package tbsc.techy.tile;
 
 import cofh.api.energy.EnergyStorage;
+import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
-import cofh.lib.util.helpers.EnergyHelper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLLog;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 import tbsc.techy.api.IBoosterItem;
@@ -133,15 +135,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
 
     @Override
     public void update() {
-        handleRedstone();
-        handleEnergyItems();
-        handleBoosters();
-
-        boolean markDirty;
-
-        markDirty = handleProcessing();
-
-        if (markDirty) {
+        if (handleRedstone() || handleEnergyItems() || handleBoosters() || handleProcessing() || handleEnergyUpdate()) {
             this.markDirty();
         }
     }
@@ -152,12 +146,14 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
             for (int i = 0; i < getBoosterSlots().length; ++i) {
                 if (inventory[getBoosterSlots()[i]] != null) {
                     // No need to check if item is a booster, because only booster items area allowed there
-                    IBoosterItem booster = (IBoosterItem) inventory[getBoosterSlots()[i]].getItem();
-                    int tier = inventory[getBoosterSlots()[i]].getMetadata();
-                    energyModifierSet =+ booster.getEnergyModifier(tier);
-                    timeModifierSet = booster.getTimeModifier(tier);
-                    experienceModifierSet =+ booster.getExperienceModifier(tier);
-                    additionalItemModifierSet =+ booster.getAdditionalItemModifier(tier);
+                    if (inventory[getBoosterSlots()[i]].getItem() instanceof IBoosterItem) {
+                        IBoosterItem booster = (IBoosterItem) inventory[getBoosterSlots()[i]].getItem();
+                        int tier = inventory[getBoosterSlots()[i]].getMetadata();
+                        energyModifierSet = +booster.getEnergyModifier(tier);
+                        timeModifierSet = booster.getTimeModifier(tier);
+                        experienceModifierSet = +booster.getExperienceModifier(tier);
+                        additionalItemModifierSet = +booster.getAdditionalItemModifier(tier);
+                    }
                 }
             }
         }
@@ -174,14 +170,57 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         return false;
     }
 
+    /**
+     * Extract energy from item energy containers in the energy slots.
+     * @return should mark dirty
+     * @author McJty - taken from RFTools' GitHub repo
+     */
     protected boolean handleEnergyItems() {
         if (getEnergySlots().length >= 1) {
             for (int i = 0; i < getEnergySlots().length; ++i) {
-                if (inventory[getEnergySlots()[i]] != null) {
-                    setEnergyStored(getEnergyStored(EnumFacing.DOWN) + EnergyHelper.extractEnergyFromContainer(inventory[getEnergySlots()[i]], energyStorage.getMaxReceive(), false));
+                ItemStack stack = inventory[getEnergySlots()[i]];
+                if (stack != null && stack.getItem() instanceof IEnergyContainerItem) {
+                    IEnergyContainerItem energyContainerItem = (IEnergyContainerItem) stack.getItem();
+                    int energyStored = getEnergyStored();
+                    int rfToGive = energyStorage.getMaxReceive() <= energyStored ? energyStorage.getMaxReceive() : energyStored;
+                    int received = energyContainerItem.extractEnergy(stack, rfToGive, false);
+                    energyStorage.receiveEnergy(received, false);
+                    return true;
                 }
             }
         }
+        return false;
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        readFromNBT(pkt.getNbtCompound());
+    }
+
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        return new SPacketUpdateTileEntity(pos, getBlockMetadata(), writeToNBT(new NBTTagCompound()));
+    }
+
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        NBTTagCompound tag = super.getUpdateTag();
+        writeToNBT(tag);
+        return tag;
+    }
+
+    protected int previousEnergy;
+
+    /**
+     * Checks for any kind of change in energy in the machine, then updates the machine.
+     * @return should mark dirty
+     */
+    protected boolean handleEnergyUpdate() {
+        if (previousEnergy != getEnergyStored()) {
+            previousEnergy = getEnergyStored();
+            return true;
+        }
+        previousEnergy = getEnergyStored();
         return false;
     }
 
@@ -200,12 +239,13 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
                             BlockBaseFacingMachine.setWorkingState(true, worldObj, pos);
                         }
                         setOperationStatus(true);
+                        markDirty = true;
                     }
                     ++progress;
-                    if (energyConsumptionPerTick >= getEnergyStored(EnumFacing.DOWN)) {
+                    if (energyConsumptionPerTick >= getEnergyStored()) {
                         stopOperating(true);
                     }
-                    setEnergyStored(getEnergyStored(EnumFacing.DOWN) - energyConsumptionPerTick);
+                    energyStorage.modifyEnergyStored(getEnergyStored() - energyConsumptionPerTick);
                     if (progress >= totalProgress) {
                         doOperation();
                         if (worldObj.getBlockState(pos).getBlock() == null) {
@@ -363,13 +403,9 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
-        NBTTagList list = nbt.getTagList("Items", 10);
-        for (int i = 0; i < list.tagCount(); ++i) {
-            NBTTagCompound stackTag = list.getCompoundTagAt(i);
-            int slot = stackTag.getByte("Slot") & 255;
-            this.setInventorySlotContents(slot, ItemStack.loadItemStackFromNBT(stackTag));
-        }
-        setEnergyStored(nbt.getInteger("Energy"));
+        FMLLog.info(nbt.getInteger("Energy") + " RF read from NBT in machine " + getName() + " at " + pos.toString());
+        energyStorage.modifyEnergyStored(nbt.getInteger("Energy"));
+        FMLLog.info(getEnergyStored() + " RF saved to variable in machine " + getName() + " at " + pos.toString());
         progress = nbt.getInteger("Progress");
         totalProgress = nbt.getInteger("TotalProgress");
 
@@ -389,19 +425,10 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
-        NBTTagList list = new NBTTagList();
-        for (int i = 0; i < this.getSizeInventory(); ++i) {
-            if (this.getStackInSlot(i) != null) {
-                NBTTagCompound stackTag = new NBTTagCompound();
-                stackTag = this.getStackInSlot(i).writeToNBT(stackTag);
-                stackTag.setByte("Slot", (byte) i);
-                list.appendTag(stackTag);
-            }
-        }
-        nbt.setTag("Items", list);
         nbt.setInteger("Progress", progress);
         nbt.setInteger("TotalProgress", totalProgress);
-        nbt.setInteger("Energy", getEnergyStored(EnumFacing.DOWN));
+        FMLLog.info(getEnergyStored() + " RF written to NBT from machine " + getName() + " at " + pos.toString());
+        nbt.setInteger("Energy", getEnergyStored());
 
         nbt.setInteger("SideConfigFront", getConfigurationForSide(Sides.FRONT).ordinal());
         nbt.setInteger("SideConfigBack", getConfigurationForSide(Sides.BACK).ordinal());
@@ -409,7 +436,6 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         nbt.setInteger("SideConfigRight", getConfigurationForSide(Sides.RIGHT).ordinal());
         nbt.setInteger("SideConfigUp", getConfigurationForSide(Sides.UP).ordinal());
         nbt.setInteger("SideConfigDown", getConfigurationForSide(Sides.DOWN).ordinal());
-
         return nbt;
     }
 
@@ -417,7 +443,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
     public int getField(int id) {
         switch (id) {
             case 0:
-                return getEnergyStored(EnumFacing.DOWN);
+                return getEnergyStored();
             case 1:
                 return progress;
             case 2:
@@ -425,7 +451,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
             case 3:
                 return energyConsumptionPerTick;
             case 4:
-                return getMaxEnergyStored(EnumFacing.DOWN);
+                return getCapacity();
             default:
                 return 0;
         }
@@ -435,7 +461,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
     public void setField(int id, int value) {
         switch (id) {
             case 0:
-                setEnergyStored(value);
+                energyStorage.modifyEnergyStored(value);
                 break;
             case 1:
                 progress = value;
@@ -449,6 +475,14 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
             case 4:
                 energyStorage.setCapacity(value);
         }
+    }
+
+    public int getEnergyStored() {
+        return energyStorage.getEnergyStored();
+    }
+
+    public int getCapacity() {
+        return energyStorage.getMaxEnergyStored();
     }
 
     @Override
@@ -561,10 +595,6 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
             sideAllows = getConfigurationForSide(Sides.DOWN).allowsOutput();
         }
         return sideAllows && ArrayUtils.contains(getOutputSlots(), index);
-    }
-
-    public void setEnergyStored(int energy) {
-        energyStorage.setEnergyStored(energy);
     }
 
     /**
