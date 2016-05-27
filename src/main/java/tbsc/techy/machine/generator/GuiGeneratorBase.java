@@ -36,7 +36,7 @@ public class GuiGeneratorBase extends GuiMachineBase {
         super.drawGuiContainerBackgroundLayer(partialTick, x, y);
         TileMachineBase tile = (TileMachineBase) world.getTileEntity(machine);
         if (tile != null) {
-            addElement(new ElementProgressBar(this, 102, 32, 13, 13, new ResourceLocation("Techy:textures/gui/container/guiItemGenerator.png"), 102, 33, 176, 0, true, tile.getField(1), 13, tile.getField(2)));
+            addElement(new ElementProgressBar(this, 102, 36, 13, 13, new ResourceLocation("Techy:textures/gui/container/guiItemGenerator.png"), 102, 36, 176, 0, tile.getField(1), 13, tile.getField(2)));
         }
     }
 }

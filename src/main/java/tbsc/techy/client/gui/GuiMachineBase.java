@@ -40,6 +40,11 @@ public abstract class GuiMachineBase extends GuiBase {
         addTab(new TabSides(this, xSize + 1, 0, 22 + 28, 22 + 28, (TileBase) world.getTileEntity(machine)));
     }
 
+    int energyBarStartX = (this.width - this.xSize) / 2 + xSize - 24;
+    int energyBarStartY = (this.height - this.ySize) / 2 + 24;
+    int energyBarWidth = 16;
+    int energyBarHeight = 42;
+
     /**
      * Renders an energy bar on the background layer
      * @param partialTick
@@ -51,15 +56,11 @@ public abstract class GuiMachineBase extends GuiBase {
         super.drawGuiContainerBackgroundLayer(partialTick, x, y);
         TileMachineBase tile = (TileMachineBase) world.getTileEntity(machine);
         if (tile != null) {
-            int i = (this.width - this.xSize) / 2;
-            int j = (this.height - this.ySize) / 2;
-            int posX = i + xSize - 24;
-            int posY = j + 24;
             int percentage = tile.getField(0) * 42 / tile.getField(4);
 
             RenderHelper.bindTexture(ElementEnergyStored.DEFAULT_TEXTURE);
-            drawSizedTexturedModalRect(posX, posY, 0, 0, 16, 42, 32, 64);
-            drawSizedTexturedModalRect(posX, posY + 42 - percentage, 16, 42 - percentage, 16, percentage, 32, 64);
+            drawSizedTexturedModalRect(energyBarStartX, energyBarStartY, 0, 0, energyBarWidth, energyBarHeight, 32, 64);
+            drawSizedTexturedModalRect(energyBarStartX, energyBarStartY + energyBarHeight - percentage, energyBarWidth, energyBarHeight - percentage, energyBarWidth, percentage, 32, 64);
         }
     }
 
@@ -68,7 +69,7 @@ public abstract class GuiMachineBase extends GuiBase {
         super.addTooltips(tooltip);
         TileMachineBase tile = (TileMachineBase) world.getTileEntity(machine);
         if (tile != null) {
-            if (mouseX >= xSize - 24 && mouseX <= xSize - 24 + 16 && mouseY >= 12 && mouseY <= 12 + 42) { // Mouse is currently on the energy bar
+            if (mouseX >= energyBarStartX && mouseX <= energyBarStartX + energyBarWidth && mouseY >= energyBarStartY && mouseY <= energyBarStartY + energyBarHeight) { // Mouse is currently on the energy bar
                 if (tile.getField(4) < 0) {
                     tooltip.add("Infinite RF");
                 } else {

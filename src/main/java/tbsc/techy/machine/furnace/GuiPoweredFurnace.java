@@ -34,7 +34,7 @@ public class GuiPoweredFurnace extends GuiMachineBase {
         super.drawScreen(mouseX, mouseY, partialTick);
         TileMachineBase tile = (TileMachineBase) world.getTileEntity(machine);
         if (tile != null) {
-            addElement(new ElementProgressBar(this, 80, 37, 22, 16, new ResourceLocation("Techy:textures/gui/element/furnaceProgressBar.png"), 0, 0, 22, 0, true, tile.getField(1), 13, tile.getField(2)));
+            addElement(new ElementProgressBar(this, 80, 37, 22, 16, new ResourceLocation("Techy:textures/gui/element/furnaceProgressBar.png"), 0, 0, 22, 0, tile.getField(1), 16, tile.getField(2)));
         }
     }
 
