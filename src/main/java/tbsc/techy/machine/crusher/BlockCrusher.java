@@ -23,7 +23,7 @@ import java.util.ArrayList;
  */
 public class BlockCrusher extends BlockBaseFacingMachine {
 
-    public static int tileInvSize = 8;
+    public static int tileInvSize = 7;
 
     public BlockCrusher() {
         super(Material.IRON, "blockCrusher", tileInvSize);

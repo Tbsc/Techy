@@ -1,6 +1,5 @@
 package tbsc.techy.machine.generator;
 
-import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.item.ItemStack;
@@ -37,32 +36,9 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
 
     @Override
     public void update() {
-        if (handleProcessing() || handleExtraction() || handleRedstone() || handleBoosters() || handleEnergyItems()) {
+        if (handleProcessing() || handleExtraction() || handleRedstone() || handleBoosters()) {
             markDirty();
         }
-    }
-
-    /**
-     * Extract energy to item energy containers in the energy slots.
-     * @return should mark dirty
-     * @author McJty - taken from RFTools' GitHub repo
-     */
-    @Override
-    protected boolean handleEnergyItems() {
-        if (getEnergySlots().length >= 1) {
-            for (int i = 0; i < getEnergySlots().length; ++i) {
-                ItemStack stack = inventory[getEnergySlots()[i]];
-                if (stack != null && stack.getItem() instanceof IEnergyContainerItem) {
-                    IEnergyContainerItem energyContainerItem = (IEnergyContainerItem) stack.getItem();
-                    int energyStored = getEnergyStored(EnumFacing.DOWN);
-                    int rfToGive = energyStorage.getMaxReceive() <= energyStored ? energyStorage.getMaxReceive() : energyStored;
-                    int received = energyContainerItem.receiveEnergy(stack, rfToGive, false);
-                    extractEnergy(EnumFacing.DOWN, received, false);
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     /**

@@ -54,7 +54,7 @@ public abstract class GuiMachineBase extends GuiBase {
             int i = (this.width - this.xSize) / 2;
             int j = (this.height - this.ySize) / 2;
             int posX = i + xSize - 24;
-            int posY = j + 12;
+            int posY = j + 24;
             int percentage = tile.getField(0) * 42 / tile.getField(4);
 
             RenderHelper.bindTexture(ElementEnergyStored.DEFAULT_TEXTURE);

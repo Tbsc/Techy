@@ -1,10 +1,8 @@
 package tbsc.techy.tile;
 
 import cofh.api.energy.EnergyStorage;
-import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -13,7 +11,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.tuple.MutablePair;
 import tbsc.techy.api.IBoosterItem;
 import tbsc.techy.api.IOperator;
 import tbsc.techy.api.SideConfiguration;
@@ -22,8 +19,6 @@ import tbsc.techy.block.BlockBaseFacingMachine;
 
 import javax.annotation.Nonnull;
 import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Basic class for machine tile entities.
@@ -108,22 +103,6 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
     protected boolean isRunning;
     protected boolean shouldRun = true;
 
-    /**
-     * In order to keep data of previous boosters in order for me to undo their modifiers,
-     * I need to save an instance of the booster, so when it is removed (not that item anymore),
-     * I can also use the {@link ItemStack} instance I saved to check what are the modifiers
-     * and revert those.
-     *
-     * The key is an integer, more specifically the booster slot ID (based on {@link #getBoosterSlots()}.
-     * The value is a {@link MutablePair}, and it has a boolean on the left letting me know
-     * if this booster has already been appplied, to prevent applying boosters a ton of times.
-     * On the right it has the copy of the booster's {@link ItemStack} (and not {@link IBoosterItem}
-     * or {@link Item} because I need to know the metadata in order to correctly undo the
-     * booster).
-     */
-    @Deprecated
-    Map<Integer, MutablePair<Boolean, ItemStack>> boosterApplied = new HashMap<>();
-
     protected TileMachineBase(int capacity, int maxTransfer, int invSize, int cookTime) {
         super(invSize);
         this.machineProcessTime = cookTime;
@@ -132,7 +111,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
 
     @Override
     public void update() {
-        if (handleRedstone() || handleEnergyItems() || handleBoosters() || handleProcessing() || handleEnergyUpdate()) {
+        if (handleRedstone() || handleBoosters() || handleProcessing()) {
             this.markDirty();
         }
     }
@@ -167,28 +146,6 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         return false;
     }
 
-    /**
-     * Extract energy from item energy containers in the energy slots.
-     * @return should mark dirty
-     * @author McJty - taken from RFTools' GitHub repo
-     */
-    protected boolean handleEnergyItems() {
-        if (getEnergySlots().length >= 1) {
-            for (int i = 0; i < getEnergySlots().length; ++i) {
-                ItemStack stack = inventory[getEnergySlots()[i]];
-                if (stack != null && stack.getItem() instanceof IEnergyContainerItem) {
-                    IEnergyContainerItem energyContainerItem = (IEnergyContainerItem) stack.getItem();
-                    int energyStored = getEnergyStored();
-                    int rfToGive = energyStorage.getMaxReceive() <= energyStored ? energyStorage.getMaxReceive() : energyStored;
-                    int received = energyContainerItem.extractEnergy(stack, rfToGive, false);
-                    energyStorage.receiveEnergy(received, false);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         readFromNBT(pkt.getNbtCompound());
@@ -204,21 +161,6 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         NBTTagCompound tag = super.getUpdateTag();
         writeToNBT(tag);
         return tag;
-    }
-
-    protected int previousEnergy;
-
-    /**
-     * Checks for any kind of change in energy in the machine, then updates the machine.
-     * @return should mark dirty
-     */
-    protected boolean handleEnergyUpdate() {
-        if (previousEnergy != getEnergyStored()) {
-            previousEnergy = getEnergyStored();
-            return true;
-        }
-        previousEnergy = getEnergyStored();
-        return false;
     }
 
     protected boolean handleProcessing() {

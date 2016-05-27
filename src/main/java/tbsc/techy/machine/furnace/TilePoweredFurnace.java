@@ -165,9 +165,7 @@ public class TilePoweredFurnace extends TileMachineBase implements IEnergyReceiv
     @Nonnull
     @Override
     public int[] getEnergySlots() {
-        return new int[]{
-                2
-        };
+        return new int[0];
     }
 
     /**
@@ -206,7 +204,7 @@ public class TilePoweredFurnace extends TileMachineBase implements IEnergyReceiv
     @Override
     public int[] getBoosterSlots() {
         return new int[] {
-            3, 4, 5, 6
+            2, 3, 4, 5
         };
     }
 

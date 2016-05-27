@@ -1,7 +1,6 @@
 package tbsc.techy.container;
 
 
-import cofh.lib.gui.slot.SlotEnergy;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -45,8 +44,6 @@ public abstract class ContainerBase extends Container {
         for (int x = 0; x < 9; ++x) {
             this.addSlotToContainer(new Slot(playerInv, x, 8 + x * 18, 142));
         }
-
-        this.addSlotToContainer(new SlotEnergy(tileBase, getNextAvailableSlot(), 152, 60));
     }
 
     /**
