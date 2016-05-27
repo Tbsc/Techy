@@ -1,0 +1,6 @@
+{
+  "parent": "Techy:item/techyBase",
+  "textures": {
+    "layer0": "Techy:items/itemDustLithium"
+  }
+}
