@@ -72,13 +72,13 @@ public class ItemDusts extends ItemBase {
         public int id;
         public String name;
         public String regName;
-        public ItemStack ingotForm;
+        public ItemStack ingot;
 
-        DustType(String unlocalizedName, String registryName, int id, ItemStack ingotForm) {
+        DustType(String unlocalizedName, String registryName, int id, ItemStack ingot) {
             this.id = id;
             this.name = unlocalizedName;
             this.regName = registryName;
-            this.ingotForm = ingotForm;
+            this.ingot = ingot;
         }
 
         public static DustType valueOf(int id) {

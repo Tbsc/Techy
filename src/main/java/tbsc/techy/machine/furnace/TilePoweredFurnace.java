@@ -51,7 +51,6 @@ public class TilePoweredFurnace extends TileMachineBase implements IEnergyReceiv
         // Double checking, you can never check more than enough
         if (this.canOperate()) {
             ItemStack recipeOutput = PoweredFurnaceRecipes.instance().getSmeltingResult(StackRecipeInput.of(inventory[0]));
-            float experience = (experienceModifier / 100) * PoweredFurnaceRecipes.instance().getSmeltingExperience(recipeOutput);
 
             if (this.inventory[1] == null) {
                 this.inventory[1] = recipeOutput.copy();
@@ -111,8 +110,6 @@ public class TilePoweredFurnace extends TileMachineBase implements IEnergyReceiv
                     }
                 }
             }
-
-            spawnXPOrb((int) experience, recipeOutput.stackSize);
 
             --this.inventory[0].stackSize;
 

@@ -123,6 +123,21 @@ public class MiscInit {
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.BRONZE.id),
                 "dustCopper", "dustTin"));
 
+        // FURNACE RECIPES //
+
+        for (BlockOreBase.OreType ore : BlockOreBase.OreType.values()) {
+            if (ore.ore != BlockInit.blockOreLithium) { // ONLY add if ore isn't lithium
+                GameRegistry.addSmelting(ore.ore, ore.ingot, 2);
+            }
+        }
+        for (ItemDusts.DustType dust : ItemDusts.DustType.values()) {
+            if (dust.ingot != null) { // Not all dusts have an ingot form
+                if (dust.ingot.getMetadata() != ItemIngots.IngotType.LITHIUM.id) { // ONLY add if dust isn't lithium
+                    GameRegistry.addSmelting(new ItemStack(ItemInit.itemDusts, 1, dust.id), dust.ingot, 2);
+                }
+            }
+        }
+
         GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreCopper.getDefaultState(), 6), 48);
         GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreTin.getDefaultState(), 10), 52);
         GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreSilver.getDefaultState(), 5), 36);

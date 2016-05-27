@@ -42,7 +42,6 @@ public class TileCrusher extends TileMachineBase implements IEnergyReceiver {
         // Double checking, you can never check more than enough
         if (this.canOperate()) {
             ItemStack recipeOutput = getSmeltingOutput(inventory[0]);
-            float experience = (experienceModifier / 100) * CrusherRecipes.instance().getSmeltingExperience(recipeOutput);
 
             if (this.inventory[1] == null) {
                 this.inventory[1] = recipeOutput.copy();
@@ -114,8 +113,6 @@ public class TileCrusher extends TileMachineBase implements IEnergyReceiver {
                     }
                 }
             }
-
-            spawnXPOrb((int) experience, recipeOutput.stackSize);
 
             --this.inventory[0].stackSize;
 

@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.fml.common.FMLLog;
 import tbsc.techy.ConfigData;
-import tbsc.techy.init.ItemInit;
+import tbsc.techy.block.BlockOreBase;
 import tbsc.techy.item.ItemDusts;
 
 import javax.annotation.Nonnull;
@@ -43,9 +43,12 @@ public class PoweredFurnaceRecipes {
 
     public void loadModRecipes() {
         for (ItemDusts.DustType type : ItemDusts.DustType.values()) {
-            if (type.ingotForm != null) {
-                addItemStackRecipe(new ItemStack(ItemInit.itemDusts, 1, type.id), type.ingotForm, 30, 4800);
+            if (type.ingot != null) {
+                addOreDictionaryRecipe("dust" + type.regName, type.ingot, 3, 4800);
             }
+        }
+        for (BlockOreBase.OreType type : BlockOreBase.OreType.values()) {
+            addOreDictionaryRecipe("ore" + type.regName, type.ingot, 3, 4800);
         }
     }
 
