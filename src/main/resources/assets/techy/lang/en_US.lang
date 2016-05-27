@@ -54,6 +54,11 @@ tile.Techy:blockCoalGenerator.name=Coal Generator
 tile.Techy:blockMachineBaseBasic.name=Basic Machine Base
 tile.Techy:blockMachineBaseImproved.name=Improved Machine Base
 tile.Techy:blockMachineBaseAdvanced.name=Advanced Machine Base
+tile.Techy:blockOreCopper.name=Copper Ore
+tile.Techy:blockOreTin.name=Tin Ore
+tile.Techy:blockOreSilver=Silver Ore
+tile.Techy:blockOreAluminium=Aluminium Ore
+tile.Techy:blockOreLithium=Lithium Ore
 
 ## Pipes ##
 tile.Techy:blockPipeEnergy.name=Energy Pipe
