@@ -403,9 +403,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
-        FMLLog.info(nbt.getInteger("Energy") + " RF read from NBT in machine " + getName() + " at " + pos.toString());
         energyStorage.modifyEnergyStored(nbt.getInteger("Energy"));
-        FMLLog.info(getEnergyStored() + " RF saved to variable in machine " + getName() + " at " + pos.toString());
         progress = nbt.getInteger("Progress");
         totalProgress = nbt.getInteger("TotalProgress");
 
@@ -427,7 +425,6 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         super.writeToNBT(nbt);
         nbt.setInteger("Progress", progress);
         nbt.setInteger("TotalProgress", totalProgress);
-        FMLLog.info(getEnergyStored() + " RF written to NBT from machine " + getName() + " at " + pos.toString());
         nbt.setInteger("Energy", getEnergyStored());
 
         nbt.setInteger("SideConfigFront", getConfigurationForSide(Sides.FRONT).ordinal());
