@@ -7,10 +7,14 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import tbsc.techy.Techy;
+import tbsc.techy.block.BlockOreBase;
 import tbsc.techy.client.gui.TechyGuiHandler;
 import tbsc.techy.event.GeneralEventHandler;
 import tbsc.techy.item.ItemDusts;
+import tbsc.techy.item.ItemIngots;
+import tbsc.techy.misc.OreWorldGenerator;
 import tbsc.techy.recipe.CrusherRecipes;
 import tbsc.techy.recipe.PoweredFurnaceRecipes;
 
@@ -41,6 +45,18 @@ public class MiscInit {
         for (ItemDusts.DustType dustType : ItemDusts.DustType.values()) {
             OreDictionary.registerOre("dust" + dustType.regName, new ItemStack(ItemInit.itemDusts, 1, dustType.id));
         }
+        // Adding ingots to ore dictionary
+        for (ItemIngots.IngotType ingotType : ItemIngots.IngotType.values()) {
+            OreDictionary.registerOre("ingot" + ingotType.regName, new ItemStack(ItemInit.itemIngots, 1, ingotType.id));
+        }
+        // Adding ores to ore dictionary
+        for (BlockOreBase.OreType oreType : BlockOreBase.OreType.values()) {
+            OreDictionary.registerOre("ore" + oreType.regName, new ItemStack(oreType.ore));
+        }
+        // Since I need to be compatible with the ore dictionary, I am also registering it as aluminium
+        OreDictionary.registerOre("oreAluminium", new ItemStack(BlockOreBase.OreType.ALUMINUM.ore));
+        OreDictionary.registerOre("ingotAluminium", new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.ALUMINIUM.id));
+        OreDictionary.registerOre("dustAluminium", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.ALUMINIUM.id));
 
         // MACHINES //
 
@@ -48,39 +64,70 @@ public class MiscInit {
                 "SIS",
                 "BFB",
                 "SHS",
-                'F', BlockInit.blockMachineBaseBasic, 'H', ItemInit.itemHeatingComponent, 'B', ItemInit.itemBatterySmall, 'S', "stone", 'I', "ingotIron"));
+                'F', BlockInit.blockMachineBaseBasic, 'H', ItemInit.itemHeatingComponent, 'B', ItemInit.itemBatterySmall, 'S', "ingotSilver", 'I', "ingotIron"));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockCrusher,
                 "IAI",
                 "BFB",
                 "IGI",
-                'F', BlockInit.blockMachineBaseBasic, 'B', ItemInit.itemBatterySmall, 'G', ItemInit.itemGrindingComponent, 'A', "ingotGold", 'I', "ingotIron"));
+                'F', BlockInit.blockMachineBaseBasic, 'B', ItemInit.itemBatterySmall, 'G', ItemInit.itemGrindingComponent, 'A', "ingotGold", 'I', "ingotTin"));
+
+        // MACHINE BASES //
+
+        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockMachineBaseBasic,
+                "ACA",
+                "CIC",
+                "ACA",
+                'C', "ingotCopper", 'A', "ingotAluminium", 'I', "ingotIron"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockMachineBaseImproved,
+                "ACA",
+                "CBC",
+                "ACA",
+                'C', "ingotBronze", 'A', "ingotAluminium", 'B', BlockInit.blockMachineBaseBasic));
+        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockMachineBaseAdvanced,
+                "ACA",
+                "CBC",
+                "ACA",
+                'C', "ingotLithium", 'A', "ingotAluminium", 'B', BlockInit.blockMachineBaseImproved));
 
         // CRAFTING COMPONENTS //
 
         GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemHeatingComponent,
                 "III",
-                "IFI",
+                "SFS",
                 "RRR",
-                'F', Items.FLINT_AND_STEEL, 'I', "ingotGold", 'R', "dustRedstone"));
+                'F', Items.FLINT_AND_STEEL, 'I', "ingotGold", 'S', "ingotSilver", 'R', "dustRedstone"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemGrindingComponent,
+                "III",
+                "SFS",
+                "RRR",
+                'F', Items.STONE_PICKAXE, 'I', "ingotGold", 'S', "ingotSilver", 'R', "dustRedstone"));
 
         // ITEMS //
 
         GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemBatterySmall,
                 " I ",
                 "IRI",
-                "III",
-                'I', "ingotIron", 'R', "dustRedstone")); // No dust because at that tier you don't have a crusher yet
+                "ICI",
+                'I', "ingotIron", 'C', "dustCopper", 'R', "dustRedstone")); // No dust because at that tier you don't have a crusher yet
         GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemBatteryMedium,
                 " D ",
                 "GRG",
-                "GGG",
-                'D', "dustGold", 'G', "ingotGold", 'R', ItemInit.itemBatterySmall));
+                "GSG",
+                'D', "dustGold", 'S', "dustSilver", 'G', "ingotGold", 'R', ItemInit.itemBatterySmall));
         GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemBatteryMedium,
                 " D ",
                 "GRG",
-                "GGG",
-                'D', "dustDiamond", 'G', "gemDiamond", 'R', ItemInit.itemBatteryMedium));
+                "GLG",
+                'D', "dustDiamond", 'G', "gemDiamond", 'L', "dustLithium", 'R', ItemInit.itemBatteryMedium));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.BRONZE.id),
+                "dustCopper", "dustTin"));
+
+        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreCopper.getDefaultState(), 6), 48);
+        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreTin.getDefaultState(), 10), 52);
+        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreSilver.getDefaultState(), 5), 36);
+        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreAluminium.getDefaultState(), 7), 44);
+        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreLithium.getDefaultState(), 3), 14);
     }
 
     /**

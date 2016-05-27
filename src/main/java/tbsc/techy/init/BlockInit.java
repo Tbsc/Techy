@@ -4,9 +4,9 @@ import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tbsc.techy.block.BlockBase;
 import tbsc.techy.block.BlockBaseFacingMachine;
 import tbsc.techy.block.BlockMachineBase;
+import tbsc.techy.block.BlockOreBase;
 import tbsc.techy.block.pipe.BlockPipeEnergy;
 import tbsc.techy.machine.crusher.BlockCrusher;
 import tbsc.techy.machine.crusher.TileCrusher;
@@ -30,8 +30,12 @@ public class BlockInit {
     public static BlockMachineBase blockMachineBaseImproved;
     public static BlockMachineBase blockMachineBaseAdvanced;
     public static BlockPipeEnergy blockPipeEnergy;
-    public static BlockBase blockPixelTest;
     public static BlockBaseFacingMachine blockCoalGenerator;
+    public static BlockOreBase blockOreCopper;
+    public static BlockOreBase blockOreTin;
+    public static BlockOreBase blockOreSilver;
+    public static BlockOreBase blockOreAluminium;
+    public static BlockOreBase blockOreLithium;
 
     /**
      * Gets called on preInit stage and loads all of the blocks and TileEntities.
@@ -43,8 +47,12 @@ public class BlockInit {
         blockMachineBaseImproved = new BlockMachineBase("blockMachineBaseImproved");
         blockMachineBaseAdvanced = new BlockMachineBase("blockMachineBaseAdvanced");
         blockPipeEnergy = new BlockPipeEnergy();
-        blockPixelTest = new BlockMachineBase("blockPixelTest");
         blockCoalGenerator = new BlockCoalGenerator();
+        blockOreCopper = new BlockOreBase("blockOreCopper");
+        blockOreTin = new BlockOreBase("blockOreTin");
+        blockOreSilver = new BlockOreBase("blockOreSilver");
+        blockOreAluminium = new BlockOreBase("blockOreAluminium");
+        blockOreLithium = new BlockOreBase("blockOreLithium");
 
         GameRegistry.register(blockPoweredFurnace);
         GameRegistry.register(new ItemBlock(blockPoweredFurnace), blockPoweredFurnace.getRegistryName());
@@ -58,10 +66,18 @@ public class BlockInit {
         GameRegistry.register(new ItemBlock(blockMachineBaseAdvanced), blockMachineBaseAdvanced.getRegistryName());
         GameRegistry.register(blockPipeEnergy);
         GameRegistry.register(new ItemBlock(blockPipeEnergy), blockPipeEnergy.getRegistryName());
-        GameRegistry.register(blockPixelTest);
-        GameRegistry.register(new ItemBlock(blockPixelTest), blockPixelTest.getRegistryName());
         GameRegistry.register(blockCoalGenerator);
         GameRegistry.register(new ItemBlock(blockCoalGenerator), blockCoalGenerator.getRegistryName());
+        GameRegistry.register(blockOreCopper);
+        GameRegistry.register(new ItemBlock(blockOreCopper), blockOreCopper.getRegistryName());
+        GameRegistry.register(blockOreTin);
+        GameRegistry.register(new ItemBlock(blockOreTin), blockOreTin.getRegistryName());
+        GameRegistry.register(blockOreSilver);
+        GameRegistry.register(new ItemBlock(blockOreSilver), blockOreSilver.getRegistryName());
+        GameRegistry.register(blockOreAluminium);
+        GameRegistry.register(new ItemBlock(blockOreAluminium), blockOreAluminium.getRegistryName());
+        GameRegistry.register(blockOreLithium);
+        GameRegistry.register(new ItemBlock(blockOreLithium), blockOreLithium.getRegistryName());
 
         GameRegistry.registerTileEntity(TilePoweredFurnace.class, "tilePoweredFurnace");
         GameRegistry.registerTileEntity(TileCrusher.class, "tileCrusher");
@@ -81,8 +97,12 @@ public class BlockInit {
         blockMachineBaseImproved.initModel();
         blockMachineBaseAdvanced.initModel();
         blockPipeEnergy.initModel();
-        blockPixelTest.initModel();
         blockCoalGenerator.initModel();
+        blockOreCopper.initModel();
+        blockOreTin.initModel();
+        blockOreSilver.initModel();
+        blockOreAluminium.initModel();
+        blockOreLithium.initModel();
     }
 
     @SideOnly(Side.CLIENT)

@@ -1,6 +1,6 @@
 ### Creative Tabs ###
-itemGroup.techy.items=Techy Items
-itemGroup.techy.machines=Techy Machines
+itemGroup.techy.items=Techy: Items
+itemGroup.techy.blocks=Techy: Blocks
 
 ### Items ###
 item.Techy:itemWrench.name=Wrench
@@ -16,6 +16,20 @@ item.Techy:itemDustCoal.name=Coal Dust
 item.Techy:itemDustEmerald.name=Emerald Dust
 item.Techy:itemDustWood.name=Sawdust
 item.Techy:itemDustStone.name=Stone Dust
+item.Techy:itemDustCopper.name=Copper Dust
+item.Techy:itemDustTin.name=Tin Dust
+item.Techy:itemDustSilver.name=Silver Dust
+item.Techy:itemDustAluminum.name=Aluminum Dust
+item.Techy:itemDustLithium.name=Lithium Dust
+item.Techy:itemDustBronze.name=Bronze Dust
+
+## Ingots ##
+item.Techy:itemIngotCopper.name=Copper Ingot
+item.Techy:itemIngotTin.name=Tin Ingot
+item.Techy:itemIngotSilver.name=Silver Ingot
+item.Techy:itemIngotAluminium.name=Aluminium Ingot
+item.Techy:itemIngotLithium.name=Lithium Ingot
+item.Techy:itemIngotBronze.name=Bronze Ingot
 
 ## Crafting Components ##
 item.Techy:itemHeatingComponent.name=Heating Component
@@ -30,10 +44,16 @@ item.Techy:itemBoosterTime.name=Time Booster
 item.Techy:itemBoosterBonus.name=Bonus Booster
 
 ### Blocks ###
+
+## Machines ##
 tile.Techy:blockPoweredFurnace.name=Powered Furnace
 tile.Techy:blockCrusher.name=Crusher
 tile.Techy:blockCoalGenerator.name=Coal Generator
+
+## Misc ##
 tile.Techy:blockMachineBaseBasic.name=Basic Machine Base
 tile.Techy:blockMachineBaseImproved.name=Improved Machine Base
 tile.Techy:blockMachineBaseAdvanced.name=Advanced Machine Base
+
+## Pipes ##
 tile.Techy:blockPipeEnergy.name=Energy Pipe

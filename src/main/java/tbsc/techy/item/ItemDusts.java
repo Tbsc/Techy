@@ -3,11 +3,13 @@ package tbsc.techy.item;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import org.apache.commons.lang3.ArrayUtils;
+import tbsc.techy.init.ItemInit;
 
 import java.util.List;
 
@@ -53,22 +55,30 @@ public class ItemDusts extends ItemBase {
 
     public enum DustType {
 
-        IRON("itemDustIron", "Iron", 0),
-        GOLD("itemDustGold", "Gold", 1),
-        DIAMOND("itemDustDiamond", "Diamond", 2),
-        COAL("itemDustCoal", "Coal", 3),
-        EMERALD("itemDustEmerald", "Emerald", 4),
-        WOOD("itemDustWood", "Wood", 5),
-        STONE("itemDustStone", "Stone", 6);
+        IRON("itemDustIron", "Iron", 0, new ItemStack(Items.IRON_INGOT)),
+        GOLD("itemDustGold", "Gold", 1, new ItemStack(Items.GOLD_INGOT)),
+        DIAMOND("itemDustDiamond", "Diamond", 2, new ItemStack(Items.DIAMOND)),
+        COAL("itemDustCoal", "Coal", 3, new ItemStack(Items.COAL)),
+        EMERALD("itemDustEmerald", "Emerald", 4, new ItemStack(Items.EMERALD)),
+        WOOD("itemDustWood", "Wood", 5, null),
+        STONE("itemDustStone", "Stone", 6, null),
+        COPPER("itemDustCopper", "Copper", 7, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.COPPER.id)),
+        TIN("itemDustTin", "Tin", 8, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.TIN.id)),
+        SILVER("itemDustSilver", "Silver", 9, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.SILVER.id)),
+        ALUMINIUM("itemDustAluminium", "Aluminium", 10, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.ALUMINIUM.id)),
+        LITHIUM("itemDustLithium", "Lithium", 11, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.LITHIUM.id)),
+        BRONZE("itemDustBronze", "Bronze", 12, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.BRONZE.id));
 
         public int id;
         public String name;
         public String regName;
+        public ItemStack ingotForm;
 
-        DustType(String unlocalizedName, String registryName, int id) {
+        DustType(String unlocalizedName, String registryName, int id, ItemStack ingotForm) {
             this.id = id;
             this.name = unlocalizedName;
             this.regName = registryName;
+            this.ingotForm = ingotForm;
         }
 
         public static DustType valueOf(int id) {

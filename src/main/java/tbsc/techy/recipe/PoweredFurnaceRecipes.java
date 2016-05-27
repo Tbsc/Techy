@@ -7,6 +7,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraftforge.fml.common.FMLLog;
 import tbsc.techy.ConfigData;
+import tbsc.techy.init.ItemInit;
+import tbsc.techy.item.ItemDusts;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -40,7 +42,11 @@ public class PoweredFurnaceRecipes {
     }
 
     public void loadModRecipes() {
-
+        for (ItemDusts.DustType type : ItemDusts.DustType.values()) {
+            if (type.ingotForm != null) {
+                addItemStackRecipe(new ItemStack(ItemInit.itemDusts, 1, type.id), type.ingotForm, 30, 4800);
+            }
+        }
     }
 
     /**
