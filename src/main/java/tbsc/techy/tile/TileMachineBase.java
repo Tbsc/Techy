@@ -4,7 +4,6 @@ import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,9 +11,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLLog;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.MutablePair;
 import tbsc.techy.api.IBoosterItem;
@@ -292,26 +289,6 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
     @Override
     public int getOperationTotalProgress() {
         return totalProgress;
-    }
-
-    public void spawnXPOrb(int xpAmount, int stackSize) {
-        if (xpAmount == 0.0F) {
-            stackSize = 0;
-        } else if (xpAmount < 1.0F) {
-            int j = MathHelper.floor_float((float) stackSize * xpAmount);
-
-            if (j < MathHelper.ceiling_float_int((float) stackSize * xpAmount) && Math.random() < (double) ((float) stackSize * xpAmount - (float) j)) {
-                ++j;
-            }
-
-            stackSize = j;
-        }
-
-        while (stackSize > 0) {
-            int k = EntityXPOrb.getXPSplit(stackSize);
-            stackSize -= k;
-            worldObj.spawnEntityInWorld(new EntityXPOrb(worldObj, pos.getX(), pos.getY() + 0.5D, pos.getZ() + 0.5D, k));
-        }
     }
 
     /**
