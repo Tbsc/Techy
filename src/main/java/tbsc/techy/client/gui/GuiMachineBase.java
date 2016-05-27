@@ -40,8 +40,8 @@ public abstract class GuiMachineBase extends GuiBase {
         addTab(new TabSides(this, xSize + 1, 0, 22 + 28, 22 + 28, (TileBase) world.getTileEntity(machine)));
     }
 
-    int energyBarStartX = (this.width - this.xSize) / 2 + xSize - 24;
-    int energyBarStartY = (this.height - this.ySize) / 2 + 24;
+    int energyBarStartX = xSize - 24;
+    int energyBarStartY = 22;
     int energyBarWidth = 16;
     int energyBarHeight = 42;
 
@@ -57,10 +57,12 @@ public abstract class GuiMachineBase extends GuiBase {
         TileMachineBase tile = (TileMachineBase) world.getTileEntity(machine);
         if (tile != null) {
             int percentage = tile.getField(0) * 42 / tile.getField(4);
+            int i = (this.width - this.xSize) / 2;
+            int j = (this.height - this.ySize) / 2;
 
             RenderHelper.bindTexture(ElementEnergyStored.DEFAULT_TEXTURE);
-            drawSizedTexturedModalRect(energyBarStartX, energyBarStartY, 0, 0, energyBarWidth, energyBarHeight, 32, 64);
-            drawSizedTexturedModalRect(energyBarStartX, energyBarStartY + energyBarHeight - percentage, energyBarWidth, energyBarHeight - percentage, energyBarWidth, percentage, 32, 64);
+            drawSizedTexturedModalRect(i + energyBarStartX, j + energyBarStartY, 0, 0, 16, 42, 32, 64);
+            drawSizedTexturedModalRect(i + energyBarStartX, j + energyBarStartY + energyBarHeight - percentage, energyBarWidth, energyBarHeight - percentage, 16, percentage, 32, 64);
         }
     }
 
@@ -68,6 +70,8 @@ public abstract class GuiMachineBase extends GuiBase {
     public void addTooltips(List<String> tooltip) {
         super.addTooltips(tooltip);
         TileMachineBase tile = (TileMachineBase) world.getTileEntity(machine);
+        int i = (this.width - this.xSize) / 2;
+        int j = (this.height - this.ySize) / 2;
         if (tile != null) {
             if (mouseX >= energyBarStartX && mouseX <= energyBarStartX + energyBarWidth && mouseY >= energyBarStartY && mouseY <= energyBarStartY + energyBarHeight) { // Mouse is currently on the energy bar
                 if (tile.getField(4) < 0) {
