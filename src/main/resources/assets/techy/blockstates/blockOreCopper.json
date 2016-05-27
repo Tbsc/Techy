@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "minecraft:cube_all"
+  },
+  "variants": {
+    "normal": [{
+      "textures": {"all": "Techy:blocks/blockOreCopper"}
+    }],
+    "inventory": [{
+      "textures": {"all": "Techy:blocks/blockOreCopper"},
+      "transform": "forge:default-block"
+    }]
+  }
+}
