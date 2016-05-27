@@ -70,7 +70,7 @@ public class Techy {
     /**
      * Creative tab for machines
      */
-    public static CreativeTabs tabTechyMachines = new CreativeTabs("techy.machines") {
+    public static CreativeTabs tabTechyBlocks = new CreativeTabs("techy.blocks") {
         @Override
         public Item getTabIconItem() {
             return Item.getItemFromBlock(BlockInit.blockPoweredFurnace);

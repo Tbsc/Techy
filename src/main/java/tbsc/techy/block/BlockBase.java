@@ -26,7 +26,7 @@ public class BlockBase extends Block {
      */
     protected BlockBase(Material material, String registryName) {
         super(material);
-        setCreativeTab(Techy.tabTechyMachines);
+        setCreativeTab(Techy.tabTechyBlocks);
         setRegistryName(registryName);
         setUnlocalizedName(Techy.MODID + ":" + registryName);
     }
