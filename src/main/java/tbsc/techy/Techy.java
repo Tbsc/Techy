@@ -28,7 +28,7 @@ public class Techy {
      * Basic data
      */
     public static final String MODID = "Techy";
-    public static final String VERSION = "MC1.9.4-v2";
+    public static final String VERSION = "MC1.9.4-v3";
     public static final String DEPENDENCIES = "required-after:Forge@[12.17.0.1909,)";
     public static final String CLIENT_PROXY = "tbsc.techy.proxy.ClientProxy";
     public static final String SERVER_PROXY = "tbsc.techy.proxy.ServerProxy";
