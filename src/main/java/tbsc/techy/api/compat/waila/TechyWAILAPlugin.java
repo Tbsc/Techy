@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
@@ -41,11 +40,11 @@ public class TechyWAILAPlugin implements IWailaDataProvider {
     public List<String> getWailaBody(ItemStack stack, List<String> list, IWailaDataAccessor data, IWailaConfigHandler config) {
         TileMachineBase tile = (TileMachineBase) data.getTileEntity();
         list.clear();
-        list.add(tile.getEnergyStored(EnumFacing.DOWN) + " / " + tile.getMaxEnergyStored(EnumFacing.DOWN) + " RF");
-        if (tile.getOperationTotalProgress() == 0) {
+        list.add(tile.getField(0) + " / " + tile.getField(4) + " RF");
+        if (tile.getField(2) == 0) {
             list.add("Not Operating");
         } else {
-            list.add("Operating: " + tile.getOperationProgress() * 100 / tile.getOperationTotalProgress() + "%");
+            list.add("Operating: " + tile.getField(1) * 100 / tile.getField(2) + "%");
         }
         return list;
     }
