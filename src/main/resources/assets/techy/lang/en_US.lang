@@ -56,9 +56,9 @@ tile.Techy:blockMachineBaseImproved.name=Improved Machine Base
 tile.Techy:blockMachineBaseAdvanced.name=Advanced Machine Base
 tile.Techy:blockOreCopper.name=Copper Ore
 tile.Techy:blockOreTin.name=Tin Ore
-tile.Techy:blockOreSilver=Silver Ore
-tile.Techy:blockOreAluminium=Aluminium Ore
-tile.Techy:blockOreLithium=Lithium Ore
+tile.Techy:blockOreSilver.name=Silver Ore
+tile.Techy:blockOreAluminium.name=Aluminium Ore
+tile.Techy:blockOreLithium.name=Lithium Ore
 
 ## Pipes ##
 tile.Techy:blockPipeEnergy.name=Energy Pipe
