@@ -5,6 +5,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -48,6 +50,13 @@ public abstract class BlockBaseMachine extends BlockBase implements ITileEntityP
     @Override
     public void dismantleBlock(IBlockState block, World world, BlockPos pos, EntityLivingBase wrenchedBy) {
         block.getBlock().breakBlock(world, pos, block);
+    }
+
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+        InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) worldIn.getTileEntity(pos));
+        worldIn.removeTileEntity(pos);
+        worldIn.destroyBlock(pos, true);
     }
 
     /**
