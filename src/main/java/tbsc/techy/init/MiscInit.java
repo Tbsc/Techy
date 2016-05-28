@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
+import tbsc.techy.ConfigData;
 import tbsc.techy.Techy;
 import tbsc.techy.block.BlockOreBase;
 import tbsc.techy.client.gui.TechyGuiHandler;
@@ -138,11 +139,16 @@ public class MiscInit {
             }
         }
 
-        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreCopper.getDefaultState(), 6), 48);
-        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreTin.getDefaultState(), 10), 52);
-        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreSilver.getDefaultState(), 5), 36);
-        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreAluminium.getDefaultState(), 7), 44);
-        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreLithium.getDefaultState(), 3), 14);
+        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreCopper.getDefaultState(),
+                ConfigData.copperPerVein, ConfigData.copperMaxHeight, ConfigData.copperPerChunk), 2);
+        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreTin.getDefaultState(),
+                ConfigData.tinPerVein, ConfigData.tinMaxHeight, ConfigData.tinPerChunk), 2);
+        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreSilver.getDefaultState(),
+                ConfigData.silverPerVein, ConfigData.silverMaxHeight, ConfigData.silverPerChunk), 2);
+        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreAluminium.getDefaultState(),
+                ConfigData.aluminiumPerVein, ConfigData.aluminiumMaxHeight, ConfigData.aluminiumPerChunk), 2);
+        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreLithium.getDefaultState(),
+                ConfigData.lithiumPerVein, ConfigData.lithiumMaxHeight, ConfigData.lithiumPerChunk), 2);
     }
 
     /**

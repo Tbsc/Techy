@@ -27,7 +27,7 @@ import java.util.Random;
 public class TileCrusher extends TileMachineBase implements IEnergyReceiver {
 
     public TileCrusher() {
-        super(50000, 700, BlockCrusher.tileInvSize, ConfigData.crusherDefaultProceessTime);
+        super(50000, 700, BlockCrusher.tileInvSize, ConfigData.crusherDefaultProcessTime);
 
         setConfigurationForSide(Sides.UP, SideConfiguration.INPUT);
         setConfigurationForSide(Sides.DOWN, SideConfiguration.OUTPUT);

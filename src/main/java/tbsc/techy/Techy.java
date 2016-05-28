@@ -127,15 +127,65 @@ public class Techy {
             // Load config
             config.load();
 
-            // Config properties
+            // Config properties //
+
+            // Furnace
             ConfigData.furnaceDefaultCookTime = config.get("Powered Furnace", "DefaultCookTime", ConfigData.furnaceDefaultCookTime,
                     "Define (in ticks) the processing time for vanilla recipes in the powered furnace.", 1, Integer.MAX_VALUE).getInt();
             ConfigData.furnaceDefaultEnergyUsage = config.get("Powered Furnace", "DefaultEnergyUsage", ConfigData.furnaceDefaultEnergyUsage,
                     "Amount of energy consumed when vanilla recipes are processed in the powered furnace", 0, Integer.MAX_VALUE).getInt();
-            ConfigData.crusherDefaultProceessTime = config.get("Crusher", "DefaultCookTime", ConfigData.crusherDefaultProceessTime,
+
+            // Crusher
+            ConfigData.crusherDefaultProcessTime = config.get("Crusher", "DefaultCookTime", ConfigData.crusherDefaultProcessTime,
                     "The time in ticks it takes to complete a process in the crusher.", 1, Integer.MAX_VALUE).getInt();
             ConfigData.crusherDefaultEnergyUsage = config.get("Crusher", "DefaultEnergyUsage", ConfigData.crusherDefaultEnergyUsage,
                     "How much energy is used when doing a default recipe.", 0, Integer.MAX_VALUE).getInt();
+
+            // Coal Generator
+            ConfigData.coalGeneratorProcessTime = config.get("CoalGenerator", "DefaultBurnTime", ConfigData.coalGeneratorProcessTime,
+                    "Default time for a piece of coal to burn in a coal generator").getInt();
+            ConfigData.coalGeneratorRFPerTick = config.get("CoalGenerator", "RFPerTick", ConfigData.coalGeneratorRFPerTick,
+                    "How much energy is generated per tick in the coal generator").getInt();
+
+            // World Gen - copper
+            ConfigData.copperPerChunk = config.get("WorldGen", "CopperPerChunk", ConfigData.copperPerChunk,
+                    "How much copper ores should be generated in each chunk (16x256x16)").getInt();
+            ConfigData.copperMaxHeight = config.get("WorldGen", "CopperMaxHeight", ConfigData.copperMaxHeight,
+                    "The maximum height copper ores can be generated in").getInt();
+            ConfigData.copperPerVein = config.get("WorldGen", "CopperPerVein", ConfigData.copperPerVein,
+                    "Maximum amount of copper per vein generated").getInt();
+
+            // World Gen - tin
+            ConfigData.tinPerChunk = config.get("WorldGen", "TinPerChunk", ConfigData.tinPerChunk,
+                    "How much tin ores should be generated in each chunk (16x256x16)").getInt();
+            ConfigData.tinMaxHeight = config.get("WorldGen", "TinMaxHeight", ConfigData.tinMaxHeight,
+                    "The maximum height tin ores can be generated in").getInt();
+            ConfigData.tinPerVein = config.get("WorldGen", "TinPerVein", ConfigData.tinPerVein,
+                    "Maximum amount of tin per vein generated").getInt();
+
+            // World Gen - silver
+            ConfigData.silverPerChunk = config.get("WorldGen", "SilverPerChunk", ConfigData.silverPerChunk,
+                    "How much silver ores should be generated in each chunk (16x256x16)").getInt();
+            ConfigData.silverMaxHeight = config.get("WorldGen", "SilverMaxHeight", ConfigData.silverMaxHeight,
+                    "The maximum height silver ores can be generated in").getInt();
+            ConfigData.silverPerVein = config.get("WorldGen", "SilverPerVein", ConfigData.silverPerVein,
+                    "Maximum amount of silver per vein generated").getInt();
+
+            // World Gen - aluminium
+            ConfigData.aluminiumPerChunk = config.get("WorldGen", "AluminiumPerChunk", ConfigData.aluminiumPerChunk,
+                    "How much aluminium ores should be generated in each chunk (16x256x16)").getInt();
+            ConfigData.aluminiumMaxHeight = config.get("WorldGen", "AluminiumMaxHeight", ConfigData.aluminiumMaxHeight,
+                    "The maximum height aluminium ores can be generated in").getInt();
+            ConfigData.aluminiumPerVein = config.get("WorldGen", "AluminiumPerVein", ConfigData.aluminiumPerVein,
+                    "Maximum amount of aluminium per vein generated").getInt();
+
+            // World Gen - lithium
+            ConfigData.lithiumPerChunk = config.get("WorldGen", "LithiumPerChunk", ConfigData.lithiumPerChunk,
+                    "How much lithium ores should be generated in each chunk (16x256x16)").getInt();
+            ConfigData.lithiumMaxHeight = config.get("WorldGen", "LithiumMaxHeight", ConfigData.lithiumMaxHeight,
+                    "The maximum height lithium ores can be generated in").getInt();
+            ConfigData.lithiumPerVein = config.get("WorldGen", "LithiumPerVein", ConfigData.lithiumPerVein,
+                    "Maximum amount of lithium per vein generated").getInt();
         } catch (Exception e) {
             e.printStackTrace();
             FMLLog.warning("Techy is unable to load config!");

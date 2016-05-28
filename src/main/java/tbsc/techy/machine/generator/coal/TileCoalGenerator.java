@@ -4,6 +4,7 @@ import cofh.api.energy.IEnergyProvider;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import tbsc.techy.ConfigData;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.machine.generator.TileGeneratorBase;
 
@@ -25,12 +26,12 @@ public class TileCoalGenerator extends TileGeneratorBase implements IEnergyProvi
 
     @Override
     protected int getBurnTimeFromItem(ItemStack item) {
-        return 400;
+        return ConfigData.coalGeneratorProcessTime;
     }
 
     @Override
     public int getEnergyUsage(ItemStack input) {
-        return 80;
+        return ConfigData.coalGeneratorRFPerTick;
     }
 
     @Override
