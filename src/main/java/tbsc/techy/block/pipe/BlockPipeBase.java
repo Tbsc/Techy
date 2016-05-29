@@ -18,9 +18,7 @@ import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tbsc.techy.api.PositionUtil;
 import tbsc.techy.block.BlockBaseMachine;
-import tbsc.techy.tile.pipe.TilePipeBase;
 
 /**
  * Base block for pipes. It is protected because it isn't an actual pipe, but rather
@@ -89,11 +87,7 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         world.markBlockRangeForRenderUpdate(pos.add(-1, -1, -1), pos.add(1, 1, 1));
-        // Loops through all pipe neighbors, and adds this added pipe to the network
-        for (BlockPos neighbor : PositionUtil.getApplicableNeighbors(world, pos, connectiblePipeClass)) {
-            TilePipeBase pipe = (TilePipeBase) world.getTileEntity(neighbor);
-            pipe.forwardPipeInNetwork(pos);
-        }
+
     }
 
     /**
