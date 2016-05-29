@@ -54,7 +54,9 @@ public abstract class BlockBaseMachine extends BlockBase implements ITileEntityP
 
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) worldIn.getTileEntity(pos));
+        if (worldIn.getTileEntity(pos) != null && worldIn.getTileEntity(pos) instanceof IInventory) {
+            InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory) worldIn.getTileEntity(pos));
+        }
         worldIn.removeTileEntity(pos);
         worldIn.destroyBlock(pos, true);
     }
