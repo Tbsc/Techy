@@ -38,9 +38,9 @@ public class OreWorldGenerator implements IWorldGenerator {
     public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
         if (!(chunkGenerator instanceof ChunkProviderHell) && !(chunkGenerator instanceof ChunkProviderEnd)) {
             for(int i = 0; i < blocksPerChunk; i++){
-                int firstBlockXCoord = chunkX + rand.nextInt(16);
+                int firstBlockXCoord = chunkX * 16 + rand.nextInt(16);
                 int firstBlockYCoord = rand.nextInt(maxHeight);
-                int firstBlockZCoord = chunkZ + rand.nextInt(16);
+                int firstBlockZCoord = chunkZ * 16 + rand.nextInt(16);
 
                 new WorldGenMinable(blockToGenerate, blocksPerVein, BlockMatcher.forBlock(Blocks.STONE)).generate(world, rand, new BlockPos(firstBlockXCoord, firstBlockYCoord, firstBlockZCoord));
             }
