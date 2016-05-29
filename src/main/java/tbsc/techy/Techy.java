@@ -7,13 +7,11 @@ import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.*;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.init.ItemInit;
 import tbsc.techy.init.MiscInit;
+import tbsc.techy.misc.cmd.CommandRetroGen;
 import tbsc.techy.proxy.IProxy;
 import tbsc.techy.recipe.IMCRecipeHandler;
 
@@ -86,7 +84,7 @@ public class Techy {
     public void preInit(FMLPreInitializationEvent event) {
         BlockInit.init();
         ItemInit.init();
-        MiscInit.init();
+        MiscInit.preInit();
         proxy.preInitClient();
         proxy.preInit();
 
@@ -97,6 +95,12 @@ public class Techy {
     @EventHandler
     public void init(FMLInitializationEvent event) {
         proxy.initClient();
+        MiscInit.init();
+    }
+
+    @EventHandler
+    public void serverLoad(FMLServerStartingEvent event) {
+        event.registerServerCommand(new CommandRetroGen());
     }
 
     /**
