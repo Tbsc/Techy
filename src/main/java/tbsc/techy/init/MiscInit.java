@@ -163,7 +163,7 @@ public class MiscInit {
     }
 
     /**
-     * TODO Make this actually generate ores
+     * Generates all of Techy's ore world gen in the world.
      */
     public static void generateOres(World world, int radius, ChunkPos chunkPos) {
         Random rand = new Random(world.getSeed());
