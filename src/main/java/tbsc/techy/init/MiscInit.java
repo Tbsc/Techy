@@ -5,6 +5,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLLog;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
@@ -171,6 +172,7 @@ public class MiscInit {
             int chunkX = x + chunkPos.chunkXPos;
             for (int z = 0; z < radius; ++z) {
                 int chunkZ = z + chunkPos.chunkZPos;
+                FMLLog.info("Retro-genning ores in chunk x=" + chunkX + ", z=" + chunkZ);
                 copperGenerator.generate(rand, chunkX, chunkZ, world, world.provider.createChunkGenerator(), world.getChunkProvider());
                 tinGenerator.generate(rand, chunkX, chunkZ, world, world.provider.createChunkGenerator(), world.getChunkProvider());
                 silverGenerator.generate(rand, chunkX, chunkZ, world, world.provider.createChunkGenerator(), world.getChunkProvider());

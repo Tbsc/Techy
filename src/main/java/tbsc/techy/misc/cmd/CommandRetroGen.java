@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraftforge.fml.common.FMLLog;
 import tbsc.techy.init.MiscInit;
 
 import javax.annotation.Nullable;
@@ -32,6 +33,7 @@ public class CommandRetroGen implements ICommand {
     private void handleElsewherePosCommand(String[] args, ICommandSender sender) {
         if (args.length >= 3) { // Double checking
             try {
+                FMLLog.info("Valid retro gen command executed! Retro-generating the world...");
                 MiscInit.generateOres(sender.getEntityWorld(), Integer.parseInt(args[2]),
                         sender.getEntityWorld().getChunkFromBlockCoords(new BlockPos(Integer.parseInt(args[0]),
                                 63, Integer.parseInt(args[1]))).getChunkCoordIntPair());
@@ -45,6 +47,7 @@ public class CommandRetroGen implements ICommand {
         if (sender instanceof Entity) { // It has a position
             if (args.length >= 1) {
                 try {
+                    FMLLog.info("Valid retro gen command executed! Retro-generating the world...");
                     MiscInit.generateOres(sender.getEntityWorld(), Integer.parseInt(args[0]), sender.getEntityWorld().getChunkFromBlockCoords(sender.getPosition()).getChunkCoordIntPair());
                 } catch (NumberFormatException e) {
                     sender.addChatMessage(new TextComponentString("Invalid radius - not a number"));
