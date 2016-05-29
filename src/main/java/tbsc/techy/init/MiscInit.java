@@ -2,6 +2,7 @@ package tbsc.techy.init;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -19,6 +20,8 @@ import tbsc.techy.item.ItemIngots;
 import tbsc.techy.misc.OreWorldGenerator;
 import tbsc.techy.recipe.CrusherRecipes;
 import tbsc.techy.recipe.PoweredFurnaceRecipes;
+
+import java.util.Random;
 
 /**
  * Anything that isn't a block/tile/item and that it needs to get loaded on startup goes here.
@@ -141,27 +144,40 @@ public class MiscInit {
         }
     }
 
+    public static OreWorldGenerator copperGenerator, tinGenerator, silverGenerator, aluminiumGenerator, lithiumGenerator;
+
     /**
      * Init stage
      */
     public static void init() {
-        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreCopper.getDefaultState(),
+        GameRegistry.registerWorldGenerator(copperGenerator = new OreWorldGenerator(BlockInit.blockOreCopper.getDefaultState(),
                 ConfigData.copperPerVein, ConfigData.copperMaxHeight, ConfigData.copperPerChunk), 0);
-        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreTin.getDefaultState(),
+        GameRegistry.registerWorldGenerator(tinGenerator = new OreWorldGenerator(BlockInit.blockOreTin.getDefaultState(),
                 ConfigData.tinPerVein, ConfigData.tinMaxHeight, ConfigData.tinPerChunk), 0);
-        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreSilver.getDefaultState(),
+        GameRegistry.registerWorldGenerator(silverGenerator = new OreWorldGenerator(BlockInit.blockOreSilver.getDefaultState(),
                 ConfigData.silverPerVein, ConfigData.silverMaxHeight, ConfigData.silverPerChunk), 0);
-        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreAluminium.getDefaultState(),
+        GameRegistry.registerWorldGenerator(aluminiumGenerator = new OreWorldGenerator(BlockInit.blockOreAluminium.getDefaultState(),
                 ConfigData.aluminiumPerVein, ConfigData.aluminiumMaxHeight, ConfigData.aluminiumPerChunk), 0);
-        GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreLithium.getDefaultState(),
+        GameRegistry.registerWorldGenerator(lithiumGenerator = new OreWorldGenerator(BlockInit.blockOreLithium.getDefaultState(),
                 ConfigData.lithiumPerVein, ConfigData.lithiumMaxHeight, ConfigData.lithiumPerChunk), 0);
     }
 
     /**
      * TODO Make this actually generate ores
      */
-    public static void generateOres(World world) {
-        // NO-OP
+    public static void generateOres(World world, int radius, ChunkPos chunkPos) {
+        Random rand = new Random(world.getSeed());
+        for (int x = 0; x < radius; ++x) {
+            int chunkX = x + chunkPos.chunkXPos;
+            for (int z = 0; z < radius; ++z) {
+                int chunkZ = z + chunkPos.chunkZPos;
+                copperGenerator.generate(rand, chunkX, chunkZ, world, world.provider.createChunkGenerator(), world.getChunkProvider());
+                tinGenerator.generate(rand, chunkX, chunkZ, world, world.provider.createChunkGenerator(), world.getChunkProvider());
+                silverGenerator.generate(rand, chunkX, chunkZ, world, world.provider.createChunkGenerator(), world.getChunkProvider());
+                aluminiumGenerator.generate(rand, chunkX, chunkZ, world, world.provider.createChunkGenerator(), world.getChunkProvider());
+                lithiumGenerator.generate(rand, chunkX, chunkZ, world, world.provider.createChunkGenerator(), world.getChunkProvider());
+            }
+        }
     }
 
     /**
