@@ -2,6 +2,7 @@ package tbsc.techy.init;
 
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -38,7 +39,7 @@ public class MiscInit {
      * Recipes need to make sense. For example, a powered furnace will
      * need a regular furnace.
      */
-    public static void init() {
+    public static void preInit() {
         MinecraftForge.EVENT_BUS.register(new GeneralEventHandler());
         NetworkRegistry.INSTANCE.registerGuiHandler(Techy.instance, new TechyGuiHandler());
 
@@ -138,7 +139,12 @@ public class MiscInit {
                 }
             }
         }
+    }
 
+    /**
+     * Init stage
+     */
+    public static void init() {
         GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreCopper.getDefaultState(),
                 ConfigData.copperPerVein, ConfigData.copperMaxHeight, ConfigData.copperPerChunk), 0);
         GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreTin.getDefaultState(),
@@ -149,6 +155,13 @@ public class MiscInit {
                 ConfigData.aluminiumPerVein, ConfigData.aluminiumMaxHeight, ConfigData.aluminiumPerChunk), 0);
         GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreLithium.getDefaultState(),
                 ConfigData.lithiumPerVein, ConfigData.lithiumMaxHeight, ConfigData.lithiumPerChunk), 0);
+    }
+
+    /**
+     * TODO Make this actually generate ores
+     */
+    public static void generateOres(World world) {
+        // NO-OP
     }
 
     /**
