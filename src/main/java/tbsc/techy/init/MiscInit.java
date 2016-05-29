@@ -140,15 +140,15 @@ public class MiscInit {
         }
 
         GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreCopper.getDefaultState(),
-                ConfigData.copperPerVein, ConfigData.copperMaxHeight, ConfigData.copperPerChunk), 2);
+                ConfigData.copperPerVein, ConfigData.copperMaxHeight, ConfigData.copperPerChunk), 0);
         GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreTin.getDefaultState(),
-                ConfigData.tinPerVein, ConfigData.tinMaxHeight, ConfigData.tinPerChunk), 2);
+                ConfigData.tinPerVein, ConfigData.tinMaxHeight, ConfigData.tinPerChunk), 0);
         GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreSilver.getDefaultState(),
-                ConfigData.silverPerVein, ConfigData.silverMaxHeight, ConfigData.silverPerChunk), 2);
+                ConfigData.silverPerVein, ConfigData.silverMaxHeight, ConfigData.silverPerChunk), 0);
         GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreAluminium.getDefaultState(),
-                ConfigData.aluminiumPerVein, ConfigData.aluminiumMaxHeight, ConfigData.aluminiumPerChunk), 2);
+                ConfigData.aluminiumPerVein, ConfigData.aluminiumMaxHeight, ConfigData.aluminiumPerChunk), 0);
         GameRegistry.registerWorldGenerator(new OreWorldGenerator(BlockInit.blockOreLithium.getDefaultState(),
-                ConfigData.lithiumPerVein, ConfigData.lithiumMaxHeight, ConfigData.lithiumPerChunk), 2);
+                ConfigData.lithiumPerVein, ConfigData.lithiumMaxHeight, ConfigData.lithiumPerChunk), 0);
     }
 
     /**
