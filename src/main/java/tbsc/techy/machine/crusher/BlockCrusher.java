@@ -1,16 +1,13 @@
 package tbsc.techy.machine.crusher;
 
-import cofh.api.energy.IEnergyConnection;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tbsc.techy.Techy;
 import tbsc.techy.api.ITechyWrench;
@@ -58,13 +55,6 @@ public class BlockCrusher extends BlockBaseFacingMachine {
             playerIn.openGui(Techy.instance, Techy.CRUSHER_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
-    }
-
-    @Override
-    public boolean canConnectOnSide(IBlockAccess world, BlockPos thisBlock, EnumFacing side) {
-        BlockPos sideBlock = thisBlock.offset(side);
-        TileEntity tile = world.getTileEntity(sideBlock);
-        return tile != null && (tile instanceof IEnergyConnection || tile instanceof IInventory);
     }
 
     @Override
