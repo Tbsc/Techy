@@ -23,8 +23,13 @@ import tbsc.techy.tile.pipe.TilePipeEnergy;
  */
 public class BlockPipeEnergy extends BlockPipeBase {
 
-    public BlockPipeEnergy() {
+    protected int capacity;
+    protected int maxTransfer;
+
+    public BlockPipeEnergy(int capacity, int maxTransfer) {
         super("blockPipeEnergy", 0, BlockPipeEnergy.class);
+        this.capacity = capacity;
+        this.maxTransfer = maxTransfer;
     }
 
     @Override
@@ -56,7 +61,7 @@ public class BlockPipeEnergy extends BlockPipeBase {
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
-        return new TilePipeEnergy();
+        return new TilePipeEnergy(capacity, maxTransfer);
     }
 
 }

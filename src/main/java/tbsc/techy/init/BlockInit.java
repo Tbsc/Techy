@@ -46,7 +46,7 @@ public class BlockInit {
         blockMachineBaseBasic = new BlockMachineBase("blockMachineBaseBasic");
         blockMachineBaseImproved = new BlockMachineBase("blockMachineBaseImproved");
         blockMachineBaseAdvanced = new BlockMachineBase("blockMachineBaseAdvanced");
-        blockPipeEnergy = new BlockPipeEnergy();
+        blockPipeEnergy = new BlockPipeEnergy(160 * 6, 160); // Can transfer 2 coal generators, and can contain enough for 2 from all sides
         blockCoalGenerator = new BlockCoalGenerator();
         blockOreCopper = new BlockOreBase("blockOreCopper");
         blockOreTin = new BlockOreBase("blockOreTin");
