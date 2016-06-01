@@ -5,8 +5,10 @@ import cofh.lib.gui.element.ElementButtonManaged;
 import cofh.lib.render.RenderHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import tbsc.techy.Techy;
 import tbsc.techy.api.SideConfiguration;
 import tbsc.techy.api.Sides;
+import tbsc.techy.network.SPacketSideConfigUpdate;
 import tbsc.techy.tile.TileBase;
 
 import java.util.List;
@@ -78,6 +80,7 @@ public class ElementButtonOptionSide extends ElementButtonManaged {
 
     public void onValueChanged(SideConfiguration changedTo) {
         tile.setConfigurationForSide(side, changedTo);
+        Techy.network.sendToServer(new SPacketSideConfigUpdate(tile.getPos(), side.ordinal(), changedTo.ordinal()));
     }
 
 }
