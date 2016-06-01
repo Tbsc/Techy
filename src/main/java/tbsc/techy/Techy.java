@@ -8,10 +8,14 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.init.ItemInit;
 import tbsc.techy.init.MiscInit;
 import tbsc.techy.misc.cmd.CommandRetroGen;
+import tbsc.techy.network.SPacketSideConfigUpdate;
 import tbsc.techy.proxy.IProxy;
 import tbsc.techy.recipe.IMCRecipeHandler;
 
@@ -45,6 +49,11 @@ public class Techy {
     public static Techy instance;
 
     /**
+     * Network wrapper, used to send and register packets.
+     */
+    public static SimpleNetworkWrapper network;
+
+    /**
      * Proxy
      */
     @SidedProxy(clientSide = CLIENT_PROXY, serverSide = SERVER_PROXY)
@@ -75,6 +84,12 @@ public class Techy {
         }
     };
 
+    int packetId = 0;
+
+    private int nextID() {
+        return packetId++;
+    }
+
     /**
      * PreInit, gets called on pre init stage of loading and registring items, blocks, tile entities
      * and config should be done here.
@@ -87,6 +102,9 @@ public class Techy {
         MiscInit.preInit();
         proxy.preInitClient();
         proxy.preInit();
+
+        network = NetworkRegistry.INSTANCE.newSimpleChannel("Techy");
+        network.registerMessage(SPacketSideConfigUpdate.Handler.class, SPacketSideConfigUpdate.class, nextID(), Side.SERVER);
 
         config = new Configuration(event.getSuggestedConfigurationFile());
         syncConfig();
