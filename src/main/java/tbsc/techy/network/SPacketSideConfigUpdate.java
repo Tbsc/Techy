@@ -25,6 +25,11 @@ public class SPacketSideConfigUpdate implements IMessage {
     public int sideOrdinal, sideConfigOrdinal;
     public BlockPos pos;
 
+    /**
+     * Needed for Minecraft to use this packet correctly
+     */
+    public SPacketSideConfigUpdate() {}
+
     public SPacketSideConfigUpdate(BlockPos pos, int sideOrdinal, int sideConfigOrdinal) {
         this.pos = pos;
         this.sideOrdinal = sideOrdinal;
@@ -33,21 +38,21 @@ public class SPacketSideConfigUpdate implements IMessage {
 
     @Override
     public void fromBytes(ByteBuf buf) {
-        sideOrdinal = buf.getInt(0);
-        sideConfigOrdinal = buf.getInt(1);
-        int x = buf.getInt(2);
-        int y = buf.getInt(3);
-        int z = buf.getInt(4);
+        sideOrdinal = buf.readInt();
+        sideConfigOrdinal = buf.readInt();
+        int x = buf.readInt();
+        int y = buf.readInt();
+        int z = buf.readInt();
         pos = new BlockPos(x, y, z);
     }
 
     @Override
     public void toBytes(ByteBuf buf) {
-        buf.setInt(0, sideOrdinal);
-        buf.setInt(1, sideConfigOrdinal);
-        buf.setInt(2, pos.getX());
-        buf.setInt(3, pos.getY());
-        buf.setInt(4, pos.getZ());
+        buf.writeInt(sideOrdinal);
+        buf.writeInt(sideConfigOrdinal);
+        buf.writeInt(pos.getX());
+        buf.writeInt(pos.getY());
+        buf.writeInt(pos.getZ());
     }
 
     public static class Handler implements IMessageHandler<SPacketSideConfigUpdate, IMessage> {
@@ -58,6 +63,11 @@ public class SPacketSideConfigUpdate implements IMessage {
             return null;
         }
 
+        /**
+         * Updates the tile entity of the changes
+         * @param message packet
+         * @param ctx more data to use
+         */
         private void handle(SPacketSideConfigUpdate message, MessageContext ctx) {
             EntityPlayerMP playerEntity = ctx.getServerHandler().playerEntity;
             World world = playerEntity.worldObj;
