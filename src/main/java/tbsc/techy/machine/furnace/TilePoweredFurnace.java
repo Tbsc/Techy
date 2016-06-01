@@ -32,7 +32,7 @@ import java.util.Random;
 public class TilePoweredFurnace extends TileMachineBase implements IEnergyReceiver {
 
     public TilePoweredFurnace() {
-        super(40000, 640, BlockPoweredFurnace.tileInvSize, ConfigData.furnaceDefaultCookTime);
+        super(40000, 640, BlockPoweredFurnace.tileInvSize, ConfigData.furnaceDefaultCookTime, 1);
 
         setConfigurationForSide(Sides.UP, SideConfiguration.INPUT);
         setConfigurationForSide(Sides.DOWN, SideConfiguration.OUTPUT);

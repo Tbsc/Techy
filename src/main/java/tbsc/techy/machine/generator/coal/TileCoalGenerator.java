@@ -16,7 +16,7 @@ import tbsc.techy.machine.generator.TileGeneratorBase;
 public class TileCoalGenerator extends TileGeneratorBase implements IEnergyProvider {
 
     public TileCoalGenerator() {
-        super(128000, 80, BlockInit.blockCoalGenerator.tileInvSize, 0); // cookTime of zero since it's not used
+        super(128000, 80, BlockInit.blockCoalGenerator.tileInvSize, 0, 1); // cookTime of zero since it's not used
     }
 
     @Override

@@ -3,13 +3,16 @@ package tbsc.techy.tile;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLLog;
 import org.apache.commons.lang3.ArrayUtils;
 import tbsc.techy.api.IBoosterItem;
 import tbsc.techy.api.IOperator;
@@ -89,6 +92,11 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
     public int machineProcessTime = 0;
 
     /**
+     * How many items can be auto-extracted/inserted per tick
+     */
+    public int itemsPerTick = 4;
+
+    /**
      * Used for {@link #stopOperating(boolean)} to prevent {@link #update()} from operating even though
      * it shouldn't
      */
@@ -103,15 +111,16 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
     protected boolean isRunning;
     protected boolean shouldRun = true;
 
-    protected TileMachineBase(int capacity, int maxTransfer, int invSize, int cookTime) {
+    protected TileMachineBase(int capacity, int maxTransfer, int invSize, int cookTime, int itemsPerTick) {
         super(invSize);
+        this.itemsPerTick = itemsPerTick;
         this.machineProcessTime = cookTime;
         this.energyStorage = new EnergyStorage(capacity, maxTransfer);
     }
 
     @Override
     public void update() {
-        if (handleRedstone() || handleBoosters() || handleProcessing()) {
+        if (handleRedstone() || handleBoosters() || handleProcessing() || handleInsertion() || handleExtraction()) {
             this.markDirty();
         }
     }
@@ -140,22 +149,221 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         return false;
     }
 
+    /**
+     * Handles redstone control. If the block is powered, then stop operating
+     * @return should mark dirty
+     */
     protected boolean handleRedstone() {
         // If receiving redstone signal, then prevent machine from operating
         shouldRun = !(worldObj.isBlockIndirectlyGettingPowered(pos) > 0);
         return false;
     }
 
+    /**
+     * I don't want machines to extract every tick. To solve that, I put a countdown that'll extract
+     * only when it finishes.
+     */
+    int insertionCountdown = 0;
+
+    /**
+     * Total amount of ticks it takes to finish the countdown.
+     */
+    int insertionCountdownTotal = 10;
+
+    /**
+     * Current count for extraction
+     */
+    int extractionCountdown = 0;
+
+    /**
+     * Total amount of ticks it takes to finish the countdown.
+     */
+    int extractionCountdownTotal = 10;
+
+    /**
+     * Attempts to insert items to this inventory from nearby inventories, based on side configuration.
+     * @return should mark dirty
+     */
+    protected boolean handleInsertion() {
+        ++insertionCountdown;
+        if (insertionCountdown >= insertionCountdownTotal) {
+            insertionCountdown = 0;
+            for (EnumFacing side : EnumFacing.VALUES) {
+                Sides blockSide = getSideFromEnumFacing(side);
+
+                if (getConfigurationForSide(blockSide) == SideConfiguration.INPUT) { // If side is configured to input mode
+                    BlockPos nearbyPos = pos.offset(side);
+                    TileEntity tile = worldObj.getTileEntity(nearbyPos);
+
+                    if (tile != null) { // If there is a tile
+                        if (tile instanceof IInventory) { // If tile has an inventory
+                            int firstAvailableSlot = getFirstAvailableSlot(this, getInputSlots());
+
+                            if (firstAvailableSlot != -1) { // If there is space
+                                IInventory inv = (IInventory) tile;
+
+                                for (int slot = 0; slot < inv.getSizeInventory(); ++slot) { // Looping through slots in the neighbor tile
+                                    ItemStack stack = inv.getStackInSlot(slot);
+
+                                    if (stack != null && canInsertItem(firstAvailableSlot, stack, side)) { // Condition is OK
+                                        if (inventory[firstAvailableSlot] == null) {
+                                            ItemStack copy = stack.copy();
+                                            copy.stackSize = itemsPerTick;
+                                            inventory[firstAvailableSlot] = copy;
+                                            inv.decrStackSize(slot, itemsPerTick);
+                                            if (inv.getStackInSlot(slot) != null) {
+                                                if (inv.getStackInSlot(slot).stackSize == 0) {
+                                                    inv.removeStackFromSlot(slot);
+                                                }
+                                            }
+                                            return true;
+                                        } else if (inventory[firstAvailableSlot].isItemEqual(stack) && inventory[firstAvailableSlot].stackSize + stack.stackSize <= stack.getMaxStackSize()) {
+                                            inventory[firstAvailableSlot].stackSize = inventory[firstAvailableSlot].stackSize + itemsPerTick;
+                                            inv.decrStackSize(slot, itemsPerTick);
+                                            if (inv.getStackInSlot(slot) != null) {
+                                                if (inv.getStackInSlot(slot).stackSize == 0) {
+                                                    inv.removeStackFromSlot(slot);
+                                                }
+                                            }
+                                            return true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Attempts to extract items from this inventory to nearby inventories, based on side configuration.
+     * @return should mark dirty
+     */
+    protected boolean handleExtraction() {
+        ++extractionCountdown;
+        if (extractionCountdown >= extractionCountdownTotal) {
+            extractionCountdown = 0;
+            for (EnumFacing side : EnumFacing.VALUES) {
+                Sides blockSide = getSideFromEnumFacing(side);
+
+                if (getConfigurationForSide(blockSide) == SideConfiguration.OUTPUT) { // If side is configured to output mode
+                    BlockPos nearbyPos = pos.offset(side);
+                    TileEntity neighborTile = worldObj.getTileEntity(nearbyPos);
+
+                    if (neighborTile != null) { // If there is a tile
+                        if (neighborTile instanceof IInventory) { // If tile has an inventory
+                            IInventory neighborInv = (IInventory) neighborTile;
+                            int extractSlot = getFirstNonEmptySlot(this, getOutputSlots()); // Find
+
+                            if (extractSlot == -1) {
+                                for (int neighborSlot = 0; neighborSlot < neighborInv.getSizeInventory(); ++neighborSlot) { // Loop through neighbor slots
+                                    ItemStack neighborStack = neighborInv.getStackInSlot(neighborSlot);
+
+                                    if (neighborStack != null) { // There is an item there already
+                                        if (neighborStack.isItemEqual(inventory[extractSlot])) { // Items are equal
+                                            if (neighborStack.stackSize + itemsPerTick <= neighborStack.getMaxStackSize()) { // Stack size together is OK
+                                                // Add to neighbor slot
+                                                ItemStack neighborCopy = neighborStack.copy();
+                                                neighborCopy.stackSize = neighborCopy.stackSize + itemsPerTick;
+                                                neighborInv.setInventorySlotContents(neighborSlot, neighborCopy);
+
+                                                // Remove from extract slot
+                                                decrStackSize(extractSlot, itemsPerTick);
+                                                if (inventory[extractSlot] != null) {
+                                                    if (inventory[extractSlot].stackSize == 0) {
+                                                        removeStackFromSlot(extractSlot);
+                                                    }
+                                                }
+                                                return true;
+                                            }
+                                        }
+                                    } else { // It IS null, therefore empty
+                                        // Add to neighbor slot
+                                        ItemStack neighborCopy = inventory[extractSlot].copy();
+                                        neighborCopy.stackSize = itemsPerTick;
+                                        neighborInv.setInventorySlotContents(neighborSlot, neighborCopy);
+
+                                        // Remove from neighbor slot
+                                        decrStackSize(extractSlot, itemsPerTick);
+                                        if (inventory[extractSlot] != null) {
+                                            if (inventory[extractSlot].stackSize == 0) {
+                                                removeStackFromSlot(extractSlot);
+                                            }
+                                        }
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Loops through the array of slot IDs given and returns the first one that can be inserted to
+     * @param inv to check
+     * @param slots array of slots to check if can be inserted to
+     * @return First available slot, if none -1
+     */
+    protected int getFirstAvailableSlot(IInventory inv, int[] slots) {
+        for (int slot : slots) {
+            ItemStack slotItem = inv.getStackInSlot(slot);
+            if (slotItem == null) {
+                return slot;
+            } else if (slotItem.stackSize < slotItem.getMaxStackSize()) {
+                return slot;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Returns the first slot that ISN'T empty. If you need an empty slot, use {@link #getFirstAvailableSlot(IInventory, int[])}.
+     * @param inv to check
+     * @param slots to check
+     * @return first slot which has something in it, -1 if the whole inv is empty
+     */
+    protected int getFirstNonEmptySlot(IInventory inv, int[] slots) {
+        for (int slot : slots) {
+            ItemStack slotItem = inv.getStackInSlot(slot);
+            if (slotItem != null) {
+                return slot;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * When a packet is sent to notify the client of changes in the tile entity, this method is called on the client.
+     * What I am doing is reading the contents of the nbt tag to update from server
+     * @param net The packet manager instane
+     * @param pkt The packet sent
+     */
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         readFromNBT(pkt.getNbtCompound());
     }
 
+    /**
+     * Returns an instance of {@link SPacketUpdateTileEntity}, which is send to the client for client/server
+     * synchronization.
+     * @return update packet
+     */
     @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
         return new SPacketUpdateTileEntity(pos, getBlockMetadata(), writeToNBT(new NBTTagCompound()));
     }
 
+    /**
+     * Returns the NBT tag that needs to be sent to the client.
+     * @return NBT tag with data
+     */
     @Override
     public NBTTagCompound getUpdateTag() {
         NBTTagCompound tag = super.getUpdateTag();
@@ -163,6 +371,10 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         return tag;
     }
 
+    /**
+     * Attempts to process stuff in the inventory
+     * @return should mark dirty
+     */
     protected boolean handleProcessing() {
         boolean markDirty = false;
         for (int input : getInputSlots()) {
@@ -326,7 +538,9 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         progress = nbt.getInteger("Progress");
         totalProgress = nbt.getInteger("TotalProgress");
 
+        FMLLog.info("SideConfigFront, readFromNBT, method tag parameter - " + SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigFront")));
         setConfigurationForSide(Sides.FRONT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigFront")));
+        FMLLog.info("SideConfigFront, readFromNBT, field - " + getConfigurationForSide(Sides.FRONT).toString());
         setConfigurationForSide(Sides.BACK, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigBack")));
         setConfigurationForSide(Sides.LEFT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigLeft")));
         setConfigurationForSide(Sides.RIGHT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigRight")));
@@ -347,6 +561,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         nbt.setInteger("Energy", getEnergyStored());
 
         nbt.setInteger("SideConfigFront", getConfigurationForSide(Sides.FRONT).ordinal());
+        FMLLog.info("SideConfigFront, writeToNBT, from field - " + SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigFront")));
         nbt.setInteger("SideConfigBack", getConfigurationForSide(Sides.BACK).ordinal());
         nbt.setInteger("SideConfigLeft", getConfigurationForSide(Sides.LEFT).ordinal());
         nbt.setInteger("SideConfigRight", getConfigurationForSide(Sides.RIGHT).ordinal());

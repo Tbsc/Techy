@@ -24,8 +24,8 @@ import javax.annotation.Nonnull;
  */
 public abstract class TileGeneratorBase extends TileMachineBase implements IEnergyProvider {
 
-    protected TileGeneratorBase(int capacity, int maxReceive, int invSize, int cookTime) {
-        super(capacity, maxReceive, invSize, cookTime);
+    protected TileGeneratorBase(int capacity, int maxReceive, int invSize, int cookTime, int itemsPerTick) {
+        super(capacity, maxReceive, invSize, cookTime, itemsPerTick);
         setConfigurationForSide(Sides.FRONT, SideConfiguration.INPUT);
         setConfigurationForSide(Sides.BACK, SideConfiguration.INPUT);
         setConfigurationForSide(Sides.UP, SideConfiguration.INPUT);
