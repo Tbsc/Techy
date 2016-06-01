@@ -24,6 +24,11 @@ public class TilePipeEnergy extends TileEntity implements ITickable, IEnergyRece
 
     public EnergyStorage energyStorage;
 
+    /**
+     * Minecraft requires me to have this constructor here
+     */
+    public TilePipeEnergy() {}
+
     public TilePipeEnergy(int capacity, int maxTransfer) {
         this.energyStorage = new EnergyStorage(capacity, maxTransfer);
     }
