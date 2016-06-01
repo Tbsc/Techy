@@ -8,8 +8,10 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import tbsc.techy.api.SideConfiguration;
 import tbsc.techy.api.Sides;
+import tbsc.techy.block.BlockBaseFacingMachine;
 
 /**
  * Basic TileEntity class, adds support for inventories and basic data saving.
@@ -67,11 +69,58 @@ public abstract class TileBase extends TileEntity implements ISidedInventory {
         }
     }
 
+    /**
+     * Returns the side configuration of the side given.
+     * @param side to check
+     * @return side config of the side given
+     */
     public abstract SideConfiguration getConfigurationForSide(Sides side);
 
+    /**
+     * Sets the side configuration for the side given
+     * @param side side to change
+     * @param sideConfig what to change to
+     */
     public abstract void setConfigurationForSide(Sides side, SideConfiguration sideConfig);
 
+    /**
+     * Returns the slots that, based on the configuration, can be accessed.
+     * @param sideConfig config to check
+     * @return slots accessible
+     */
     public abstract int[] getSlotsForConfiguration(SideConfiguration sideConfig);
+
+    /**
+     * Returns a {@link Sides} value corresponding to the {@link EnumFacing} given, correct
+     * for this tile entity.
+     * @param side to check
+     * @return Side for the enum facing
+     */
+    public Sides getSideFromEnumFacing(EnumFacing side) {
+        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockBaseFacingMachine.FACING);
+        if (frontOfBlock == side) { // FRONT
+            return Sides.FRONT;
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // LEFT
+            return Sides.LEFT;
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // BACK
+            return Sides.BACK;
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // RIGHT
+            return Sides.RIGHT;
+        }
+        if (side == EnumFacing.UP) { // UP
+            return Sides.UP;
+        }
+        if (side == EnumFacing.DOWN) { // DOWN
+            return Sides.DOWN;
+        }
+        return Sides.UNKNOWN; // seriously, wtf, it can't return unknown because I just checked every type of EnumFacing
+    }
 
     /**
      * When TileEntity update packet {@link SPacketUpdateTileEntity} is received, read the data
