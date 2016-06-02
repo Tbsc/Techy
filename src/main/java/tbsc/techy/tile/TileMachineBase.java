@@ -538,9 +538,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         progress = nbt.getInteger("Progress");
         totalProgress = nbt.getInteger("TotalProgress");
 
-        FMLLog.info("SideConfigFront, readFromNBT, method tag parameter - " + SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigFront")));
         setConfigurationForSide(Sides.FRONT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigFront")));
-        FMLLog.info("SideConfigFront, readFromNBT, field - " + getConfigurationForSide(Sides.FRONT).toString());
         setConfigurationForSide(Sides.BACK, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigBack")));
         setConfigurationForSide(Sides.LEFT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigLeft")));
         setConfigurationForSide(Sides.RIGHT, SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigRight")));
@@ -561,7 +559,6 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         nbt.setInteger("Energy", getEnergyStored());
 
         nbt.setInteger("SideConfigFront", getConfigurationForSide(Sides.FRONT).ordinal());
-        FMLLog.info("SideConfigFront, writeToNBT, from field - " + SideConfiguration.fromOrdinal(nbt.getInteger("SideConfigFront")));
         nbt.setInteger("SideConfigBack", getConfigurationForSide(Sides.BACK).ordinal());
         nbt.setInteger("SideConfigLeft", getConfigurationForSide(Sides.LEFT).ordinal());
         nbt.setInteger("SideConfigRight", getConfigurationForSide(Sides.RIGHT).ordinal());
