@@ -70,16 +70,16 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
                         markDirty = true;
                     } else {
                         stopOperating(true);
-                        if (worldObj.getBlockState(pos) != null) {
-                            if (BlockBaseFacingMachine.getWorkingState(worldObj, pos)) {
+                        if (worldObj.isBlockLoaded(pos)) {
+                            if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) {
                                 BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
                             }
                         }
                     }
                 } else {
                     stopOperating(true);
-                    if (worldObj.getBlockState(pos) != null) {
-                        if (BlockBaseFacingMachine.getWorkingState(worldObj, pos)) {
+                    if (worldObj.isBlockLoaded(pos)) {
+                        if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) {
                             BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
                         }
                     }

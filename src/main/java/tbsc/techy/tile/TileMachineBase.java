@@ -12,7 +12,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLLog;
 import org.apache.commons.lang3.ArrayUtils;
 import tbsc.techy.api.IBoosterItem;
 import tbsc.techy.api.IOperator;
@@ -386,8 +385,10 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
                         // What this does is calculate the amount of energy to be consumed per tick, by rounding it to a multiple of 10
                         double energyPercentage = (energyModifier / 100) * getEnergyUsage(getSmeltingOutput(inventory[0]));
                         energyConsumptionPerTick = (int) ((energyPercentage / totalProgress) / 10 * 10);
-                        if (worldObj.getBlockState(pos).getBlock() == null) {
-                            BlockBaseFacingMachine.setWorkingState(true, worldObj, pos);
+                        if (worldObj.isBlockLoaded(pos)) {
+                            if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) {
+                                BlockBaseFacingMachine.setWorkingState(true, worldObj, pos);
+                            }
                         }
                         setOperationStatus(true);
                         markDirty = true;
@@ -399,8 +400,10 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
                     energyStorage.modifyEnergyStored(getEnergyStored() - energyConsumptionPerTick);
                     if (progress >= totalProgress) {
                         doOperation();
-                        if (worldObj.getBlockState(pos).getBlock() == null) {
-                            BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                        if (worldObj.isBlockLoaded(pos)) {
+                            if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) {
+                                BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                            }
                         }
                         progress = totalProgress = 0;
                         setOperationStatus(false);
@@ -408,14 +411,18 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
                     }
                 } else {
                     stopOperating(true);
-                    if (BlockBaseFacingMachine.getWorkingState(worldObj, pos)) {
-                        BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                    if (worldObj.isBlockLoaded(pos)) {
+                        if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) {
+                            BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                        }
                     }
                 }
             } else {
                 stopOperating(true);
-                if (BlockBaseFacingMachine.getWorkingState(worldObj, pos)) {
-                    BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                if (worldObj.isBlockLoaded(pos)) {
+                    if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) {
+                        BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                    }
                 }
             }
         }
