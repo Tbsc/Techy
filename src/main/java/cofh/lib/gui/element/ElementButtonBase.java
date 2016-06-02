@@ -2,8 +2,10 @@ package cofh.lib.gui.element;
 
 import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.GuiProps;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
+import net.minecraftforge.fml.client.FMLClientHandler;
 
 public abstract class ElementButtonBase extends ElementBase {
 
@@ -34,10 +36,12 @@ public abstract class ElementButtonBase extends ElementBase {
 		return true;
 	}
 
+
 	protected void playSound(int button) {
 
 		if (button == 0) {
-			GuiBase.playSound("random.click", SoundCategory.NEUTRAL, 1.0F, 1.0F);
+			// GuiBase.playSound(SoundEvents.UI_BUTTON_CLICK, SoundCategory.NEUTRAL, 1.0F, 1.0F);
+			FMLClientHandler.instance().getClient().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 		}
 	}
 
