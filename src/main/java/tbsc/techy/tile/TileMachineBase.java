@@ -119,8 +119,10 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
 
     @Override
     public void update() {
-        if (handleRedstone() || handleBoosters() || handleProcessing() || handleInsertion() || handleExtraction()) {
-            this.markDirty();
+        if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) { // Only run if block is there
+            if (handleRedstone() || handleBoosters() || handleProcessing() || handleInsertion() || handleExtraction()) {
+                this.markDirty();
+            }
         }
     }
 
