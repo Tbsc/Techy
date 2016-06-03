@@ -1,5 +1,7 @@
 package tbsc.techy.proxy;
 
+import net.minecraftforge.fml.common.event.*;
+
 /**
  * Base interface for proxy
  *
@@ -7,10 +9,14 @@ package tbsc.techy.proxy;
  */
 public interface IProxy {
 
-    void preInitClient();
+    void init(FMLInitializationEvent event);
 
-    void initClient();
+    void preInit(FMLPreInitializationEvent event);
 
-    void preInit();
+    void postInit(FMLPostInitializationEvent event);
+
+    void serverLoad(FMLServerStartingEvent event);
+
+    void imcMessageReceived(FMLInterModComms.IMCEvent event);
 
 }

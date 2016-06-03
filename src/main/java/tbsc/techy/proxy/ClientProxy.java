@@ -1,12 +1,8 @@
 package tbsc.techy.proxy;
 
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.model.ModelLoaderRegistry;
-import net.minecraftforge.fml.common.event.FMLInterModComms;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tbsc.techy.block.pipe.render.PipeEnergyBakedModel;
-import tbsc.techy.block.pipe.render.PipeEnergyLoader;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.init.ItemInit;
 
@@ -18,28 +14,32 @@ import tbsc.techy.init.ItemInit;
 @SideOnly(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
 
-    @SideOnly(Side.CLIENT)
-    public void preInit() {
-        FMLInterModComms.sendMessage("Waila", "register", "tbsc.techy.api.compat.waila.TechyWAILAPlugin.callbackRegister");
-
-        ModelLoaderRegistry.registerLoader(new PipeEnergyLoader());
-    }
-
-    /**
-     * Loads models
-     */
     @Override
-    @SideOnly(Side.CLIENT)
-    public void preInitClient() {
+    public void preInit(FMLPreInitializationEvent event) {
+        super.preInit(event);
+        FMLInterModComms.sendMessage("Waila", "register", "tbsc.techy.api.compat.waila.TechyWAILAPlugin.callbackRegister");
         ItemInit.initModels();
         BlockInit.initModels();
     }
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void initClient() {
-        BlockInit.initItemModels();
-        Minecraft.getMinecraft().getTextureMapBlocks().registerSprite(PipeEnergyBakedModel.BAKED_MODEL);
+    public void init(FMLInitializationEvent event) {
+        super.init(event);
+    }
+
+    @Override
+    public void postInit(FMLPostInitializationEvent event) {
+        super.postInit(event);
+    }
+
+    @Override
+    public void serverLoad(FMLServerStartingEvent event) {
+        super.serverLoad(event);
+    }
+
+    @Override
+    public void imcMessageReceived(FMLInterModComms.IMCEvent event) {
+        super.imcMessageReceived(event);
     }
 
 }
