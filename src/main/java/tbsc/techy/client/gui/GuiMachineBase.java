@@ -40,10 +40,10 @@ public abstract class GuiMachineBase extends GuiBase {
         addTab(new TabSides(this, xSize + 1, 0, 22 + 28, 22 + 28, (TileBase) world.getTileEntity(machine)));
     }
 
-    int energyBarStartX = xSize - 24;
-    int energyBarStartY = 22;
-    int energyBarWidth = 16;
-    int energyBarHeight = 42;
+    protected int energyBarStartX = xSize - 24;
+    protected int energyBarStartY = 22;
+    protected int energyBarWidth = 16;
+    protected int energyBarHeight = 42;
 
     /**
      * Renders an energy bar on the background layer
