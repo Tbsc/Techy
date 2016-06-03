@@ -8,9 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -67,6 +65,16 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
         IBlockState iblockstate = world.getBlockState(pos);
 
         return clazz.isInstance(iblockstate.getBlock());
+    }
+
+    @Override
+    public IBlockState withRotation(IBlockState state, Rotation rot) {
+        return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+        return state.withProperty(FACING, mirrorIn.mirror(state.getValue(FACING)));
     }
 
     @SideOnly(Side.CLIENT)
