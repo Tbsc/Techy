@@ -23,6 +23,21 @@ public class ConfigData {
     public static int coalGeneratorProcessTime = 400;
     public static int coalGeneratorRFPerTick = 80;
 
+    // BASIC POWER CELL CONFIG //
+
+    public static int basicPowerCellCapacity = 1000000; // 1M
+    public static int basicPowerCellTransferRate = 360; // 0.36K
+
+    // IMPROVED POWER CELL CONFIG //
+
+    public static int improvedPowerCellCapacity = 15000000; // 15M
+    public static int improvedPowerCellTransferRate = 1280; // 1.28K
+
+    // ADVANCED POWER CELL CONFIG //
+
+    public static int advancedPowerCellCapacity = 40000000; // 40M
+    public static int advancedPowerCellTransferRate = 3840; // 3.84K
+
     // WORLD GEN CONFIG //
 
     public static int copperPerChunk = 16;

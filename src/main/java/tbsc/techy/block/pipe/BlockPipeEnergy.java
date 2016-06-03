@@ -2,18 +2,11 @@ package tbsc.techy.block.pipe;
 
 import cofh.api.energy.IEnergyConnection;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.block.statemap.StateMapperBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import tbsc.techy.block.pipe.render.PipeEnergyBakedModel;
 import tbsc.techy.tile.pipe.TilePipeEnergy;
 
 /**
@@ -27,7 +20,7 @@ public class BlockPipeEnergy extends BlockPipeBase {
     protected int maxTransfer;
 
     public BlockPipeEnergy(int capacity, int maxTransfer) {
-        super("blockPipeEnergy", 0, BlockPipeEnergy.class);
+        super("blockPipeEnergyBasic", 0, BlockPipeEnergy.class);
         this.capacity = capacity;
         this.maxTransfer = maxTransfer;
     }
@@ -40,8 +33,9 @@ public class BlockPipeEnergy extends BlockPipeBase {
     /**
      * Inits the ISBM
      */
-    @SideOnly(Side.CLIENT)
+    /*@SideOnly(Side.CLIENT)
     public void initModel() {
+        /*
         // To make sure that our ISBM model is chosen for all states we use this custom state mapper:
         StateMapperBase ignoreState = new StateMapperBase() {
             @Override
@@ -50,7 +44,10 @@ public class BlockPipeEnergy extends BlockPipeBase {
             }
         };
         ModelLoader.setCustomStateMapper(this, ignoreState);
+        *
+        super.initModel();
     }
+    */
 
     @Override
     public boolean canConnectWithBlock(IBlockAccess world, BlockPos blockPos) {

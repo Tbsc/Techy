@@ -1,0 +1,64 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "Techy:pipeTemplateCenter",
+    "textures": {
+      "all": "Techy:blocks/pipeEnergyTexture",
+      "connection": "Techy:blocks/pipeEnergyTexture",
+      "side": "Techy:blocks/pipeEnergyTexture",
+      "updown": "Techy:blocks/pipeEnergyTexture"
+    }
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{
+      "transform": "forge:default-block"
+    }],
+    "north": {
+      "false": {},
+      "true": {
+        "submodel": "Techy:pipeConnectionNorth"
+      }
+    },
+    "south": {
+      "false": {},
+      "true": {
+        "submodel": {
+          "Techy:pipeConnectionNorth": { "y": 180 }
+        }
+      }
+    },
+    "west": {
+      "false": {},
+      "true": {
+        "submodel": {
+          "Techy:pipeConnectionNorth": { "y": 270 }
+        }
+      }
+    },
+    "east": {
+      "false": {},
+      "true": {
+        "submodel": {
+          "Techy:pipeConnectionNorth": { "y": 90 }
+        }
+      }
+    },
+    "up": {
+      "false": {},
+      "true": {
+        "submodel": {
+          "Techy:pipeConnectionNorth": { "z": 90 }
+        }
+      }
+    },
+    "down": {
+      "false": {},
+      "true": {
+        "submodel": {
+          "Techy:pipeConnectionNorth": { "z": 270 }
+        }
+      }
+    }
+  }
+}

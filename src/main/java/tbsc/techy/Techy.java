@@ -8,16 +8,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import net.minecraftforge.fml.relauncher.Side;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.init.ItemInit;
-import tbsc.techy.init.MiscInit;
-import tbsc.techy.misc.cmd.CommandRetroGen;
-import tbsc.techy.network.SPacketSideConfigUpdate;
 import tbsc.techy.proxy.IProxy;
-import tbsc.techy.recipe.IMCRecipeHandler;
 
 /**
  * Main mod class.
@@ -84,12 +78,6 @@ public class Techy {
         }
     };
 
-    int packetId = 0;
-
-    private int nextID() {
-        return packetId++;
-    }
-
     /**
      * PreInit, gets called on pre init stage of loading and registring items, blocks, tile entities
      * and config should be done here.
@@ -97,28 +85,26 @@ public class Techy {
      */
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        BlockInit.init();
-        ItemInit.init();
-        MiscInit.preInit();
-        proxy.preInitClient();
-        proxy.preInit();
-
-        network = NetworkRegistry.INSTANCE.newSimpleChannel("Techy");
-        network.registerMessage(SPacketSideConfigUpdate.Handler.class, SPacketSideConfigUpdate.class, nextID(), Side.SERVER);
-
-        config = new Configuration(event.getSuggestedConfigurationFile());
-        syncConfig();
+        proxy.preInit(event);
     }
 
+    /**
+     * Init stage, used to add stuff to game
+     * @param event
+     */
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        proxy.initClient();
-        MiscInit.init();
+        proxy.init(event);
     }
 
+    /**
+     * Gets called when the server is loaded. On a server this is when it's started, on client
+     * is when the integrated server is started (world load)
+     * @param event
+     */
     @EventHandler
     public void serverLoad(FMLServerStartingEvent event) {
-        event.registerServerCommand(new CommandRetroGen());
+        proxy.serverLoad(event);
     }
 
     /**
@@ -129,7 +115,7 @@ public class Techy {
      */
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        MiscInit.postInit();
+        proxy.postInit(event);
     }
 
     /**
@@ -138,13 +124,13 @@ public class Techy {
      */
     @EventHandler
     public void imcMessage(FMLInterModComms.IMCEvent event) {
-        IMCRecipeHandler.imcMessageReceived(event.getMessages());
+        proxy.imcMessageReceived(event);
     }
 
     /**
      * Syncs saved config with the mod.
      */
-    public void syncConfig() {
+    public static void syncConfig() {
         try {
             // Load config
             config.load();
@@ -168,6 +154,24 @@ public class Techy {
                     "Default time for a piece of coal to burn in a coal generator").getInt();
             ConfigData.coalGeneratorRFPerTick = config.get("CoalGenerator", "RFPerTick", ConfigData.coalGeneratorRFPerTick,
                     "How much energy is generated per tick in the coal generator").getInt();
+
+            // Basic power cell
+            ConfigData.basicPowerCellCapacity = config.get("BasicPowerCell", "Capacity", ConfigData.basicPowerCellCapacity,
+                    "Maximum amount of RF a basic power cell can hold").getInt();
+            ConfigData.basicPowerCellTransferRate = config.get("BasicPowerCell", "MaxTransferRate", ConfigData.basicPowerCellTransferRate,
+                    "Maximum amount of RF a basic power cell can transfer per tick").getInt();
+
+            // Improved power cell
+            ConfigData.improvedPowerCellCapacity = config.get("ImprovedPowerCell", "Capacity", ConfigData.improvedPowerCellCapacity,
+                    "Maximum amount of RF an improved power cell can hold").getInt();
+            ConfigData.improvedPowerCellTransferRate = config.get("ImprovedPowerCell", "MaxTransferRate", ConfigData.improvedPowerCellTransferRate,
+                    "Maximum amount of RF an improved power cell can transfer per tick").getInt();
+
+            // Advanced power cell
+            ConfigData.advancedPowerCellCapacity = config.get("AdvancedPowerCell", "Capacity", ConfigData.advancedPowerCellCapacity,
+                    "Maximum amount of RF an advanced power cell can hold").getInt();
+            ConfigData.advancedPowerCellTransferRate = config.get("AdvancedPowerCell", "MaxTransferRate", ConfigData.advancedPowerCellTransferRate,
+                    "Maximum amount of RF an advanced power cell can transfer per tick").getInt();
 
             // World Gen - copper
             ConfigData.copperPerChunk = config.get("WorldGen", "CopperPerChunk", ConfigData.copperPerChunk,

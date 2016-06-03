@@ -1,24 +1,21 @@
 package tbsc.techy.block.pipe;
 
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import tbsc.techy.block.BlockBaseMachine;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * Base block for pipes. It is protected because it isn't an actual pipe, but rather
@@ -28,12 +25,14 @@ import tbsc.techy.block.BlockBaseMachine;
  */
 public abstract class BlockPipeBase extends BlockBaseMachine {
 
-    public static final PropertyConnection NORTH_CONNECTION = PropertyConnection.create("north_connection");
-    public static final PropertyConnection SOUTH_CONNECTION = PropertyConnection.create("up_connection");
-    public static final PropertyConnection WEST_CONNECTION = PropertyConnection.create("west_connection");
-    public static final PropertyConnection EAST_CONNECTION = PropertyConnection.create("east_connection");
-    public static final PropertyConnection UP_CONNECTION = PropertyConnection.create("up_connection");
-    public static final PropertyConnection DOWN_CONNECTION = PropertyConnection.create("down_connection");
+    public static final PropertyBool NORTH = PropertyBool.create("north");
+    public static final PropertyBool SOUTH = PropertyBool.create("south");
+    public static final PropertyBool WEST = PropertyBool.create("west");
+    public static final PropertyBool EAST = PropertyBool.create("east");
+    public static final PropertyBool UP = PropertyBool.create("up");
+    public static final PropertyBool DOWN = PropertyBool.create("down");
+
+    public static AxisAlignedBB BASE_AABB = new AxisAlignedBB(0.29, 0.29, 0.29, 0.71, 0.71, 0.71);
 
     /**
      * Used to know the type of class a block needs to be a sub type of to connect to
@@ -45,6 +44,7 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
         setHardness(2.0F);
 
         this.connectiblePipeClass = connectiblePipeClass;
+        setDefaultState(blockState.getBaseState().withProperty(NORTH, false).withProperty(SOUTH, false).withProperty(WEST, false).withProperty(EAST, false).withProperty(UP, false).withProperty(DOWN, false));
     }
 
     /**
@@ -64,18 +64,6 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
     public abstract boolean canConnectWithBlock(IBlockAccess world, BlockPos block);
 
     /**
-     * Inits the item model for the pipe, so it'd render in hand like it does when placed
-     */
-    @SideOnly(Side.CLIENT)
-    public void initItemModel() {
-        // For our item model we want to use a normal json model. This has to be called in
-        // ClientProxy.init (not preInit) so that's why it is a separate method.
-        Item itemBlock = Item.REGISTRY.getObject(getRegistryName());
-        ModelResourceLocation itemModelResourceLocation = new ModelResourceLocation(getRegistryName(), "inventory");
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(itemBlock, 0, itemModelResourceLocation);
-    }
-
-    /**
      * Update nearby blocks when block is placed for them to know a pipe is placed, and if they are a pipe too
      * then to connect
      * @param world the world
@@ -87,20 +75,24 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         world.markBlockRangeForRenderUpdate(pos.add(-1, -1, -1), pos.add(1, 1, 1));
+    }
 
+    @Override
+    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn) {
+        addCollisionBoxToList(pos, entityBox, collidingBoxes, BASE_AABB);
     }
 
     /**
-     * Tells the game to not render any sides, as it is done by the ISBM
-     * @param worldIn the world
-     * @param pos of the pipe
-     * @param side side to render
-     * @return if the side should be rendered (false)
+     * Returns a bounding box for the pipe.
+     * connections using block models.
+     * @param state the block state
+     * @param source access to the world
+     * @param pos the position of the block
+     * @return the bounding box for this pipe
      */
     @Override
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-        return false;
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return BASE_AABB;
     }
 
     /**
@@ -121,17 +113,13 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
         return false;
     }
 
-    /**
-     * Returns the extended block state of the block, containing the connection properties.
-     * @param state of the block
-     * @param world the world
-     * @param pos of the block
-     * @return extended state with connection properties
-     */
     @Override
-    public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
-        IExtendedBlockState extendedBlockState = (IExtendedBlockState) state;
+    public int getMetaFromState(IBlockState state) {
+        return 0;
+    }
 
+    @Override
+    public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
         boolean north = canConnectOnSide(world, pos, EnumFacing.NORTH);
         boolean south = canConnectOnSide(world, pos, EnumFacing.SOUTH);
         boolean west = canConnectOnSide(world, pos, EnumFacing.WEST);
@@ -139,13 +127,13 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
         boolean up = canConnectOnSide(world, pos, EnumFacing.UP);
         boolean down = canConnectOnSide(world, pos, EnumFacing.DOWN);
 
-        return extendedBlockState
-                .withProperty(NORTH_CONNECTION, north)
-                .withProperty(SOUTH_CONNECTION, south)
-                .withProperty(WEST_CONNECTION, west)
-                .withProperty(EAST_CONNECTION, east)
-                .withProperty(UP_CONNECTION, up)
-                .withProperty(DOWN_CONNECTION, down);
+        return state
+                .withProperty(NORTH, north)
+                .withProperty(SOUTH, south)
+                .withProperty(WEST, west)
+                .withProperty(EAST, east)
+                .withProperty(UP, up)
+                .withProperty(DOWN, down);
     }
 
     /**
@@ -154,43 +142,7 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
      */
     @Override
     protected BlockStateContainer createBlockState() {
-        IUnlistedProperty[] unlistedProps = new IUnlistedProperty[] { NORTH_CONNECTION, SOUTH_CONNECTION, WEST_CONNECTION, EAST_CONNECTION, UP_CONNECTION, DOWN_CONNECTION };
-        IProperty[] props = new IProperty[0];
-        return new ExtendedBlockState(this, props, unlistedProps);
-    }
-
-    public static class PropertyConnection implements IUnlistedProperty<Boolean> {
-
-        private final String name;
-
-        private PropertyConnection(String name) {
-            this.name = name;
-        }
-
-        public static PropertyConnection create(String name) {
-            return new PropertyConnection(name);
-        }
-
-        @Override
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public boolean isValid(Boolean value) {
-            return true;
-        }
-
-        @Override
-        public Class<Boolean> getType() {
-            return Boolean.class;
-        }
-
-        @Override
-        public String valueToString(Boolean value) {
-            return Boolean.toString(value);
-        }
-
+        return new BlockStateContainer(this, NORTH, SOUTH, WEST, EAST, UP, DOWN);
     }
 
 }
