@@ -22,7 +22,7 @@ import java.util.List;
  */
 public class TilePipeEnergy extends TileEntity implements ITickable, IEnergyReceiver, IEnergyProvider {
 
-    public EnergyStorage energyStorage;
+    public EnergyStorage energyStorage = new EnergyStorage(960, 160);
 
     /**
      * Minecraft requires me to have this constructor here
