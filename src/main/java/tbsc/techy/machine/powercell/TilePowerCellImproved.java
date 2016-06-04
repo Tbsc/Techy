@@ -7,9 +7,9 @@ import net.minecraft.util.ResourceLocation;
  *
  * Created by tbsc on 6/3/16.
  */
-public class TilePowerCellBasic extends TilePowerCellBase {
+public class TilePowerCellImproved extends TilePowerCellBase {
 
-    public TilePowerCellBasic(int capacity, int maxTransfer, int invSize, String registryName) {
+    public TilePowerCellImproved(int capacity, int maxTransfer, int invSize, String registryName) {
         super(capacity, maxTransfer, invSize, registryName);
     }
 

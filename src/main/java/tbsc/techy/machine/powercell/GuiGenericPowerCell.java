@@ -13,7 +13,7 @@ import tbsc.techy.container.ContainerBase;
  */
 public class GuiGenericPowerCell extends GuiMachineBase {
 
-    protected GuiGenericPowerCell(ContainerBase containerBase, BlockPos pos, World world, int tileInvSize, ResourceLocation guiTexture) {
+    public GuiGenericPowerCell(ContainerBase containerBase, BlockPos pos, World world, int tileInvSize, ResourceLocation guiTexture) {
         super(containerBase, pos, world, tileInvSize, guiTexture);
         energyBarStartX = 81;
         energyBarStartY = 20;

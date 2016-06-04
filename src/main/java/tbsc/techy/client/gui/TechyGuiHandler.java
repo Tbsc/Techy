@@ -13,6 +13,9 @@ import tbsc.techy.machine.furnace.GuiPoweredFurnace;
 import tbsc.techy.machine.furnace.TilePoweredFurnace;
 import tbsc.techy.machine.generator.ContainerGeneratorBase;
 import tbsc.techy.machine.generator.GuiGeneratorBase;
+import tbsc.techy.machine.powercell.ContainerGenericPowerCell;
+import tbsc.techy.machine.powercell.GuiGenericPowerCell;
+import tbsc.techy.machine.powercell.TilePowerCellBase;
 import tbsc.techy.tile.TileMachineBase;
 
 /**
@@ -44,6 +47,10 @@ public class TechyGuiHandler implements IGuiHandler {
         if (ID == Techy.COAL_GENERATOR_GUI_ID) {
             return new ContainerGeneratorBase(player.inventory, (TileMachineBase) world.getTileEntity(new BlockPos(x, y, z)));
         }
+        if (ID == Techy.POWER_CELL_GUI_ID) {
+            TilePowerCellBase tile = (TilePowerCellBase) world.getTileEntity(new BlockPos(x, y, z));
+            return new ContainerGenericPowerCell(player.inventory, tile, tile.inventorySize);
+        }
         return null;
     }
 
@@ -67,6 +74,10 @@ public class TechyGuiHandler implements IGuiHandler {
         }
         if (ID == Techy.COAL_GENERATOR_GUI_ID) {
             return new GuiGeneratorBase(new ContainerGeneratorBase(player.inventory, (TileMachineBase) world.getTileEntity(new BlockPos(x, y, z))), new BlockPos(x, y, z), world);
+        }
+        if (ID == Techy.POWER_CELL_GUI_ID) {
+            TilePowerCellBase tile = (TilePowerCellBase) world.getTileEntity(new BlockPos(x, y, z));
+            return new GuiGenericPowerCell(new ContainerGenericPowerCell(player.inventory, tile, tile.inventorySize), tile.getPos(), world, tile.inventorySize, tile.getGUITexture());
         }
         return null;
     }

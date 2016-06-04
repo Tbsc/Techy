@@ -61,4 +61,11 @@ tile.Techy:blockOreAluminium.name=Aluminium Ore
 tile.Techy:blockOreLithium.name=Lithium Ore
 
 ## Pipes ##
-tile.Techy:blockPipeEnergy.name=Energy Pipe
+tile.Techy:blockPipeEnergyBasic.name=Basic Energy Pipe
+tile.Techy:blockPipeEnergyImproved.name=Improved Energy Pipe
+tile.Techy:blockPipeEnergyAdvanced.name=Advanced Energy Pipe
+
+## Power Cells ##
+tile.Techy:blockPowerCellBasic.name=Basic Power Cell
+tile.Techy:blockPowerCellImproved.name=Improved Power Cell
+tile.Techy:blockPowerCellAdvanced.name=Advanced Power Cell

@@ -12,14 +12,14 @@ import tbsc.techy.tile.TileMachineBase;
  */
 public class ContainerGenericPowerCell extends ContainerBase {
 
-    protected ContainerGenericPowerCell(IInventory playerInv, TileMachineBase tileBase, int tileInvSize) {
+    public ContainerGenericPowerCell(IInventory playerInv, TileMachineBase tileBase, int tileInvSize) {
         super(playerInv, tileBase, tileInvSize);
     }
 
     @Override
     protected void addBlockSlots() {
-        addSlotToContainer(new SlotEnergy(playerInv, getNextAvailableSlot(), 133, 34)); // input
-        addSlotToContainer(new SlotEnergy(playerInv, getNextAvailableSlot(), 27, 34));
+        addSlotToContainer(new SlotEnergy(tileBase, getNextAvailableSlot(), 133, 34)); // input
+        addSlotToContainer(new SlotEnergy(tileBase, getNextAvailableSlot(), 27, 34));
     }
 
 }

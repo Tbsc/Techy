@@ -1,9 +1,19 @@
 package tbsc.techy.machine.powercell;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import tbsc.techy.Techy;
+import tbsc.techy.api.ITechyWrench;
 import tbsc.techy.block.BlockBaseFacingMachine;
+
+import javax.annotation.Nullable;
 
 /**
  * Generic block for adding power cells to the game.
@@ -16,9 +26,32 @@ public class BlockGenericPowerCell extends BlockBaseFacingMachine {
 
     protected TilePowerCellBase tile;
 
-    public BlockGenericPowerCell(String registryName, int capacity, int maxTransfer, TilePowerCellBase tile) {
+    public BlockGenericPowerCell(String registryName, TilePowerCellBase tile) {
         super(Material.IRON, registryName, 2);
         this.tile = tile;
+    }
+
+    /**
+     * Gets called when a player hits the block (right click).
+     * @param worldIn world
+     * @param pos position of the block
+     * @param state the block(state)
+     * @param playerIn the player that did the action
+     * @param side the side that got hit
+     * @param hitX the position (on the x axis) that got hit on the block
+     * @param hitY the position (on the y axis) that got hit on the block
+     * @param hitZ the position (on the z axis) that got hit on the block
+     * @return i have no idea, darn you obfuscation
+     */
+    @Override
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+        if (heldItem != null && heldItem.getItem() instanceof ITechyWrench) {
+            return false;
+        }
+        if (!worldIn.isRemote) {
+            playerIn.openGui(Techy.instance, Techy.POWER_CELL_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
+        }
+        return true;
     }
 
     @Override

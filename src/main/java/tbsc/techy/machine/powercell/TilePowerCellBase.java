@@ -5,9 +5,12 @@ import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
+import tbsc.techy.api.SideConfiguration;
+import tbsc.techy.api.Sides;
 import tbsc.techy.tile.TileMachineBase;
 
 import javax.annotation.Nonnull;
@@ -24,6 +27,13 @@ public abstract class TilePowerCellBase extends TileMachineBase implements IEner
     public TilePowerCellBase(int capacity, int maxTransfer, int invSize, String registryName) {
         super(capacity, maxTransfer, invSize, 0, 1);
         this.registryName = registryName;
+
+        setConfigurationForSide(Sides.UP, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.DOWN, SideConfiguration.OUTPUT);
+        setConfigurationForSide(Sides.FRONT, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.BACK, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.LEFT, SideConfiguration.INPUT);
+        setConfigurationForSide(Sides.RIGHT, SideConfiguration.INPUT);
     }
 
     @Override
@@ -39,6 +49,12 @@ public abstract class TilePowerCellBase extends TileMachineBase implements IEner
 
         if (markDirty) this.markDirty();
     }
+
+    /**
+     * Used by GUI handler to handle GUIs
+     * @return location of GUI texture
+     */
+    public abstract ResourceLocation getGUITexture();
 
     protected boolean extractEnergyFromContainer() {
         if (getInputEnergySlots().length >= 1) {

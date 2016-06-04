@@ -35,6 +35,7 @@ public class Techy {
     public static final int POWERED_FURNACE_GUI_ID = 0;
     public static final int CRUSHER_GUI_ID = 1;
     public static final int COAL_GENERATOR_GUI_ID = 2;
+    public static final int POWER_CELL_GUI_ID = 3;
 
     /**
      * Instance of this class

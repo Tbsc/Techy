@@ -21,7 +21,7 @@ import tbsc.techy.block.BlockBaseFacingMachine;
 public abstract class TileBase extends TileEntity implements ISidedInventory {
 
     public ItemStack[] inventory;
-    protected int inventorySize;
+    public int inventorySize;
 
     /**
      *

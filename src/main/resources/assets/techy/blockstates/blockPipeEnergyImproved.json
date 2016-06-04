@@ -3,10 +3,10 @@
   "defaults": {
     "model": "Techy:pipeTemplateCenter",
     "textures": {
-      "all": "Techy:blocks/pipeEnergyBasic",
-      "connection": "Techy:blocks/pipeEnergyBasic",
-      "side": "Techy:blocks/pipeEnergyBasic",
-      "updown": "Techy:blocks/pipeEnergyBasic"
+      "all": "Techy:blocks/pipeEnergyImproved",
+      "connection": "Techy:blocks/pipeEnergyImproved",
+      "side": "Techy:blocks/pipeEnergyImproved",
+      "updown": "Techy:blocks/pipeEnergyImproved"
     }
   },
   "variants": {
