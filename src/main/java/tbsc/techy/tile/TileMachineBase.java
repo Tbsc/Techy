@@ -653,29 +653,27 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
 
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
-        if (worldObj != null) { // ???
-            EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockBaseFacingMachine.FACING);
-            if (frontOfBlock == side) { // FRONT
-                return getSlotsForConfiguration(getConfigurationForSide(Sides.FRONT));
-            }
-            frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-            if (frontOfBlock == side) { // LEFT
-                return getSlotsForConfiguration(getConfigurationForSide(Sides.LEFT));
-            }
-            frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-            if (frontOfBlock == side) { // BACK
-                return getSlotsForConfiguration(getConfigurationForSide(Sides.BACK));
-            }
-            frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
-            if (frontOfBlock == side) { // RIGHT
-                return getSlotsForConfiguration(getConfigurationForSide(Sides.RIGHT));
-            }
-            if (side == EnumFacing.UP) { // UP
-                return getSlotsForConfiguration(getConfigurationForSide(Sides.UP));
-            }
-            if (side == EnumFacing.DOWN) { // DOWN
-                return getSlotsForConfiguration(getConfigurationForSide(Sides.DOWN));
-            }
+        EnumFacing frontOfBlock = worldObj.getBlockState(pos).getValue(BlockBaseFacingMachine.FACING);
+        if (frontOfBlock == side) { // FRONT
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.FRONT));
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // LEFT
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.LEFT));
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // BACK
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.BACK));
+        }
+        frontOfBlock = frontOfBlock.rotateAround(EnumFacing.Axis.Y);
+        if (frontOfBlock == side) { // RIGHT
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.RIGHT));
+        }
+        if (side == EnumFacing.UP) { // UP
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.UP));
+        }
+        if (side == EnumFacing.DOWN) { // DOWN
+            return getSlotsForConfiguration(getConfigurationForSide(Sides.DOWN));
         }
         return new int[0];
     }
