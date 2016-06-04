@@ -42,6 +42,7 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
 
     protected BlockBaseFacingMachine(Material material, String registryName, int tileInvSize) {
         super(material, registryName, tileInvSize);
+        setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
 
     /**
