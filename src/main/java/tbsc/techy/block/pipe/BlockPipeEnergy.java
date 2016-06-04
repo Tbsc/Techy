@@ -19,8 +19,8 @@ public class BlockPipeEnergy extends BlockPipeBase {
     protected int capacity;
     protected int maxTransfer;
 
-    public BlockPipeEnergy(int capacity, int maxTransfer) {
-        super("blockPipeEnergyBasic", 0, BlockPipeEnergy.class);
+    public BlockPipeEnergy(String registryName, int capacity, int maxTransfer) {
+        super(registryName, 0, BlockPipeEnergy.class);
         this.capacity = capacity;
         this.maxTransfer = maxTransfer;
     }
