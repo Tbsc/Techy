@@ -1,6 +1,13 @@
-### Creative Tabs ###
+### Misc ###
+
+## Creative Tabs ##
 itemGroup.techy.items=Techy: Items
 itemGroup.techy.blocks=Techy: Blocks
+
+## JEI ##
+techy.jei.furnace=Powered Furnace
+techy.jei.crusher=Crusher
+
 
 ### Items ###
 item.Techy:itemWrench.name=Wrench
@@ -42,6 +49,7 @@ item.Techy:itemBoosterEnergy.name=Energy Booster
 item.Techy:itemBoosterTime.name=Time Booster
 # Bonus
 item.Techy:itemBoosterBonus.name=Bonus Booster
+
 
 ### Blocks ###
 
