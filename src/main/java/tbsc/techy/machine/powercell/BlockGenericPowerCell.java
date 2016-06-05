@@ -1,6 +1,7 @@
 package tbsc.techy.machine.powercell;
 
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -30,6 +31,7 @@ public class BlockGenericPowerCell extends BlockBaseFacingMachine {
     public BlockGenericPowerCell(String registryName, TilePowerCellBase tile) {
         super(Material.IRON, registryName, 2);
         this.tile = tile;
+        setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
     }
 
     @Override
@@ -59,6 +61,22 @@ public class BlockGenericPowerCell extends BlockBaseFacingMachine {
             playerIn.openGui(Techy.instance, Techy.POWER_CELL_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState()
+                .withProperty(FACING, EnumFacing.getFront((meta & 3) + 2));
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(FACING).getIndex();
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, FACING);
     }
 
     @Override

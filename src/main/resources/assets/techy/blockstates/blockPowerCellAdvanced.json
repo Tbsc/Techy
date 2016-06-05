@@ -1,12 +1,21 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "Techy:blockPowerCellGeneric"
+    "model": "Techy:blockPowerCellGeneric",
+    "textures": {
+      "front": "Techy:blocks/blockPowerCellAdvanced"
+    }
   },
   "variants": {
     "normal": [{}],
     "inventory": [{
       "transform": "forge:default-block"
-    }]
+    }],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90}
+    }
   }
 }
