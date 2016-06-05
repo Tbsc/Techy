@@ -1,5 +1,6 @@
 package tbsc.techy.init;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.ChunkPos;
@@ -128,6 +129,21 @@ public class MiscInit {
                 'D', "dustDiamond", 'G', "gemDiamond", 'L', "dustLithium", 'R', ItemInit.itemBatteryMedium));
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.BRONZE.id),
                 "dustCopper", "dustTin"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockPipeEnergyBasic,
+                "GGG",
+                "CRC",
+                "GGG",
+                'G', Blocks.GLASS, 'C', "dustCopper", 'R', "dustRedstone"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockPipeEnergyImproved,
+                "GGG",
+                "CRC",
+                "GGG",
+                'G', Blocks.GLASS, 'C', "dustSilver", 'R', "dustRedstone"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockPipeEnergyAdvanced,
+                "GGG",
+                "CRC",
+                "GGG",
+                'G', Blocks.GLASS, 'C', "dustLithium", 'R', "dustRedstone"));
 
         // FURNACE RECIPES //
 
