@@ -79,6 +79,12 @@ public class MiscInit {
                 "IGI",
                 'F', BlockInit.blockMachineBaseBasic, 'B', ItemInit.itemBatterySmall, 'G', ItemInit.itemGrindingComponent, 'A', "ingotGold", 'I', "ingotTin"));
 
+        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockCoalGenerator,
+                "IAI",
+                "BFB",
+                "IGI",
+                'I', "ingotIron", 'A', "ingotAluminum", 'F', BlockInit.blockMachineBaseBasic, 'B', ItemInit.itemBatterySmall, 'G', ItemInit.itemIgnitionComponent));
+
         // MACHINE BASES //
 
         GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockMachineBaseBasic,
@@ -108,7 +114,7 @@ public class MiscInit {
                 "III",
                 "SFS",
                 "RRR",
-                'F', Items.STONE_PICKAXE, 'I', "ingotGold", 'S', "ingotSilver", 'R', "dustRedstone"));
+                'F', Items.IRON_PICKAXE, 'I', "ingotGold", 'S', "ingotSilver", 'R', "dustRedstone"));
 
         // ITEMS //
 
@@ -122,7 +128,7 @@ public class MiscInit {
                 "GRG",
                 "GSG",
                 'D', "dustGold", 'S', "dustSilver", 'G', "ingotGold", 'R', ItemInit.itemBatterySmall));
-        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemBatteryMedium,
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemBatteryLarge,
                 " D ",
                 "GRG",
                 "GLG",
@@ -144,6 +150,11 @@ public class MiscInit {
                 "CRC",
                 "GGG",
                 'G', Blocks.GLASS, 'C', "dustLithium", 'R', "dustRedstone"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemWrench,
+                "T  ",
+                " I ",
+                "  I",
+                'T', "ingotTin", 'I', "ingotIron"));
 
         // FURNACE RECIPES //
 

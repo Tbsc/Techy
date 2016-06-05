@@ -23,6 +23,7 @@ public class ItemInit {
     public static ItemIngots itemIngots;
     public static ItemGenericCraftingComponent itemHeatingComponent;
     public static ItemGenericCraftingComponent itemGrindingComponent;
+    public static ItemGenericCraftingComponent itemIgnitionComponent;
 
     public static void init() {
         itemWrench = new ItemWrench();
@@ -35,6 +36,7 @@ public class ItemInit {
         itemDusts = new ItemDusts();
         itemHeatingComponent = new ItemGenericCraftingComponent("itemHeatingComponent");
         itemGrindingComponent = new ItemGenericCraftingComponent("itemGrindingComponent");
+        itemIgnitionComponent = new ItemGenericCraftingComponent("itemIgnitionComponent");
         itemIngots = new ItemIngots();
 
         GameRegistry.register(itemWrench);
@@ -47,6 +49,7 @@ public class ItemInit {
         GameRegistry.register(itemDusts);
         GameRegistry.register(itemHeatingComponent);
         GameRegistry.register(itemGrindingComponent);
+        GameRegistry.register(itemIgnitionComponent);
         GameRegistry.register(itemIngots);
     }
 
@@ -66,6 +69,7 @@ public class ItemInit {
         itemDusts.initModel();
         itemHeatingComponent.initModel();
         itemGrindingComponent.initModel();
+        itemIgnitionComponent.initModel();
         itemIngots.initModel();
     }
 
