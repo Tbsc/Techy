@@ -14,6 +14,7 @@ import tbsc.techy.api.ITechyWrench;
 import tbsc.techy.block.BlockBaseFacingMachine;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 /**
  * Generic block for adding power cells to the game.
@@ -29,6 +30,12 @@ public class BlockGenericPowerCell extends BlockBaseFacingMachine {
     public BlockGenericPowerCell(String registryName, TilePowerCellBase tile) {
         super(Material.IRON, registryName, 2);
         this.tile = tile;
+    }
+
+    @Override
+    public void addInformation(ItemStack stack, EntityPlayer player, List<String> tooltip, boolean advanced) {
+        tooltip.add("Capacity: " + tile.getCapacity() + " RF");
+        tooltip.add("Max transfer: " + tile.energyStorage.getMaxExtract() + " RF/t");
     }
 
     /**
