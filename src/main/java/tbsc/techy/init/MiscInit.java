@@ -115,6 +115,11 @@ public class MiscInit {
                 "SFS",
                 "RRR",
                 'F', Items.IRON_PICKAXE, 'I', "ingotGold", 'S', "ingotSilver", 'R', "dustRedstone"));
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemIgnitionComponent,
+                "III",
+                "SFS",
+                "RRR",
+                'F', Items.COAL, 'I', "ingotGold", 'S', "ingotSilver", 'R', "dustRedstone"));
 
         // ITEMS //
 
