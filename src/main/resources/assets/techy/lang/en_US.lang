@@ -41,6 +41,7 @@ item.Techy:itemIngotBronze.name=Bronze Ingot
 ## Crafting Components ##
 item.Techy:itemHeatingComponent.name=Heating Component
 item.Techy:itemGrindingComponent.name=Grinding Component
+item.Techy:itemIgnitionComponent.name=Ignition Component
 
 ## Boosters ##
 # Energy
