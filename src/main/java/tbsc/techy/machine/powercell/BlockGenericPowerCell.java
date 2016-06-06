@@ -40,6 +40,11 @@ public class BlockGenericPowerCell extends BlockBaseFacingMachine {
         tooltip.add("Max transfer: " + tile.energyStorage.getMaxExtract() + " RF/t");
     }
 
+    @Override
+    public boolean isOpaqueCube(IBlockState state) {
+        return false;
+    }
+
     /**
      * Gets called when a player hits the block (right click).
      * @param worldIn world
