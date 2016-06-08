@@ -83,7 +83,7 @@ public class MiscInit {
                 "IAI",
                 "BFB",
                 "IGI",
-                'I', "ingotIron", 'A', "ingotAluminum", 'F', BlockInit.blockMachineBaseBasic, 'B', ItemInit.itemBatterySmall, 'G', ItemInit.itemIgnitionComponent));
+                'F', BlockInit.blockMachineBaseBasic, 'B', ItemInit.itemBatterySmall, 'G', ItemInit.itemIgnitionComponent, 'A', "ingotAluminium", 'I', "ingotIron"));
 
         // MACHINE BASES //
 
