@@ -1,4 +1,4 @@
-package tbsc.techy.api;
+package tbsc.techy.api.util;
 
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
