@@ -15,10 +15,8 @@ import tbsc.techy.machine.furnace.BlockPoweredFurnace;
 import tbsc.techy.machine.furnace.TilePoweredFurnace;
 import tbsc.techy.machine.generator.coal.BlockCoalGenerator;
 import tbsc.techy.machine.generator.coal.TileCoalGenerator;
-import tbsc.techy.machine.powercell.BlockGenericPowerCell;
-import tbsc.techy.machine.powercell.TilePowerCellAdvanced;
-import tbsc.techy.machine.powercell.TilePowerCellBasic;
-import tbsc.techy.machine.powercell.TilePowerCellImproved;
+import tbsc.techy.machine.powercell.*;
+import tbsc.techy.machine.powercell.creative.TilePowerCellCreative;
 import tbsc.techy.tile.pipe.TilePipeEnergy;
 
 /**
@@ -46,6 +44,7 @@ public class BlockInit {
     public static BlockGenericPowerCell blockBasicPowerCell;
     public static BlockGenericPowerCell blockImprovedPowerCell;
     public static BlockGenericPowerCell blockAdvancedPowerCell;
+    public static BlockGenericPowerCell blockCreativePowerCell;
 
     /**
      * Gets called on preInit stage and loads all of the blocks and TileEntities.
@@ -74,6 +73,8 @@ public class BlockInit {
         blockAdvancedPowerCell = new BlockGenericPowerCell("blockPowerCellAdvanced",
                 new TilePowerCellAdvanced(ConfigData.advancedPowerCellCapacity, ConfigData.advancedPowerCellTransferRate,
                         2, "blockPowerCellAdvanced"));
+        blockCreativePowerCell = new BlockGenericPowerCell("blockPowerCellCreative",
+                new TilePowerCellCreative(1, "blockPowerCellCreative"));
 
         GameRegistry.register(blockPoweredFurnace);
         GameRegistry.register(new ItemBlock(blockPoweredFurnace), blockPoweredFurnace.getRegistryName());
@@ -109,6 +110,8 @@ public class BlockInit {
         GameRegistry.register(new ItemBlock(blockImprovedPowerCell), blockImprovedPowerCell.getRegistryName());
         GameRegistry.register(blockAdvancedPowerCell);
         GameRegistry.register(new ItemBlock(blockAdvancedPowerCell), blockAdvancedPowerCell.getRegistryName());
+        GameRegistry.register(blockCreativePowerCell);
+        GameRegistry.register(new ItemBlock(blockCreativePowerCell), blockCreativePowerCell.getRegistryName());
 
         GameRegistry.registerTileEntity(TilePoweredFurnace.class, "tilePoweredFurnace");
         GameRegistry.registerTileEntity(TileCrusher.class, "tileCrusher");
@@ -117,6 +120,7 @@ public class BlockInit {
         GameRegistry.registerTileEntity(TilePowerCellBasic.class, "tilePowerCellBasic");
         GameRegistry.registerTileEntity(TilePowerCellImproved.class, "tilePowerCellImproved");
         GameRegistry.registerTileEntity(TilePowerCellAdvanced.class, "tilePowerCellAdvanced");
+        GameRegistry.registerTileEntity(TilePowerCellCreative.class, "tilePowerCellCreative");
     }
 
     /**
@@ -142,6 +146,7 @@ public class BlockInit {
         blockBasicPowerCell.initModel();
         blockImprovedPowerCell.initModel();
         blockAdvancedPowerCell.initModel();
+        blockCreativePowerCell.initModel();
     }
 
 }
