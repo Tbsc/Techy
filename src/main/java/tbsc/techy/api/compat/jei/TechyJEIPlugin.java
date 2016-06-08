@@ -1,7 +1,6 @@
 package tbsc.techy.api.compat.jei;
 
 import cofh.lib.util.helpers.ItemHelper;
-import com.google.common.collect.Lists;
 import mezz.jei.api.*;
 import mezz.jei.api.gui.IDrawableAnimated;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -11,14 +10,12 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import org.apache.commons.lang3.tuple.ImmutableTriple;
 import tbsc.techy.ConfigData;
 import tbsc.techy.api.compat.jei.category.TechyGenericRecipeCategory;
 import tbsc.techy.api.compat.jei.handler.TechyCrusherRecipeHandler;
 import tbsc.techy.api.compat.jei.handler.TechyFurnaceRecipeHandler;
 import tbsc.techy.api.compat.jei.wrapper.TechyRecipeWrapper;
 import tbsc.techy.init.BlockInit;
-import tbsc.techy.recipe.CrusherRecipes;
 import tbsc.techy.recipe.IRecipeInput;
 import tbsc.techy.recipe.PoweredFurnaceRecipes;
 
@@ -85,9 +82,9 @@ public class TechyJEIPlugin extends BlankModPlugin {
                     @Override
                     public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
                         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-                        guiItemStacks.init(0, true, 42, 36);
-                        guiItemStacks.init(1, false, 101, 36);
-                        guiItemStacks.init(2, false, 121, 36);
+                        guiItemStacks.init(0, true, 33, 27);
+                        guiItemStacks.init(1, false, 94, 27);
+                        guiItemStacks.init(2, false, 114, 27);
                         guiItemStacks.setFromRecipe(0, recipeWrapper.getInputs());
                         guiItemStacks.setFromRecipe(1, recipeWrapper.getOutputs().get(0));
                         guiItemStacks.setFromRecipe(2, recipeWrapper.getOutputs().get(1));
@@ -135,6 +132,7 @@ public class TechyJEIPlugin extends BlankModPlugin {
             recipes.add(new TechyFurnaceRecipeHandler.FurnaceRecipeWrapper(energyUsage, cookTime, Collections.singletonList(inputStack), Collections.singletonList(output)));
         }
 
+        /*
         for (Map.Entry<IRecipeInput, ImmutableTriple<ItemStack, ItemStack, Integer>> entry : CrusherRecipes.instance().getRecipeMap().entrySet()) {
             IRecipeInput input = entry.getKey();
             ItemStack inputStack;
@@ -148,16 +146,10 @@ public class TechyJEIPlugin extends BlankModPlugin {
             ItemStack secondOutput = output.getMiddle();
             int secondChance = output.getRight();
             int energyUsage = CrusherRecipes.instance().getSmeltingEnergy(firstOutput);
-            int cookTime = ConfigData.furnaceDefaultCookTime;
-            recipes.add(new TechyCrusherRecipeHandler.CrusherRecipeWrapper(energyUsage, cookTime, Collections.singletonList(inputStack), Lists.newArrayList(firstOutput, secondOutput)) {
+            int cookTime = ConfigData.crusherDefaultProcessTime;
+            recipes.add(new TechyCrusherRecipeHandler.CrusherRecipeWrapper(energyUsage, cookTime, Collections.singletonList(inputStack), Lists.newArrayList(firstOutput, secondOutput)));
+        }*/
 
-                @Override
-                public void drawInfo(@Nonnull Minecraft minecraft, int width, int height, int mouseX, int mouseY) {
-                    super.drawInfo(minecraft, width, height, mouseX, mouseY);
-                }
-
-            });
-        }
 
         registry.addRecipes(recipes);
     }
