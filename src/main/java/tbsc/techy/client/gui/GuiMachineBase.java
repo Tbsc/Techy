@@ -25,6 +25,7 @@ public abstract class GuiMachineBase extends GuiBase {
     protected ResourceLocation guiTexture;
     protected BlockPos machine;
     protected World world;
+    public TabSides tabSides;
 
     protected GuiMachineBase(ContainerBase containerBase, BlockPos pos, World world, int tileInvSize, ResourceLocation guiTexture) {
         super(containerBase, guiTexture);
@@ -37,7 +38,7 @@ public abstract class GuiMachineBase extends GuiBase {
     @Override
     public void initGui() {
         super.initGui();
-        addTab(new TabSides(this, xSize + 1, 0, 22 + 28, 22 + 28, (TileBase) world.getTileEntity(machine)));
+        addTab(this.tabSides = new TabSides(this, xSize + 1, 0, 22 + 28, 22 + 28, (TileBase) world.getTileEntity(machine)));
     }
 
     protected int energyBarStartX = xSize - 24;

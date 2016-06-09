@@ -114,11 +114,14 @@ public class TechyJEIPlugin extends BlankModPlugin {
                 new TechyCrusherRecipeHandler()
         );
 
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockInit.blockPoweredFurnace), FURNACE_UID);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockInit.blockCrusher), CRUSHER_UID);
-
         registry.addRecipeClickArea(GuiPoweredFurnace.class, 80, 37, 22, 16, FURNACE_UID);
         registry.addRecipeClickArea(GuiCrusher.class, 72, 37, 22, 16, CRUSHER_UID);
+
+        registry.addAdvancedGuiHandlers(new TechyAdvancedGuiHandler<>(GuiPoweredFurnace.class));
+        registry.addAdvancedGuiHandlers(new TechyAdvancedGuiHandler<>(GuiCrusher.class));
+
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockInit.blockPoweredFurnace), FURNACE_UID);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockInit.blockCrusher), CRUSHER_UID);
 
         registry.addDescription(Lists.newArrayList(new ItemStack(BlockInit.blockPoweredFurnace), new ItemStack(BlockInit.blockCrusher), new ItemStack(BlockInit.blockCoalGenerator)),
                 "Techy Machines",
@@ -132,6 +135,38 @@ public class TechyJEIPlugin extends BlankModPlugin {
                 "Boosters are items that modify the behaviour of some machines, and can be inserted to machines by putting " +
                         "them in one of the 4 slots on the left, outside of the machine GUI. " +
                         "faster in generators, while energy boosters would be bad in generator, because less power would be generated.");
+
+        registry.addDescription(new ItemStack(BlockInit.blockOreCopper),
+                "Copper Ore Generation",
+                "",
+                "Max ores per vein: " + ConfigData.copperPerVein,
+                "Max ores per chunk: " + ConfigData.copperPerChunk,
+                "Maximum height for copper generation: "+ ConfigData.copperMaxHeight);
+        registry.addDescription(new ItemStack(BlockInit.blockOreTin),
+                "Tin Ore Generation",
+                "",
+                "Max ores per vein: " + ConfigData.tinPerVein,
+                "Max ores per chunk: " + ConfigData.tinPerChunk,
+                "Maximum height for tin generation: "+ ConfigData.tinMaxHeight);
+        registry.addDescription(new ItemStack(BlockInit.blockOreSilver),
+                "Silver Ore Generation",
+                "",
+                "Max ores per vein: " + ConfigData.silverPerVein,
+                "Max ores per chunk: " + ConfigData.silverPerChunk,
+                "Maximum height for copper generation: "+ ConfigData.silverMaxHeight);
+        registry.addDescription(new ItemStack(BlockInit.blockOreAluminium),
+                "Aluminium Ore Generation",
+                "",
+                "Max ores per vein: " + ConfigData.aluminiumPerVein,
+                "Max ores per chunk: " + ConfigData.aluminiumPerChunk,
+                "Maximum height for copper generation: "+ ConfigData.aluminiumMaxHeight);
+        registry.addDescription(new ItemStack(BlockInit.blockOreLithium),
+                "Lithium Ore Generation",
+                "",
+                "Max ores per vein: " + ConfigData.lithiumPerVein,
+                "Max ores per chunk: " + ConfigData.lithiumPerChunk,
+                "Maximum height for copper generation: "+ ConfigData.lithiumMaxHeight);
+
 
         List<TechyRecipeWrapper> recipes = new ArrayList<>();
 
