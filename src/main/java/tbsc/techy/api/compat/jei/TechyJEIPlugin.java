@@ -1,6 +1,7 @@
 package tbsc.techy.api.compat.jei;
 
 import cofh.lib.util.helpers.ItemHelper;
+import com.google.common.collect.Lists;
 import mezz.jei.api.*;
 import mezz.jei.api.gui.IDrawableAnimated;
 import mezz.jei.api.gui.IDrawableStatic;
@@ -16,6 +17,8 @@ import tbsc.techy.api.compat.jei.handler.TechyCrusherRecipeHandler;
 import tbsc.techy.api.compat.jei.handler.TechyFurnaceRecipeHandler;
 import tbsc.techy.api.compat.jei.wrapper.TechyRecipeWrapper;
 import tbsc.techy.init.BlockInit;
+import tbsc.techy.machine.crusher.GuiCrusher;
+import tbsc.techy.machine.furnace.GuiPoweredFurnace;
 import tbsc.techy.recipe.IRecipeInput;
 import tbsc.techy.recipe.PoweredFurnaceRecipes;
 
@@ -46,8 +49,8 @@ public class TechyJEIPlugin extends BlankModPlugin {
         registry.addRecipeCategories(
                 new TechyGenericRecipeCategory(guiHelper, FURNACE_UID, new ResourceLocation("Techy:textures/gui/container/guiPoweredFurnace.png")) {
 
+                    IDrawableStatic progressBackground;
                     IDrawableAnimated progressBar;
-                    IDrawableAnimated energyBar;
 
                     @Override
                     public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
@@ -64,20 +67,19 @@ public class TechyJEIPlugin extends BlankModPlugin {
                             IDrawableStatic staticProgressBar = guiHelper.createDrawable(new ResourceLocation("Techy:textures/gui/element/furnaceProgressBar.png"), 22, 16, 22, 16);
                             progressBar = guiHelper.createAnimatedDrawable(staticProgressBar, 300, IDrawableAnimated.StartDirection.LEFT, false);
                         }
-                        if (energyBar == null) {
-                            IDrawableStatic staticProgressBar = guiHelper.createDrawable(new ResourceLocation("cofh:textures/gui/elements/Energy.png"), 18, 0, 16, 42);
-                            progressBar = guiHelper.createAnimatedDrawable(staticProgressBar, 300, IDrawableAnimated.StartDirection.BOTTOM, false);
+                        if (progressBackground == null) {
+                            progressBackground = guiHelper.createDrawable(new ResourceLocation("Techy:textures/gui/element/furnaceProgressBar.png"), 0, 0, 22, 16);
                         }
 
+                        progressBackground.draw(minecraft, 50, 27);
                         progressBar.draw(minecraft, 50, 27);
-                        // energyBar.draw(minecraft, getBackground().getWidth() - 24, 22);
                     }
 
                 },
                 new TechyGenericRecipeCategory(guiHelper, CRUSHER_UID, new ResourceLocation("Techy:textures/gui/container/guiCrusher.png")) {
 
+                    IDrawableStatic progressBackground;
                     IDrawableAnimated progressBar;
-                    IDrawableAnimated energyBar;
 
                     @Override
                     public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
@@ -96,13 +98,12 @@ public class TechyJEIPlugin extends BlankModPlugin {
                             IDrawableStatic staticProgressBar = guiHelper.createDrawable(new ResourceLocation("Techy:textures/gui/element/furnaceProgressBar.png"), 22, 16, 22, 16);
                             progressBar = guiHelper.createAnimatedDrawable(staticProgressBar, 300, IDrawableAnimated.StartDirection.LEFT, false);
                         }
-                        if (energyBar == null) {
-                            IDrawableStatic staticProgressBar = guiHelper.createDrawable(new ResourceLocation("cofh:textures/gui/elements/Energy.png"), 18, 0, 16, 42);
-                            progressBar = guiHelper.createAnimatedDrawable(staticProgressBar, 300, IDrawableAnimated.StartDirection.BOTTOM, false);
+                        if (progressBackground == null) {
+                            progressBackground = guiHelper.createDrawable(new ResourceLocation("Techy:textures/gui/element/furnaceProgressBar.png"), 0, 0, 22, 16);
                         }
 
+                        progressBackground.draw(minecraft, 42, 27);
                         progressBar.draw(minecraft, 42, 27);
-                        // energyBar.draw(minecraft, getBackground().getWidth() - 24, 22);
                     }
 
                 }
@@ -115,6 +116,22 @@ public class TechyJEIPlugin extends BlankModPlugin {
 
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockInit.blockPoweredFurnace), FURNACE_UID);
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockInit.blockCrusher), CRUSHER_UID);
+
+        registry.addRecipeClickArea(GuiPoweredFurnace.class, 80, 37, 22, 16, FURNACE_UID);
+        registry.addRecipeClickArea(GuiCrusher.class, 72, 37, 22, 16, CRUSHER_UID);
+
+        registry.addDescription(Lists.newArrayList(new ItemStack(BlockInit.blockPoweredFurnace), new ItemStack(BlockInit.blockCrusher), new ItemStack(BlockInit.blockCoalGenerator)),
+                "Techy Machines",
+                "",
+                "Reconfigurable sides can be configured using the tab on the right side. " +
+                        "Blue means input, orange is output, gray is input AND output, and red is blocked (no transfer). " +
+                "If a side is configured to either input or output, then the machine will actively try to push/pull items " +
+                        "from those sides.",
+                "",
+                "Boosters",
+                "Boosters are items that modify the behaviour of some machines, and can be inserted to machines by putting " +
+                        "them in one of the 4 slots on the left, outside of the machine GUI. " +
+                        "faster in generators, while energy boosters would be bad in generator, because less power would be generated.");
 
         List<TechyRecipeWrapper> recipes = new ArrayList<>();
 
