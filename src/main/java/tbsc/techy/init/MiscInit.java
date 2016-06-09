@@ -47,23 +47,24 @@ public class MiscInit {
     public static void preInit() {
         MinecraftForge.EVENT_BUS.register(new GeneralEventHandler());
         NetworkRegistry.INSTANCE.registerGuiHandler(Techy.instance, new TechyGuiHandler());
+    }
 
-        // Adding dusts to ore dictionary
-        for (ItemDusts.DustType dustType : ItemDusts.DustType.values()) {
-            OreDictionary.registerOre("dust" + dustType.regName, new ItemStack(ItemInit.itemDusts, 1, dustType.id));
-        }
-        // Adding ingots to ore dictionary
-        for (ItemIngots.IngotType ingotType : ItemIngots.IngotType.values()) {
-            OreDictionary.registerOre("ingot" + ingotType.regName, new ItemStack(ItemInit.itemIngots, 1, ingotType.id));
-        }
-        // Adding ores to ore dictionary
-        for (BlockOreBase.OreType oreType : BlockOreBase.OreType.values()) {
-            OreDictionary.registerOre("ore" + oreType.regName, new ItemStack(oreType.ore));
-        }
-        // Since I need to be compatible with the ore dictionary, I am also registering it as aluminium
-        OreDictionary.registerOre("oreAluminium", new ItemStack(BlockOreBase.OreType.ALUMINUM.ore));
-        OreDictionary.registerOre("ingotAluminium", new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.ALUMINIUM.id));
-        OreDictionary.registerOre("dustAluminium", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.ALUMINIUM.id));
+    public static OreWorldGenerator copperGenerator, tinGenerator, silverGenerator, aluminiumGenerator, lithiumGenerator;
+
+    /**
+     * Init stage
+     */
+    public static void init() {
+        GameRegistry.registerWorldGenerator(copperGenerator = new OreWorldGenerator(BlockInit.blockOreCopper.getDefaultState(),
+                ConfigData.copperPerVein, ConfigData.copperMaxHeight, ConfigData.copperPerChunk), 0);
+        GameRegistry.registerWorldGenerator(tinGenerator = new OreWorldGenerator(BlockInit.blockOreTin.getDefaultState(),
+                ConfigData.tinPerVein, ConfigData.tinMaxHeight, ConfigData.tinPerChunk), 0);
+        GameRegistry.registerWorldGenerator(silverGenerator = new OreWorldGenerator(BlockInit.blockOreSilver.getDefaultState(),
+                ConfigData.silverPerVein, ConfigData.silverMaxHeight, ConfigData.silverPerChunk), 0);
+        GameRegistry.registerWorldGenerator(aluminiumGenerator = new OreWorldGenerator(BlockInit.blockOreAluminium.getDefaultState(),
+                ConfigData.aluminiumPerVein, ConfigData.aluminiumMaxHeight, ConfigData.aluminiumPerChunk), 0);
+        GameRegistry.registerWorldGenerator(lithiumGenerator = new OreWorldGenerator(BlockInit.blockOreLithium.getDefaultState(),
+                ConfigData.lithiumPerVein, ConfigData.lithiumMaxHeight, ConfigData.lithiumPerChunk), 0);
 
         // MACHINES //
 
@@ -161,6 +162,23 @@ public class MiscInit {
                 "  I",
                 'T', "ingotTin", 'I', "ingotIron"));
 
+        // Adding dusts to ore dictionary
+        for (ItemDusts.DustType dustType : ItemDusts.DustType.values()) {
+            OreDictionary.registerOre("dust" + dustType.regName, new ItemStack(ItemInit.itemDusts, 1, dustType.id));
+        }
+        // Adding ingots to ore dictionary
+        for (ItemIngots.IngotType ingotType : ItemIngots.IngotType.values()) {
+            OreDictionary.registerOre("ingot" + ingotType.regName, new ItemStack(ItemInit.itemIngots, 1, ingotType.id));
+        }
+        // Adding ores to ore dictionary
+        for (BlockOreBase.OreType oreType : BlockOreBase.OreType.values()) {
+            OreDictionary.registerOre("ore" + oreType.regName, new ItemStack(oreType.ore));
+        }
+        // Since I need to be compatible with the ore dictionary, I am also registering it as aluminium
+        OreDictionary.registerOre("oreAluminum", new ItemStack(BlockOreBase.OreType.ALUMINIUM.ore));
+        OreDictionary.registerOre("ingotAluminum", new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.ALUMINIUM.id));
+        OreDictionary.registerOre("dustAluminum", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.ALUMINIUM.id));
+
         // FURNACE RECIPES //
 
         for (BlockOreBase.OreType ore : BlockOreBase.OreType.values()) {
@@ -175,24 +193,6 @@ public class MiscInit {
                 }
             }
         }
-    }
-
-    public static OreWorldGenerator copperGenerator, tinGenerator, silverGenerator, aluminiumGenerator, lithiumGenerator;
-
-    /**
-     * Init stage
-     */
-    public static void init() {
-        GameRegistry.registerWorldGenerator(copperGenerator = new OreWorldGenerator(BlockInit.blockOreCopper.getDefaultState(),
-                ConfigData.copperPerVein, ConfigData.copperMaxHeight, ConfigData.copperPerChunk), 0);
-        GameRegistry.registerWorldGenerator(tinGenerator = new OreWorldGenerator(BlockInit.blockOreTin.getDefaultState(),
-                ConfigData.tinPerVein, ConfigData.tinMaxHeight, ConfigData.tinPerChunk), 0);
-        GameRegistry.registerWorldGenerator(silverGenerator = new OreWorldGenerator(BlockInit.blockOreSilver.getDefaultState(),
-                ConfigData.silverPerVein, ConfigData.silverMaxHeight, ConfigData.silverPerChunk), 0);
-        GameRegistry.registerWorldGenerator(aluminiumGenerator = new OreWorldGenerator(BlockInit.blockOreAluminium.getDefaultState(),
-                ConfigData.aluminiumPerVein, ConfigData.aluminiumMaxHeight, ConfigData.aluminiumPerChunk), 0);
-        GameRegistry.registerWorldGenerator(lithiumGenerator = new OreWorldGenerator(BlockInit.blockOreLithium.getDefaultState(),
-                ConfigData.lithiumPerVein, ConfigData.lithiumMaxHeight, ConfigData.lithiumPerChunk), 0);
     }
 
     /**

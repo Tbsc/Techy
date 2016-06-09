@@ -61,7 +61,7 @@ public class CrusherRecipes {
         addOreDictionaryRecipe("blockCharcoal", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.COAL.id), null, 0, 2, 20000);
 
         addOreDictionaryRecipe("ingotCopper", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.COPPER.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreCopper", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.COPPER.id), null, 0, 4, 5000);
+        addOreDictionaryRecipe("oreCopper", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.COPPER.id), new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.GOLD.id), 30, 4, 5000);
         addOreDictionaryRecipe("blockCopper", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.COPPER.id), null, 0, 2, 20000);
 
         addOreDictionaryRecipe("ingotTin", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.IRON.id), null, 0, 2, 3000);
@@ -75,6 +75,9 @@ public class CrusherRecipes {
         addOreDictionaryRecipe("ingotAluminum", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.ALUMINIUM.id), null, 0, 2, 3000);
         addOreDictionaryRecipe("oreAluminum", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.ALUMINIUM.id), null, 0, 4, 5000);
         addOreDictionaryRecipe("blockAluminum", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.ALUMINIUM.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotAluminium", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.ALUMINIUM.id), null, 0, 2, 3000);
+        addOreDictionaryRecipe("oreAluminium", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.ALUMINIUM.id), null, 0, 4, 5000);
+        addOreDictionaryRecipe("blockAluminium", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.ALUMINIUM.id), null, 0, 2, 20000);
 
         addOreDictionaryRecipe("ingotLithium", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.LITHIUM.id), null, 0, 2, 3000);
         addOreDictionaryRecipe("oreLithium", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.LITHIUM.id), null, 0, 4, 5000);
@@ -106,7 +109,9 @@ public class CrusherRecipes {
      * Adds a recipe with an ore dictionary ore name as the input, and 2 outputs with a chance
      */
     public void addOreDictionaryRecipe(@Nonnull String oreName, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
-        this.addIRecipeInputRecipe(OreRecipeInput.of(oreName), output, output2, output2Chance, experience, energyUsage);
+        if (ItemHelper.oreProxy.getOre(oreName) != null) {
+            this.addIRecipeInputRecipe(OreRecipeInput.of(oreName), output, output2, output2Chance, experience, energyUsage);
+        }
     }
 
     /**

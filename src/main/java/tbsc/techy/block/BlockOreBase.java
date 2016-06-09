@@ -21,7 +21,7 @@ public class BlockOreBase extends BlockBase {
         COPPER("blockOreCopper", "Copper", BlockInit.blockOreCopper, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.COPPER.id)),
         TIN("blockOreTin", "Tin", BlockInit.blockOreTin, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.TIN.id)),
         SILVER("blockOreSilver", "Silver", BlockInit.blockOreSilver, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.SILVER.id)),
-        ALUMINUM("blockOreAluminium", "Aluminum", BlockInit.blockOreAluminium, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.ALUMINIUM.id)),
+        ALUMINIUM("blockOreAluminium", "Aluminium", BlockInit.blockOreAluminium, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.ALUMINIUM.id)),
         LITHIUM("blockOreLithium", "Lithium", BlockInit.blockOreLithium, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.LITHIUM.id));
 
         public BlockOreBase ore;
