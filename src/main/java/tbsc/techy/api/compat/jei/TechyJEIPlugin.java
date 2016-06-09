@@ -11,6 +11,7 @@ import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.apache.commons.lang3.tuple.ImmutableTriple;
 import tbsc.techy.ConfigData;
 import tbsc.techy.api.compat.jei.category.TechyGenericRecipeCategory;
 import tbsc.techy.api.compat.jei.handler.TechyCrusherRecipeHandler;
@@ -19,6 +20,7 @@ import tbsc.techy.api.compat.jei.wrapper.TechyRecipeWrapper;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.machine.crusher.GuiCrusher;
 import tbsc.techy.machine.furnace.GuiPoweredFurnace;
+import tbsc.techy.recipe.CrusherRecipes;
 import tbsc.techy.recipe.IRecipeInput;
 import tbsc.techy.recipe.PoweredFurnaceRecipes;
 
@@ -84,9 +86,9 @@ public class TechyJEIPlugin extends BlankModPlugin {
                     @Override
                     public void setRecipe(@Nonnull IRecipeLayout recipeLayout, @Nonnull IRecipeWrapper recipeWrapper) {
                         IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
-                        guiItemStacks.init(0, true, 33, 27);
-                        guiItemStacks.init(1, false, 94, 27);
-                        guiItemStacks.init(2, false, 114, 27);
+                        guiItemStacks.init(0, true, 11, 26);
+                        guiItemStacks.init(1, false, 71, 26);
+                        guiItemStacks.init(2, false, 91, 26);
                         guiItemStacks.setFromRecipe(0, recipeWrapper.getInputs());
                         guiItemStacks.setFromRecipe(1, recipeWrapper.getOutputs().get(0));
                         guiItemStacks.setFromRecipe(2, recipeWrapper.getOutputs().get(1));
@@ -159,13 +161,13 @@ public class TechyJEIPlugin extends BlankModPlugin {
                 "",
                 "Max ores per vein: " + ConfigData.aluminiumPerVein,
                 "Max ores per chunk: " + ConfigData.aluminiumPerChunk,
-                "Maximum height for copper generation: "+ ConfigData.aluminiumMaxHeight);
+                "Maximum height: "+ ConfigData.aluminiumMaxHeight);
         registry.addDescription(new ItemStack(BlockInit.blockOreLithium),
                 "Lithium Ore Generation",
                 "",
                 "Max ores per vein: " + ConfigData.lithiumPerVein,
                 "Max ores per chunk: " + ConfigData.lithiumPerChunk,
-                "Maximum height for copper generation: "+ ConfigData.lithiumMaxHeight);
+                "Maximum height: "+ ConfigData.lithiumMaxHeight);
 
 
         List<TechyRecipeWrapper> recipes = new ArrayList<>();
@@ -184,7 +186,6 @@ public class TechyJEIPlugin extends BlankModPlugin {
             recipes.add(new TechyFurnaceRecipeHandler.FurnaceRecipeWrapper(energyUsage, cookTime, Collections.singletonList(inputStack), Collections.singletonList(output)));
         }
 
-        /*
         for (Map.Entry<IRecipeInput, ImmutableTriple<ItemStack, ItemStack, Integer>> entry : CrusherRecipes.instance().getRecipeMap().entrySet()) {
             IRecipeInput input = entry.getKey();
             ItemStack inputStack;
@@ -199,9 +200,8 @@ public class TechyJEIPlugin extends BlankModPlugin {
             int secondChance = output.getRight();
             int energyUsage = CrusherRecipes.instance().getSmeltingEnergy(firstOutput);
             int cookTime = ConfigData.crusherDefaultProcessTime;
-            recipes.add(new TechyCrusherRecipeHandler.CrusherRecipeWrapper(energyUsage, cookTime, Collections.singletonList(inputStack), Lists.newArrayList(firstOutput, secondOutput)));
-        }*/
-
+            recipes.add(new TechyCrusherRecipeHandler.CrusherRecipeWrapper(energyUsage, cookTime, Collections.singletonList(inputStack), Lists.newArrayList(firstOutput, secondOutput), secondChance));
+        }
 
         registry.addRecipes(recipes);
     }
