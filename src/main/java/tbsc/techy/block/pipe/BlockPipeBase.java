@@ -6,6 +6,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -48,6 +49,7 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
     protected BlockPipeBase(String registryName, int tileInvSize, Class<?> connectiblePipeClass) {
         super(Material.CIRCUITS, registryName, tileInvSize);
         setHardness(2.0F);
+        setHarvestLevel("pickaxe", Item.ToolMaterial.STONE.getHarvestLevel());
 
         this.connectiblePipeClass = connectiblePipeClass;
         setDefaultState(blockState.getBaseState().withProperty(NORTH, false).withProperty(SOUTH, false).withProperty(WEST, false).withProperty(EAST, false).withProperty(UP, false).withProperty(DOWN, false));
