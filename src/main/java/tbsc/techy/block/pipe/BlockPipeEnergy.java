@@ -40,25 +40,6 @@ public class BlockPipeEnergy extends BlockPipeBase {
         tooltip.add("Max transfer: " + maxTransfer + " RF/t");
     }
 
-    /**
-     * Inits the ISBM
-     */
-    /*@SideOnly(Side.CLIENT)
-    public void initModel() {
-        /*
-        // To make sure that our ISBM model is chosen for all states we use this custom state mapper:
-        StateMapperBase ignoreState = new StateMapperBase() {
-            @Override
-            protected ModelResourceLocation getModelResourceLocation(IBlockState iBlockState) {
-                return PipeEnergyBakedModel.BAKED_MODEL;
-            }
-        };
-        ModelLoader.setCustomStateMapper(this, ignoreState);
-        *
-        super.initModel();
-    }
-    */
-
     @Override
     public boolean canConnectWithBlock(IBlockAccess world, BlockPos blockPos) {
         Block block = world.getBlockState(blockPos).getBlock();
