@@ -15,6 +15,8 @@ public class BlockOreBase extends BlockBase {
 
     public BlockOreBase(String unlocalizedName) {
         super(Material.ROCK, unlocalizedName);
+        setHardness(3.0F);
+        setResistance(5.0F);
     }
 
     public enum OreType {

@@ -1,5 +1,6 @@
 package tbsc.techy.init;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -60,10 +61,15 @@ public class BlockInit {
         blockPipeEnergyAdvanced = new BlockPipeEnergy("blockPipeEnergyAdvanced", 1280 * 2, 3840); // max 2 sides
         blockCoalGenerator = new BlockCoalGenerator();
         blockOreCopper = new BlockOreBase("blockOreCopper");
+        blockOreCopper.setHarvestLevel("pickaxe", Item.ToolMaterial.STONE.getHarvestLevel());
         blockOreTin = new BlockOreBase("blockOreTin");
+        blockOreTin.setHarvestLevel("pickaxe", Item.ToolMaterial.STONE.getHarvestLevel());
         blockOreSilver = new BlockOreBase("blockOreSilver");
+        blockOreSilver.setHarvestLevel("pickaxe", Item.ToolMaterial.IRON.getHarvestLevel());
         blockOreAluminium = new BlockOreBase("blockOreAluminium");
+        blockOreAluminium.setHarvestLevel("pickaxe", Item.ToolMaterial.STONE.getHarvestLevel());
         blockOreLithium = new BlockOreBase("blockOreLithium");
+        blockOreLithium.setHarvestLevel("pickaxe", Item.ToolMaterial.DIAMOND.getHarvestLevel());
         blockBasicPowerCell = new BlockGenericPowerCell("blockPowerCellBasic",
                 new TilePowerCellBasic(ConfigData.basicPowerCellCapacity, ConfigData.basicPowerCellTransferRate,
                         2, "blockPowerCellBasic"));

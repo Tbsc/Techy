@@ -149,31 +149,36 @@ public class TechyJEIPlugin extends BlankModPlugin {
                 "",
                 "Max ores per vein: " + ConfigData.copperPerVein,
                 "Max ores per chunk: " + ConfigData.copperPerChunk,
-                "Maximum height for copper generation: "+ ConfigData.copperMaxHeight);
+                "Maximum height for copper generation: "+ ConfigData.copperMaxHeight,
+                "Harvest level: " + BlockInit.blockOreCopper.getHarvestLevel(BlockInit.blockOreCopper.getBlockState().getBaseState()));
         registry.addDescription(new ItemStack(BlockInit.blockOreTin),
                 "Tin Ore Generation",
                 "",
                 "Max ores per vein: " + ConfigData.tinPerVein,
                 "Max ores per chunk: " + ConfigData.tinPerChunk,
-                "Maximum height for tin generation: "+ ConfigData.tinMaxHeight);
+                "Maximum height for tin generation: "+ ConfigData.tinMaxHeight,
+                "Harvest level: " + BlockInit.blockOreTin.getHarvestLevel(BlockInit.blockOreTin.getBlockState().getBaseState()));
         registry.addDescription(new ItemStack(BlockInit.blockOreSilver),
                 "Silver Ore Generation",
                 "",
                 "Max ores per vein: " + ConfigData.silverPerVein,
                 "Max ores per chunk: " + ConfigData.silverPerChunk,
-                "Maximum height for copper generation: "+ ConfigData.silverMaxHeight);
+                "Maximum height for copper generation: "+ ConfigData.silverMaxHeight,
+                "Harvest level: " + BlockInit.blockOreSilver.getHarvestLevel(BlockInit.blockOreSilver.getBlockState().getBaseState()));
         registry.addDescription(new ItemStack(BlockInit.blockOreAluminium),
                 "Aluminium Ore Generation",
                 "",
                 "Max ores per vein: " + ConfigData.aluminiumPerVein,
                 "Max ores per chunk: " + ConfigData.aluminiumPerChunk,
-                "Maximum height: "+ ConfigData.aluminiumMaxHeight);
+                "Maximum height: "+ ConfigData.aluminiumMaxHeight,
+                "Harvest level: " + BlockInit.blockOreAluminium.getHarvestLevel(BlockInit.blockOreAluminium.getBlockState().getBaseState()));
         registry.addDescription(new ItemStack(BlockInit.blockOreLithium),
                 "Lithium Ore Generation",
                 "",
                 "Max ores per vein: " + ConfigData.lithiumPerVein,
                 "Max ores per chunk: " + ConfigData.lithiumPerChunk,
-                "Maximum height: "+ ConfigData.lithiumMaxHeight);
+                "Maximum height: "+ ConfigData.lithiumMaxHeight,
+                "Harvest level: " + BlockInit.blockOreLithium.getHarvestLevel(BlockInit.blockOreLithium.getBlockState().getBaseState()));
 
 
         List<TechyRecipeWrapper> recipes = new ArrayList<>();
