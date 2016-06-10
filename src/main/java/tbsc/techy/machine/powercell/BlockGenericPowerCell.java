@@ -1,14 +1,17 @@
 package tbsc.techy.machine.powercell;
 
+import cofh.api.energy.IEnergyHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tbsc.techy.Techy;
 import tbsc.techy.api.ITechyWrench;
@@ -69,6 +72,16 @@ public class BlockGenericPowerCell extends BlockBaseFacingMachine {
     }
 
     @Override
+    public boolean canConnectOnSide(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        if (world.getTileEntity(pos.offset(side)) != null) {
+            if (world.getTileEntity(pos.offset(side)) instanceof IEnergyHandler || world.getTileEntity(pos.offset(side)) instanceof IInventory) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public IBlockState getStateFromMeta(int meta) {
         return getDefaultState()
                 .withProperty(FACING, EnumFacing.getFront((meta & 3) + 2));
@@ -81,7 +94,7 @@ public class BlockGenericPowerCell extends BlockBaseFacingMachine {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING);
+        return new BlockStateContainer(this, FACING, NORTH, SOUTH, WEST, EAST, UP, DOWN);
     }
 
     @Override

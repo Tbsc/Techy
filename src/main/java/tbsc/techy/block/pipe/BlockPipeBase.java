@@ -4,18 +4,14 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import tbsc.techy.block.BlockBaseMachine;
 
 import javax.annotation.Nullable;
@@ -150,6 +146,7 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
 
     @Override
     public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+        /*
         if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
             EntityPlayer player = Minecraft.getMinecraft().thePlayer;
             double reachDistance = (double) Minecraft.getMinecraft().playerController.getBlockReachDistance();
@@ -172,6 +169,7 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
                 }
             }
         }
+        */
 
         return BASE_AABB;
     }

@@ -10,6 +10,7 @@
 * More pipes
   - Item pipes
   - *(Low priority, only when I add stuff that uses fluids)* Fluid pipes
+~~* Finish connection render between machines~~
 
 # Improvements
 * ~~JEI Support~~

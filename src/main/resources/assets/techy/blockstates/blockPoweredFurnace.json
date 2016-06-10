@@ -21,6 +21,42 @@
           "front": "Techy:blocks/blockPoweredFurnaceFrontWorking"
         }
       }
+    },
+    "north": {
+      "false": {},
+      "true": {
+        "submodel": "Techy:machineConnectionNorth"
+      }
+    },
+    "south": {
+      "false": {},
+      "true": {
+        "submodel": "Techy:machineConnectionSouth"
+      }
+    },
+    "west": {
+      "false": {},
+      "true": {
+        "submodel": "Techy:machineConnectionWest"
+      }
+    },
+    "east": {
+      "false": {},
+      "true": {
+        "submodel": "Techy:machineConnectionEast"
+      }
+    },
+    "up": {
+      "false": {},
+      "true": {
+        "submodel": "Techy:machineConnectionUp"
+      }
+    },
+    "down": {
+      "false": {},
+      "true": {
+        "submodel": "Techy:machineConnectionDown"
+      }
     }
   }
 }

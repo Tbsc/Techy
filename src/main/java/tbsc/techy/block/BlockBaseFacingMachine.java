@@ -31,18 +31,22 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
      */
     public static PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
     public static PropertyBool WORKING = PropertyBool.create("working");
-    /*
     public static PropertyBool NORTH = PropertyBool.create("north");
     public static PropertyBool SOUTH = PropertyBool.create("south");
     public static PropertyBool WEST = PropertyBool.create("west");
     public static PropertyBool EAST = PropertyBool.create("east");
     public static PropertyBool UP = PropertyBool.create("up");
     public static PropertyBool DOWN = PropertyBool.create("down");
-    */
 
     protected BlockBaseFacingMachine(Material material, String registryName, int tileInvSize) {
         super(material, registryName, tileInvSize);
-        setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH)
+        .withProperty(NORTH, false)
+        .withProperty(SOUTH, false)
+        .withProperty(WEST, false)
+        .withProperty(EAST, false)
+        .withProperty(UP, false)
+        .withProperty(DOWN, false));
     }
 
     /**
@@ -145,12 +149,11 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
 
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-        /*
         // Don't know of a better way to do this
         switch (state.getValue(FACING)) {
             case NORTH:
-                return state.withProperty(NORTH, canConnectOnSide(worldIn, pos, EnumFacing.SOUTH))
-                        .withProperty(SOUTH, canConnectOnSide(worldIn, pos, EnumFacing.NORTH))
+                return state.withProperty(NORTH, canConnectOnSide(worldIn, pos, EnumFacing.NORTH))
+                        .withProperty(SOUTH, canConnectOnSide(worldIn, pos, EnumFacing.SOUTH))
                         .withProperty(WEST, canConnectOnSide(worldIn, pos, EnumFacing.WEST))
                         .withProperty(EAST, canConnectOnSide(worldIn, pos, EnumFacing.EAST))
                         .withProperty(UP, canConnectOnSide(worldIn, pos, EnumFacing.UP))
@@ -158,32 +161,29 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
             case SOUTH:
                 return state.withProperty(NORTH, canConnectOnSide(worldIn, pos, EnumFacing.SOUTH))
                         .withProperty(SOUTH, canConnectOnSide(worldIn, pos, EnumFacing.NORTH))
-                        .withProperty(WEST, canConnectOnSide(worldIn, pos, EnumFacing.WEST))
-                        .withProperty(EAST, canConnectOnSide(worldIn, pos, EnumFacing.EAST))
+                        .withProperty(WEST, canConnectOnSide(worldIn, pos, EnumFacing.EAST))
+                        .withProperty(EAST, canConnectOnSide(worldIn, pos, EnumFacing.WEST))
                         .withProperty(UP, canConnectOnSide(worldIn, pos, EnumFacing.UP))
                         .withProperty(DOWN, canConnectOnSide(worldIn, pos, EnumFacing.DOWN));
             case WEST:
-                return state.withProperty(NORTH, canConnectOnSide(worldIn, pos, EnumFacing.NORTH))
-                        .withProperty(SOUTH, canConnectOnSide(worldIn, pos, EnumFacing.SOUTH))
-                        .withProperty(WEST, canConnectOnSide(worldIn, pos, EnumFacing.EAST))
-                        .withProperty(EAST, canConnectOnSide(worldIn, pos, EnumFacing.WEST))
+                return state.withProperty(NORTH, canConnectOnSide(worldIn, pos, EnumFacing.WEST))
+                        .withProperty(SOUTH, canConnectOnSide(worldIn, pos, EnumFacing.EAST))
+                        .withProperty(WEST, canConnectOnSide(worldIn, pos, EnumFacing.SOUTH))
+                        .withProperty(EAST, canConnectOnSide(worldIn, pos, EnumFacing.NORTH))
                         .withProperty(UP, canConnectOnSide(worldIn, pos, EnumFacing.UP))
                         .withProperty(DOWN, canConnectOnSide(worldIn, pos, EnumFacing.DOWN));
             case EAST:
-                return state.withProperty(NORTH, canConnectOnSide(worldIn, pos, EnumFacing.NORTH))
-                        .withProperty(SOUTH, canConnectOnSide(worldIn, pos, EnumFacing.SOUTH))
-                        .withProperty(WEST, canConnectOnSide(worldIn, pos, EnumFacing.EAST))
-                        .withProperty(EAST, canConnectOnSide(worldIn, pos, EnumFacing.WEST))
+                return state.withProperty(NORTH, canConnectOnSide(worldIn, pos, EnumFacing.EAST))
+                        .withProperty(SOUTH, canConnectOnSide(worldIn, pos, EnumFacing.WEST))
+                        .withProperty(WEST, canConnectOnSide(worldIn, pos, EnumFacing.NORTH))
+                        .withProperty(EAST, canConnectOnSide(worldIn, pos, EnumFacing.SOUTH))
                         .withProperty(UP, canConnectOnSide(worldIn, pos, EnumFacing.UP))
                         .withProperty(DOWN, canConnectOnSide(worldIn, pos, EnumFacing.DOWN));
             default:
                 return state; // No special connections, better to solve it this way rather then bad connections
         }
-        */
-        return state; // Connections are disabled ATM until I get to fixing them, TODO
     }
 
-    /*
     /**
      * The implementation of this method should return whether this block can connect to
      * nearby blocks.
@@ -191,9 +191,8 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
      * @param pos position of this block
      * @param side to check if is connectible
      * @return is side connectible with block
-     *
+     */
     public abstract boolean canConnectOnSide(IBlockAccess world, BlockPos pos, EnumFacing side);
-    */
 
     /**
      * Return the {@link IBlockState} of the block from metadata
@@ -224,7 +223,7 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
      */
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING, WORKING); //, NORTH, SOUTH, WEST, EAST, UP, DOWN);
+        return new BlockStateContainer(this, FACING, WORKING, NORTH, SOUTH, WEST, EAST, UP, DOWN);
     }
 
 }

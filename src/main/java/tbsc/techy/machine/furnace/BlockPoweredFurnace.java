@@ -1,13 +1,16 @@
 package tbsc.techy.machine.furnace;
 
+import cofh.api.energy.IEnergyHandler;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tbsc.techy.Techy;
 import tbsc.techy.api.ITechyWrench;
@@ -51,6 +54,16 @@ public class BlockPoweredFurnace extends BlockBaseFacingMachine {
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TilePoweredFurnace();
+    }
+
+    @Override
+    public boolean canConnectOnSide(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        if (world.getTileEntity(pos.offset(side)) != null) {
+            if (world.getTileEntity(pos.offset(side)) instanceof IEnergyHandler || world.getTileEntity(pos.offset(side)) instanceof IInventory) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
