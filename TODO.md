@@ -2,6 +2,8 @@
 
 # Bugs
 * Pipe bounding boxes
+* Powered furnace doesn't change "working" property
+~~* Coal generator will fill its internal buffer upon inserting fuel~~
 
 # Features
 * Storage blocks for resources
@@ -13,7 +15,7 @@
 ~~* Finish connection render between machines~~
 
 # Improvements
-* ~~JEI Support~~
-  ~~- Appearance~~
 * Boosters
   - While there are boosters, they don't affect machines, nor have any crafting recipes
+* ~~JEI Support~~
+  ~~- Appearance~~

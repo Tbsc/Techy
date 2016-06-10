@@ -93,7 +93,7 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
 
                 // Not enough room for added energy
                 if (energyConsumptionPerTick + getEnergyStored() <= getCapacity()) {
-                    energyStorage.modifyEnergyStored(getEnergyStored() + energyConsumptionPerTick);
+                    energyStorage.setEnergyStored(getEnergyStored() + energyConsumptionPerTick);
                 }
 
                 if (progress >= totalProgress) {
