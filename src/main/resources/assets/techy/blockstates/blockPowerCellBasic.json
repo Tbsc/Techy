@@ -26,31 +26,51 @@
     "south": {
       "false": {},
       "true": {
-        "submodel": "Techy:machineConnectionSouth"
+        "submodel": {
+          "connectionSouth": {
+            "model": "Techy:machineConnectionNorth", "y": 180
+          }
+        }
       }
     },
     "west": {
       "false": {},
       "true": {
-        "submodel": "Techy:machineConnectionWest"
+        "submodel": {
+          "connectionEast": {
+            "model": "Techy:machineConnectionNorth", "y": 270
+          }
+        }
       }
     },
     "east": {
       "false": {},
       "true": {
-        "submodel": "Techy:machineConnectionEast"
+        "submodel": {
+          "connectionWest": {
+            "model": "Techy:machineConnectionNorth", "y": 90
+          }
+        }
       }
     },
     "up": {
       "false": {},
       "true": {
-        "submodel": "Techy:machineConnectionUp"
+        "submodel": {
+          "connectionUp": {
+            "model": "Techy:machineConnectionNorth", "x": 270
+          }
+        }
       }
     },
     "down": {
       "false": {},
       "true": {
-        "submodel": "Techy:machineConnectionDown"
+        "submodel": {
+          "connectionDown": {
+            "model": "Techy:machineConnectionNorth", "x": 90
+          }
+        }
       }
     }
   }
