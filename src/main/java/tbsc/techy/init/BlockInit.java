@@ -5,7 +5,6 @@ import net.minecraft.item.ItemBlock;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tbsc.techy.ConfigData;
 import tbsc.techy.block.BlockBaseFacingMachine;
 import tbsc.techy.block.BlockMachineBase;
 import tbsc.techy.block.BlockOreBase;
@@ -15,9 +14,6 @@ import tbsc.techy.machine.crusher.TileCrusher;
 import tbsc.techy.machine.furnace.BlockPoweredFurnace;
 import tbsc.techy.machine.furnace.TilePoweredFurnace;
 import tbsc.techy.machine.generator.coal.BlockCoalGenerator;
-import tbsc.techy.machine.generator.coal.TileCoalGenerator;
-import tbsc.techy.machine.powercell.*;
-import tbsc.techy.machine.powercell.creative.TilePowerCellCreative;
 import tbsc.techy.tile.pipe.TilePipeEnergy;
 
 /**
@@ -42,10 +38,6 @@ public class BlockInit {
     public static BlockOreBase blockOreSilver;
     public static BlockOreBase blockOreAluminium;
     public static BlockOreBase blockOreLithium;
-    public static BlockGenericPowerCell blockBasicPowerCell;
-    public static BlockGenericPowerCell blockImprovedPowerCell;
-    public static BlockGenericPowerCell blockAdvancedPowerCell;
-    public static BlockGenericPowerCell blockCreativePowerCell;
 
     /**
      * Gets called on preInit stage and loads all of the blocks and TileEntities.
@@ -70,17 +62,6 @@ public class BlockInit {
         blockOreAluminium.setHarvestLevel("pickaxe", Item.ToolMaterial.STONE.getHarvestLevel());
         blockOreLithium = new BlockOreBase("blockOreLithium");
         blockOreLithium.setHarvestLevel("pickaxe", Item.ToolMaterial.DIAMOND.getHarvestLevel());
-        blockBasicPowerCell = new BlockGenericPowerCell("blockPowerCellBasic",
-                new TilePowerCellBasic(ConfigData.basicPowerCellCapacity, ConfigData.basicPowerCellTransferRate,
-                        2, "blockPowerCellBasic"));
-        blockImprovedPowerCell = new BlockGenericPowerCell("blockPowerCellImproved",
-                new TilePowerCellImproved(ConfigData.improvedPowerCellCapacity, ConfigData.improvedPowerCellTransferRate,
-                        2, "blockPowerCellImproved"));
-        blockAdvancedPowerCell = new BlockGenericPowerCell("blockPowerCellAdvanced",
-                new TilePowerCellAdvanced(ConfigData.advancedPowerCellCapacity, ConfigData.advancedPowerCellTransferRate,
-                        2, "blockPowerCellAdvanced"));
-        blockCreativePowerCell = new BlockGenericPowerCell("blockPowerCellCreative",
-                new TilePowerCellCreative(1, "blockPowerCellCreative"));
 
         GameRegistry.register(blockPoweredFurnace);
         GameRegistry.register(new ItemBlock(blockPoweredFurnace), blockPoweredFurnace.getRegistryName());
@@ -110,23 +91,10 @@ public class BlockInit {
         GameRegistry.register(new ItemBlock(blockOreAluminium), blockOreAluminium.getRegistryName());
         GameRegistry.register(blockOreLithium);
         GameRegistry.register(new ItemBlock(blockOreLithium), blockOreLithium.getRegistryName());
-        GameRegistry.register(blockBasicPowerCell);
-        GameRegistry.register(new ItemBlock(blockBasicPowerCell), blockBasicPowerCell.getRegistryName());
-        GameRegistry.register(blockImprovedPowerCell);
-        GameRegistry.register(new ItemBlock(blockImprovedPowerCell), blockImprovedPowerCell.getRegistryName());
-        GameRegistry.register(blockAdvancedPowerCell);
-        GameRegistry.register(new ItemBlock(blockAdvancedPowerCell), blockAdvancedPowerCell.getRegistryName());
-        GameRegistry.register(blockCreativePowerCell);
-        GameRegistry.register(new ItemBlock(blockCreativePowerCell), blockCreativePowerCell.getRegistryName());
 
         GameRegistry.registerTileEntity(TilePoweredFurnace.class, "tilePoweredFurnace");
         GameRegistry.registerTileEntity(TileCrusher.class, "tileCrusher");
         GameRegistry.registerTileEntity(TilePipeEnergy.class, "pipeEnergy");
-        GameRegistry.registerTileEntity(TileCoalGenerator.class, "tileCoalGenerator");
-        GameRegistry.registerTileEntity(TilePowerCellBasic.class, "tilePowerCellBasic");
-        GameRegistry.registerTileEntity(TilePowerCellImproved.class, "tilePowerCellImproved");
-        GameRegistry.registerTileEntity(TilePowerCellAdvanced.class, "tilePowerCellAdvanced");
-        GameRegistry.registerTileEntity(TilePowerCellCreative.class, "tilePowerCellCreative");
     }
 
     /**
@@ -149,10 +117,6 @@ public class BlockInit {
         blockOreSilver.initModel();
         blockOreAluminium.initModel();
         blockOreLithium.initModel();
-        blockBasicPowerCell.initModel();
-        blockImprovedPowerCell.initModel();
-        blockAdvancedPowerCell.initModel();
-        blockCreativePowerCell.initModel();
     }
 
 }

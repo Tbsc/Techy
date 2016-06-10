@@ -8,6 +8,8 @@
 
 # Features
 * Storage blocks for resources
+* Power Cells
+  - 4 tiers: Usual tiers + creative tier
 * Actual content rather then just utilities:
   - Progression, which I've started by requiring a crusher to create an improved machine base
 * More pipes
