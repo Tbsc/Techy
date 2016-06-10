@@ -1,7 +1,6 @@
 package tbsc.techy.proxy;
 
 import net.minecraftforge.fml.common.event.*;
-import tbsc.techy.misc.cmd.CommandRetroGen;
 
 /**
  * Server proxy, stuff will run only on server
@@ -28,7 +27,6 @@ public class ServerProxy extends CommonProxy {
     @Override
     public void serverLoad(FMLServerStartingEvent event) {
         super.serverLoad(event);
-        event.registerServerCommand(new CommandRetroGen());
     }
 
     @Override

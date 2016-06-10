@@ -8,6 +8,7 @@ import tbsc.techy.Techy;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.init.ItemInit;
 import tbsc.techy.init.MiscInit;
+import tbsc.techy.misc.cmd.CommandRetroGen;
 import tbsc.techy.network.SPacketSideConfigUpdate;
 import tbsc.techy.recipe.IMCRecipeHandler;
 
@@ -47,7 +48,7 @@ public abstract class CommonProxy implements IProxy {
 
     @Override
     public void serverLoad(FMLServerStartingEvent event) {
-
+        event.registerServerCommand(new CommandRetroGen());
     }
 
     @Override
