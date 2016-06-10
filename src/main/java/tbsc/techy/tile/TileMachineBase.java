@@ -4,6 +4,7 @@ import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -257,44 +258,31 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
                     if (neighborTile != null) { // If there is a tile
                         if (neighborTile instanceof IInventory) { // If tile has an inventory
                             IInventory neighborInv = (IInventory) neighborTile;
-                            int extractSlot = getFirstNonEmptySlot(this, getOutputSlots()); // Find
 
-                            if (extractSlot == -1) {
-                                for (int neighborSlot = 0; neighborSlot < neighborInv.getSizeInventory(); ++neighborSlot) { // Loop through neighbor slots
-                                    ItemStack neighborStack = neighborInv.getStackInSlot(neighborSlot);
+                            int slotToExtract = getFirstNonEmptySlot(this, getSlotsForFace(side));
+                            ItemStack insertStack = inventory[slotToExtract];
+                            insertStack.stackSize = itemsPerTick;
 
-                                    if (neighborStack != null) { // There is an item there already
-                                        if (neighborStack.isItemEqual(inventory[extractSlot])) { // Items are equal
-                                            if (neighborStack.stackSize + itemsPerTick <= neighborStack.getMaxStackSize()) { // Stack size together is OK
-                                                // Add to neighbor slot
-                                                ItemStack neighborCopy = neighborStack.copy();
-                                                neighborCopy.stackSize = neighborCopy.stackSize + itemsPerTick;
-                                                neighborInv.setInventorySlotContents(neighborSlot, neighborCopy);
+                            if (slotToExtract != -1) { // If can extract anything
+                                if (neighborInv instanceof ISidedInventory) { // If nearby inv is sided
+                                    ISidedInventory sidedNeighbor = (ISidedInventory) neighborInv;
+                                    int[] availableSlots = sidedNeighbor.getSlotsForFace(side.getOpposite());
+                                    int slotToInsert = getFirstAvailableSlot(sidedNeighbor, availableSlots, insertStack);
 
-                                                // Remove from extract slot
-                                                decrStackSize(extractSlot, itemsPerTick);
-                                                if (inventory[extractSlot] != null) {
-                                                    if (inventory[extractSlot].stackSize == 0) {
-                                                        removeStackFromSlot(extractSlot);
-                                                    }
-                                                }
-                                                return true;
-                                            }
+                                    if (sidedNeighbor.canInsertItem(slotToInsert, insertStack, side.getOpposite())) { // If can insert stack
+                                        inventory[slotToExtract].stackSize = inventory[slotToExtract].stackSize - itemsPerTick;
+
+                                        if (inventory[slotToExtract].stackSize == 0) {
+                                            removeStackFromSlot(slotToExtract);
                                         }
-                                    } else { // It IS null, therefore empty
-                                        // Add to neighbor slot
-                                        ItemStack neighborCopy = inventory[extractSlot].copy();
-                                        neighborCopy.stackSize = itemsPerTick;
-                                        neighborInv.setInventorySlotContents(neighborSlot, neighborCopy);
-
-                                        // Remove from neighbor slot
-                                        decrStackSize(extractSlot, itemsPerTick);
-                                        if (inventory[extractSlot] != null) {
-                                            if (inventory[extractSlot].stackSize == 0) {
-                                                removeStackFromSlot(extractSlot);
-                                            }
+                                        
+                                        if (sidedNeighbor.getStackInSlot(slotToInsert) == null) {
+                                            sidedNeighbor.setInventorySlotContents(slotToInsert, insertStack);
+                                        } else {
+                                            ItemStack copy = sidedNeighbor.getStackInSlot(slotToInsert).copy();
+                                            copy.stackSize = copy.stackSize + insertStack.stackSize;
+                                            sidedNeighbor.setInventorySlotContents(slotToInsert, copy);
                                         }
-                                        return true;
                                     }
                                 }
                             }
@@ -319,6 +307,30 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
                 return slot;
             } else if (slotItem.stackSize < slotItem.getMaxStackSize()) {
                 return slot;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Returns the first slot in the inventory given that the item can be inserted to.
+     * It will check the slots in the array given, and if the item can be inserted to
+     * that slot (while considering the stack size), it will return the slot. If not,
+     * then it'll return -1.
+     * @param inv The inventory to check
+     * @param slots the slots to check
+     * @param insert the item to check if can be inserted
+     * @return first slot item can be inserted to
+     */
+    protected int getFirstAvailableSlot(IInventory inv, int[] slots, ItemStack insert) {
+        for (int slot : slots) {
+            ItemStack slotItem = inv.getStackInSlot(slot);
+            if (slotItem == null) {
+                return slot;
+            } else if (slotItem.getItem() == insert.getItem()) {
+                if (insert.stackSize + slotItem.stackSize >= insert.stackSize) {
+                    return slot;
+                }
             }
         }
         return -1;
