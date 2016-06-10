@@ -3,6 +3,7 @@
 # Bugs
 * Pipe bounding boxes
 * Powered furnace doesn't change "working" property
+* *(WIP)* Automatic extraction from nearby inventories/insertion to nearby inventories
 ~~* Coal generator will fill its internal buffer upon inserting fuel~~
 
 # Features
