@@ -5,6 +5,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -30,6 +31,9 @@ public class BlockCrusher extends BlockBaseFacingMachine {
 
     public BlockCrusher() {
         super(Material.IRON, "blockCrusher", tileInvSize);
+        setHarvestLevel("pickaxe", Item.ToolMaterial.IRON.getHarvestLevel());
+        setHardness(4.0F);
+        setResistance(5.5F);
     }
 
     @Override
