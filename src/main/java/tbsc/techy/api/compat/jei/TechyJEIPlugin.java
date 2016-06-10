@@ -20,6 +20,9 @@ import tbsc.techy.api.compat.jei.wrapper.TechyRecipeWrapper;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.machine.crusher.GuiCrusher;
 import tbsc.techy.machine.furnace.GuiPoweredFurnace;
+import tbsc.techy.machine.generator.GuiGeneratorBase;
+import tbsc.techy.machine.powercell.GuiGenericPowerCell;
+import tbsc.techy.machine.powercell.creative.GuiCreativePowerCell;
 import tbsc.techy.recipe.CrusherRecipes;
 import tbsc.techy.recipe.IRecipeInput;
 import tbsc.techy.recipe.PoweredFurnaceRecipes;
@@ -121,6 +124,9 @@ public class TechyJEIPlugin extends BlankModPlugin {
 
         registry.addAdvancedGuiHandlers(new TechyAdvancedGuiHandler<>(GuiPoweredFurnace.class));
         registry.addAdvancedGuiHandlers(new TechyAdvancedGuiHandler<>(GuiCrusher.class));
+        registry.addAdvancedGuiHandlers(new TechyAdvancedGuiHandler<>(GuiGeneratorBase.class));
+        registry.addAdvancedGuiHandlers(new TechyAdvancedGuiHandler<>(GuiGenericPowerCell.class));
+        registry.addAdvancedGuiHandlers(new TechyAdvancedGuiHandler<>(GuiCreativePowerCell.class));
 
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockInit.blockPoweredFurnace), FURNACE_UID);
         registry.addRecipeCategoryCraftingItem(new ItemStack(BlockInit.blockCrusher), CRUSHER_UID);
