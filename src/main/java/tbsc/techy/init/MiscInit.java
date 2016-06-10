@@ -128,7 +128,7 @@ public class MiscInit {
                 " I ",
                 "IRI",
                 "ICI",
-                'I', "ingotIron", 'C', "dustCopper", 'R', "dustRedstone")); // No dust because at that tier you don't have a crusher yet
+                'I', "ingotIron", 'C', "ingotCopper", 'R', "dustRedstone")); // No dust because at that tier you don't have a crusher yet
         GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemBatteryMedium,
                 " D ",
                 "GRG",
