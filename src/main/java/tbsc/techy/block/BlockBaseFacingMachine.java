@@ -74,7 +74,10 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
 
     @Override
     public int getLightValue(IBlockState state) {
-        return state.getValue(WORKING) ? 12 : 0;
+        if (state.getProperties().containsKey(WORKING)) {
+            return state.getValue(WORKING) ? 12 : 0;
+        }
+        return 0;
     }
 
     @Override
