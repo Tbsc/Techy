@@ -73,6 +73,11 @@ public abstract class BlockBaseFacingMachine extends BlockBaseMachine implements
     }
 
     @Override
+    public int getLightValue(IBlockState state) {
+        return state.getValue(WORKING) ? 12 : 0;
+    }
+
+    @Override
     public IBlockState withRotation(IBlockState state, Rotation rot) {
         return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
     }
