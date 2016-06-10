@@ -258,12 +258,12 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
                     if (neighborTile != null) { // If there is a tile
                         if (neighborTile instanceof IInventory) { // If tile has an inventory
                             IInventory neighborInv = (IInventory) neighborTile;
-
                             int slotToExtract = getFirstNonEmptySlot(this, getSlotsForFace(side));
-                            ItemStack insertStack = inventory[slotToExtract];
-                            insertStack.stackSize = itemsPerTick;
 
                             if (slotToExtract != -1) { // If can extract anything
+                                ItemStack insertStack = inventory[slotToExtract].copy();
+                                insertStack.stackSize = itemsPerTick;
+
                                 if (neighborInv instanceof ISidedInventory) { // If nearby inv is sided
                                     ISidedInventory sidedNeighbor = (ISidedInventory) neighborInv;
                                     int[] availableSlots = sidedNeighbor.getSlotsForFace(side.getOpposite());
