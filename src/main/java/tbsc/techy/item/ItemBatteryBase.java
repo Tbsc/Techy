@@ -61,7 +61,10 @@ public class ItemBatteryBase extends ItemBase implements IEnergyContainerItem {
     public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
         super.getSubItems(itemIn, tab, subItems);
         ItemStack energyFull = new ItemStack(itemIn, 1, 0);
-        receiveEnergy(energyFull, capacity, false);
+        if (!energyFull.hasTagCompound()) {
+            energyFull.setTagCompound(new NBTTagCompound());
+        }
+        energyFull.getTagCompound().setInteger("Energy", capacity);
         subItems.add(energyFull);
     }
 
