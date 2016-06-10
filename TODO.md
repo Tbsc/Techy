@@ -38,4 +38,4 @@ Everything here is divided by sections and is in tables, more information will b
 As of now what I need to do is recode how machines handle boosters, and add crafting recipes. Crafting recipes will be added **after** I get them working, so no one would make them for no reason.
 
 *<sup>2</sup> - I've already started with that. For example, to get to the second tier you need dusts from the first tier, and for the third tier you'll need stuff from the second tier (perhaps lithium, that'll only be able to be processed using second tier machines?)
-I also said that I want content. There is content in the mod, but that's mostly utilities for typical Minecraft gameplay. I want the mod to have unique stuff, that people will actually ***PLAY*** with the mod instead of ***USE*** it. Got it? :P
+I also said that I want content. There is content in the mod, but that's mostly utilities for typical Minecraft gameplay. I want the mod to have unique stuff, that people will actually **PLAY** with the mod instead of **USE** it. Got it? :P
