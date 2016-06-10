@@ -122,6 +122,22 @@ public class TilePipeEnergy extends TileEntity implements ITickable, IEnergyRece
     }
 
     /**
+     * Returns the energy currently stored in the tile, without side
+     * @return energy stored currently
+     */
+    public int getEnergyStored() {
+        return energyStorage.getEnergyStored();
+    }
+
+    /**
+     * Returns the capacity of the tile, without side
+     * @return max energy storage
+     */
+    public int getMaxEnergyStored() {
+        return energyStorage.getMaxEnergyStored();
+    }
+
+    /**
      * Energy pipes do NOT support blocking transfer based on wrench toggle. Therefore returns true.
      * However redstone signal does change this, and if this block is powered on any signal, it
      * will NOT transfer anything. This is how all pipes behave.
