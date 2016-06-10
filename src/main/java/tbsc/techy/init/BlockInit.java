@@ -14,6 +14,7 @@ import tbsc.techy.machine.crusher.TileCrusher;
 import tbsc.techy.machine.furnace.BlockPoweredFurnace;
 import tbsc.techy.machine.furnace.TilePoweredFurnace;
 import tbsc.techy.machine.generator.coal.BlockCoalGenerator;
+import tbsc.techy.machine.generator.coal.TileCoalGenerator;
 import tbsc.techy.tile.pipe.TilePipeEnergy;
 
 /**
@@ -95,6 +96,7 @@ public class BlockInit {
         GameRegistry.registerTileEntity(TilePoweredFurnace.class, "tilePoweredFurnace");
         GameRegistry.registerTileEntity(TileCrusher.class, "tileCrusher");
         GameRegistry.registerTileEntity(TilePipeEnergy.class, "pipeEnergy");
+        GameRegistry.registerTileEntity(TileCoalGenerator.class, "tileCoalGenerator");
     }
 
     /**
