@@ -9,12 +9,10 @@ Everything here is divided by sections and is in tables, more information will b
 
 | Critical                                   | Important                                                  |   Later   |
 |--------------------------------------------|------------------------------------------------------------|-----------|
-| Pipe bounding boxes                        | Powered furnace "working" property<sup>*<sup>1</sup></sup> |           |
-| Automatic transfer<sup>*<sup>2</sup></sup> |                                                            |           |
+| Pipe bounding boxes                        |                                                            |           |
+| Automatic transfer<sup>*<sup>1</sup></sup> |                                                            |           |
 
-*<sup>1</sup> - This means that when the furnace is running, it should change the front texture and display particles
-
-*<sup>2</sup> - Machines should automatically pull and push items from nearby inventories, while checking if they can (ISidedInventory)
+*<sup>1</sup> - Machines should automatically pull and push items from nearby inventories, while checking if they can (ISidedInventory)
 
 ### Features
 
