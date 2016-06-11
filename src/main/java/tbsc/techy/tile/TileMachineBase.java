@@ -18,6 +18,7 @@ import tbsc.techy.api.IBoosterItem;
 import tbsc.techy.api.IOperator;
 import tbsc.techy.api.SideConfiguration;
 import tbsc.techy.api.Sides;
+import tbsc.techy.api.util.InventoryUtils;
 import tbsc.techy.block.BlockBaseFacingMachine;
 
 import javax.annotation.Nonnull;
@@ -199,35 +200,67 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
 
                     if (tile != null) { // If there is a tile
                         if (tile instanceof IInventory) { // If tile has an inventory
-                            int firstAvailableSlot = getFirstAvailableSlot(this, getInputSlots());
+                            int firstAvailableSlot = InventoryUtils.getFirstAvailableSlot(this, getInputSlots());
 
                             if (firstAvailableSlot != -1) { // If there is space
                                 IInventory inv = (IInventory) tile;
 
-                                for (int slot = 0; slot < inv.getSizeInventory(); ++slot) { // Looping through slots in the neighbor tile
-                                    ItemStack stack = inv.getStackInSlot(slot);
+                                if (inv instanceof ISidedInventory) {
+                                    ISidedInventory sidedInv = (ISidedInventory) inv;
 
-                                    if (stack != null && canInsertItem(firstAvailableSlot, stack, side)) { // Condition is OK
-                                        if (inventory[firstAvailableSlot] == null) {
-                                            ItemStack copy = stack.copy();
-                                            copy.stackSize = itemsPerTick;
-                                            inventory[firstAvailableSlot] = copy;
-                                            inv.decrStackSize(slot, itemsPerTick);
-                                            if (inv.getStackInSlot(slot) != null) {
-                                                if (inv.getStackInSlot(slot).stackSize == 0) {
-                                                    inv.removeStackFromSlot(slot);
+                                    for (int slot : sidedInv.getSlotsForFace(side.getOpposite())) { // Looping through slots in the neighbor tile, for side
+                                        ItemStack stack = sidedInv.getStackInSlot(slot);
+
+                                        if (stack != null && canInsertItem(firstAvailableSlot, stack, side)) { // Condition is OK
+                                            if (inventory[firstAvailableSlot] == null) {
+                                                ItemStack copy = stack.copy();
+                                                copy.stackSize = itemsPerTick;
+                                                inventory[firstAvailableSlot] = copy;
+                                                sidedInv.decrStackSize(slot, itemsPerTick);
+                                                if (sidedInv.getStackInSlot(slot) != null) {
+                                                    if (sidedInv.getStackInSlot(slot).stackSize == 0) {
+                                                        sidedInv.removeStackFromSlot(slot);
+                                                    }
                                                 }
-                                            }
-                                            return true;
-                                        } else if (inventory[firstAvailableSlot].isItemEqual(stack) && inventory[firstAvailableSlot].stackSize + stack.stackSize <= stack.getMaxStackSize()) {
-                                            inventory[firstAvailableSlot].stackSize = inventory[firstAvailableSlot].stackSize + itemsPerTick;
-                                            inv.decrStackSize(slot, itemsPerTick);
-                                            if (inv.getStackInSlot(slot) != null) {
-                                                if (inv.getStackInSlot(slot).stackSize == 0) {
-                                                    inv.removeStackFromSlot(slot);
+                                                return true;
+                                            } else if (inventory[firstAvailableSlot].isItemEqual(stack) && inventory[firstAvailableSlot].stackSize + stack.stackSize <= stack.getMaxStackSize()) {
+                                                inventory[firstAvailableSlot].stackSize = inventory[firstAvailableSlot].stackSize + itemsPerTick;
+                                                sidedInv.decrStackSize(slot, itemsPerTick);
+                                                if (sidedInv.getStackInSlot(slot) != null) {
+                                                    if (sidedInv.getStackInSlot(slot).stackSize == 0) {
+                                                        sidedInv.removeStackFromSlot(slot);
+                                                    }
                                                 }
+                                                return true;
                                             }
-                                            return true;
+                                        }
+                                    }
+                                } else {
+                                    for (int slot = 0; slot < inv.getSizeInventory(); ++slot) { // Looping through slots in the neighbor tile
+                                        ItemStack stack = inv.getStackInSlot(slot);
+
+                                        if (stack != null && canInsertItem(firstAvailableSlot, stack, side)) { // Condition is OK
+                                            if (inventory[firstAvailableSlot] == null) {
+                                                ItemStack copy = stack.copy();
+                                                copy.stackSize = itemsPerTick;
+                                                inventory[firstAvailableSlot] = copy;
+                                                inv.decrStackSize(slot, itemsPerTick);
+                                                if (inv.getStackInSlot(slot) != null) {
+                                                    if (inv.getStackInSlot(slot).stackSize == 0) {
+                                                        inv.removeStackFromSlot(slot);
+                                                    }
+                                                }
+                                                return true;
+                                            } else if (inventory[firstAvailableSlot].isItemEqual(stack) && inventory[firstAvailableSlot].stackSize + stack.stackSize <= stack.getMaxStackSize()) {
+                                                inventory[firstAvailableSlot].stackSize = inventory[firstAvailableSlot].stackSize + itemsPerTick;
+                                                inv.decrStackSize(slot, itemsPerTick);
+                                                if (inv.getStackInSlot(slot) != null) {
+                                                    if (inv.getStackInSlot(slot).stackSize == 0) {
+                                                        inv.removeStackFromSlot(slot);
+                                                    }
+                                                }
+                                                return true;
+                                            }
                                         }
                                     }
                                 }
@@ -258,7 +291,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
                     if (neighborTile != null) { // If there is a tile
                         if (neighborTile instanceof IInventory) { // If tile has an inventory
                             IInventory neighborInv = (IInventory) neighborTile;
-                            int slotToExtract = getFirstNonEmptySlot(this, getSlotsForFace(side));
+                            int slotToExtract = InventoryUtils.getFirstNonEmptySlot(this, getSlotsForFace(side));
 
                             if (slotToExtract != -1) { // If can extract anything
                                 ItemStack insertStack = inventory[slotToExtract].copy();
@@ -267,7 +300,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
                                 if (neighborInv instanceof ISidedInventory) { // If nearby inv is sided
                                     ISidedInventory sidedNeighbor = (ISidedInventory) neighborInv;
                                     int[] availableSlots = sidedNeighbor.getSlotsForFace(side.getOpposite());
-                                    int slotToInsert = getFirstAvailableSlot(sidedNeighbor, availableSlots, insertStack);
+                                    int slotToInsert = InventoryUtils.getFirstAvailableSlot(sidedNeighbor, availableSlots, insertStack);
 
                                     if (sidedNeighbor.canInsertItem(slotToInsert, insertStack, side.getOpposite())) { // If can insert stack
                                         inventory[slotToExtract].stackSize = inventory[slotToExtract].stackSize - itemsPerTick;
@@ -284,6 +317,23 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
                                             sidedNeighbor.setInventorySlotContents(slotToInsert, copy);
                                         }
                                     }
+                                } else { // Inv is not sided, can interact with all slots
+                                    int[] availableSlots = InventoryUtils.getSlotArray(neighborInv);
+                                    int slotToInsert = InventoryUtils.getFirstAvailableSlot(neighborInv, availableSlots, insertStack);
+
+                                    inventory[slotToExtract].stackSize = inventory[slotToExtract].stackSize - itemsPerTick;
+
+                                    if (inventory[slotToExtract].stackSize == 0) {
+                                        removeStackFromSlot(slotToExtract);
+                                    }
+
+                                    if (neighborInv.getStackInSlot(slotToInsert) == null) {
+                                        neighborInv.setInventorySlotContents(slotToInsert, insertStack);
+                                    } else {
+                                        ItemStack copy = neighborInv.getStackInSlot(slotToInsert).copy();
+                                        copy.stackSize = copy.stackSize + insertStack.stackSize;
+                                        neighborInv.setInventorySlotContents(slotToInsert, copy);
+                                    }
                                 }
                             }
                         }
@@ -292,64 +342,6 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
             }
         }
         return false;
-    }
-
-    /**
-     * Loops through the array of slot IDs given and returns the first one that can be inserted to
-     * @param inv to check
-     * @param slots array of slots to check if can be inserted to
-     * @return First available slot, if none -1
-     */
-    protected int getFirstAvailableSlot(IInventory inv, int[] slots) {
-        for (int slot : slots) {
-            ItemStack slotItem = inv.getStackInSlot(slot);
-            if (slotItem == null) {
-                return slot;
-            } else if (slotItem.stackSize < slotItem.getMaxStackSize()) {
-                return slot;
-            }
-        }
-        return -1;
-    }
-
-    /**
-     * Returns the first slot in the inventory given that the item can be inserted to.
-     * It will check the slots in the array given, and if the item can be inserted to
-     * that slot (while considering the stack size), it will return the slot. If not,
-     * then it'll return -1.
-     * @param inv The inventory to check
-     * @param slots the slots to check
-     * @param insert the item to check if can be inserted
-     * @return first slot item can be inserted to
-     */
-    protected int getFirstAvailableSlot(IInventory inv, int[] slots, ItemStack insert) {
-        for (int slot : slots) {
-            ItemStack slotItem = inv.getStackInSlot(slot);
-            if (slotItem == null) {
-                return slot;
-            } else if (slotItem.getItem() == insert.getItem()) {
-                if (insert.stackSize + slotItem.stackSize >= insert.stackSize) {
-                    return slot;
-                }
-            }
-        }
-        return -1;
-    }
-
-    /**
-     * Returns the first slot that ISN'T empty. If you need an empty slot, use {@link #getFirstAvailableSlot(IInventory, int[])}.
-     * @param inv to check
-     * @param slots to check
-     * @return first slot which has something in it, -1 if the whole inv is empty
-     */
-    protected int getFirstNonEmptySlot(IInventory inv, int[] slots) {
-        for (int slot : slots) {
-            ItemStack slotItem = inv.getStackInSlot(slot);
-            if (slotItem != null) {
-                return slot;
-            }
-        }
-        return -1;
     }
 
     /**

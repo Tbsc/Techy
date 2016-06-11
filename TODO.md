@@ -7,12 +7,10 @@ Everything here is divided by sections and is in tables, more information will b
 
 ### Bugs
 
-| Critical                                   | Important                                                  |   Later   |
-|--------------------------------------------|------------------------------------------------------------|-----------|
-| Pipe bounding boxes                        |                                                            |           |
-| Automatic transfer<sup>*<sup>1</sup></sup> |                                                            |           |
-
-*<sup>1</sup> - Machines should automatically pull and push items from nearby inventories, while checking if they can (ISidedInventory)
+| Critical            | Important |   Later   |
+|---------------------|-----------|-----------|
+| Pipe bounding boxes |           |           |
+|                     |           |           |
 
 ### Features
 
