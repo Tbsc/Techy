@@ -141,17 +141,17 @@ public class MiscInit {
                 'D', "dustDiamond", 'G', "gemDiamond", 'L', "dustLithium", 'R', ItemInit.itemBatteryMedium));
         GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.BRONZE.id),
                 "dustCopper", "dustTin"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockPipeEnergyBasic,
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockInit.blockPipeEnergyBasic, 8),
                 "GGG",
                 "CRC",
                 "GGG",
                 'G', Blocks.GLASS, 'C', "dustCopper", 'R', "dustRedstone"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockPipeEnergyImproved,
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockInit.blockPipeEnergyImproved, 8),
                 "GGG",
                 "CRC",
                 "GGG",
                 'G', Blocks.GLASS, 'C', "dustSilver", 'R', "dustRedstone"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockPipeEnergyAdvanced,
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockInit.blockPipeEnergyAdvanced, 8),
                 "GGG",
                 "CRC",
                 "GGG",
