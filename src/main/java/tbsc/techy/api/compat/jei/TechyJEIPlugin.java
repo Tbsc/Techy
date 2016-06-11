@@ -131,14 +131,15 @@ public class TechyJEIPlugin extends BlankModPlugin {
                 "Techy Machines",
                 "",
                 "Reconfigurable sides can be configured using the tab on the right side. " +
-                        "Blue means input, orange is output, gray is input AND output, and red is blocked (no transfer). " +
+                        "Blue means input, orange is output, gray is input AND output, and red is blocked (no transfer *at all*). " +
                 "If a side is configured to either input or output, then the machine will actively try to push/pull items " +
-                        "from those sides.",
+                        "from those sides. If you just want it to allow anything, configure it to gray.",
                 "",
-                "Boosters",
+                "Boosters (WIP)",
                 "Boosters are items that modify the behaviour of some machines, and can be inserted to machines by putting " +
                         "them in one of the 4 slots on the left, outside of the machine GUI. " +
-                        "faster in generators, while energy boosters would be bad in generator, because less power would be generated.");
+                        "While some boosters will make a machine operate better, some may make it operate worse (tier 0 boosters). " +
+                        "It also depends on the machine. Energy boosters will make generators perform worse (in terms of energy generation).");
 
         registry.addDescription(new ItemStack(BlockInit.blockOreCopper),
                 "Copper Ore Generation",
