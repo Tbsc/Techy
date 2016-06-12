@@ -81,9 +81,9 @@ public class CrusherRecipes {
         addOreDictionaryRecipe("oreCopper", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.COPPER.id), new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.GOLD.id), 30, 4, 5000);
         addOreDictionaryRecipe("blockCopper", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.COPPER.id), null, 0, 2, 20000);
 
-        addOreDictionaryRecipe("ingotTin", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.IRON.id), null, 0, 2, 3000);
+        addOreDictionaryRecipe("ingotTin", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.TIN.id), null, 0, 2, 3000);
         addOreDictionaryRecipe("oreTin", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.TIN.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockTin", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.IRON.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("blockTin", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.TIN.id), null, 0, 2, 20000);
 
         addOreDictionaryRecipe("ingotSilver", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.SILVER.id), null, 0, 2, 3000);
         addOreDictionaryRecipe("oreSilver", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.SILVER.id), null, 0, 4, 5000);
