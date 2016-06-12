@@ -21,24 +21,15 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.event.DrawBlockHighlightEvent;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import tbsc.techy.block.BlockBaseMachine;
 
 import javax.annotation.Nullable;
@@ -85,7 +76,7 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
         super(Material.CIRCUITS, registryName, tileInvSize);
         setHardness(2.0F);
         setHarvestLevel("pickaxe", Item.ToolMaterial.STONE.getHarvestLevel());
-        MinecraftForge.EVENT_BUS.register(this);
+//        MinecraftForge.EVENT_BUS.register(this);
 
         this.connectiblePipeClass = connectiblePipeClass;
         setDefaultState(blockState.getBaseState().withProperty(NORTH, false).withProperty(SOUTH, false).withProperty(WEST, false).withProperty(EAST, false).withProperty(UP, false).withProperty(DOWN, false));
@@ -265,6 +256,7 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
         return new BlockStateContainer(this, NORTH, SOUTH, WEST, EAST, UP, DOWN);
     }
 
+    /*
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onDrawBlockOutline(DrawBlockHighlightEvent event) {
@@ -296,6 +288,6 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
 
             GlStateManager.popMatrix(); // Stop render
         }
-    }
+    }*/
 
 }
