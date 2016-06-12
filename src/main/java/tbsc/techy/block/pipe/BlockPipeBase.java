@@ -1,18 +1,44 @@
+/*
+ * Copyright © 2016 Tbsc
+ *
+ * Techy is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * Techy is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with Techy.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package tbsc.techy.block.pipe;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.DrawBlockHighlightEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import tbsc.techy.block.BlockBaseMachine;
 
 import javax.annotation.Nullable;
@@ -59,6 +85,7 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
         super(Material.CIRCUITS, registryName, tileInvSize);
         setHardness(2.0F);
         setHarvestLevel("pickaxe", Item.ToolMaterial.STONE.getHarvestLevel());
+        MinecraftForge.EVENT_BUS.register(this);
 
         this.connectiblePipeClass = connectiblePipeClass;
         setDefaultState(blockState.getBaseState().withProperty(NORTH, false).withProperty(SOUTH, false).withProperty(WEST, false).withProperty(EAST, false).withProperty(UP, false).withProperty(DOWN, false));
@@ -236,6 +263,39 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
     @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, NORTH, SOUTH, WEST, EAST, UP, DOWN);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public void onDrawBlockOutline(DrawBlockHighlightEvent event) {
+        RayTraceResult hit = event.getTarget();
+        if (hit != null) {
+            GlStateManager.pushMatrix(); // Begin render
+
+            BlockPos pos = hit.getBlockPos();
+            EntityPlayer player = event.getPlayer();
+            float partialTicks = event.getPartialTicks();
+            double x = pos.getX() - (player.lastTickPosX + (player.posX - player.lastTickPosX) * partialTicks);
+            double y = pos.getY() - (player.lastTickPosY + (player.posY - player.lastTickPosY) * partialTicks);
+            double z = pos.getZ() - (player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * partialTicks);
+            GlStateManager.translate(x, y, z);
+
+            // render outline
+            GlStateManager.enableBlend();
+            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+            GlStateManager.color(0.0F, 0.0F, 0.0F, 0.4F);
+            GlStateManager.glLineWidth(2.0F);
+            GlStateManager.disableTexture2D();
+            GlStateManager.depthMask(false);
+
+            RenderGlobal.drawSelectionBoundingBox(player.worldObj.getBlockState(pos).getSelectedBoundingBox(player.worldObj, pos).expandXyz(0.007));
+
+            GlStateManager.depthMask(true);
+            GlStateManager.enableTexture2D();
+            GlStateManager.disableBlend();
+
+            GlStateManager.popMatrix(); // Stop render
+        }
     }
 
 }
