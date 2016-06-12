@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import tbsc.techy.block.BlockBaseMachine;
 
 import javax.annotation.Nullable;
+import java.util.EnumMap;
 import java.util.List;
 
 /**
@@ -33,13 +34,21 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
     public static final PropertyBool UP = PropertyBool.create("up");
     public static final PropertyBool DOWN = PropertyBool.create("down");
 
-    public static AxisAlignedBB BASE_AABB = new AxisAlignedBB(0.29, 0.29, 0.29, 0.71, 0.71, 0.71);
-    public static AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0.29, 0.29, 0, 0.71, 0.71, 0.29);
-    public static AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(0.29, 0.29, 0.71, 0.71, 0.71, 1);
-    public static AxisAlignedBB WEST_AABB = new AxisAlignedBB(0.29, 0.29, 0.29, 0, 0.71, 0.71);
-    public static AxisAlignedBB EAST_AABB = new AxisAlignedBB(0.71, 0.29, 0.29, 1, 1, 0.71);
-    public static AxisAlignedBB DOWN_AABB = new AxisAlignedBB(0.29, 0, 0.29, 0.71, 0.29, 0.71);
-    public static AxisAlignedBB UP_AABB = new AxisAlignedBB(0.29, 0.71, 0.29, 0.71, 1, 0.71);
+    public static EnumMap<EnumFacing, AxisAlignedBB> aabbMap = new EnumMap<>(EnumFacing.class);
+
+    static {
+        aabbMap.put(EnumFacing.NORTH, new AxisAlignedBB(0.295, 0.295, 0, 0.705, 0.705, 0.295));
+        aabbMap.put(EnumFacing.SOUTH, new AxisAlignedBB(0.295, 0.295, 0.705, 0.705, 0.705, 1));
+        aabbMap.put(EnumFacing.WEST, new AxisAlignedBB(0.295, 0.295, 0.295, 0, 0.705, 0.705));
+        aabbMap.put(EnumFacing.EAST, new AxisAlignedBB(0.705, 0.295, 0.295, 1, 1, 0.705));
+        aabbMap.put(EnumFacing.UP, new AxisAlignedBB(0.295, 0.705, 0.295, 0.705, 1, 0.705));
+        aabbMap.put(EnumFacing.DOWN, new AxisAlignedBB(0.295, 0, 0.295, 0.705, 0.295, 0.705));
+    }
+
+    /**
+     * Center piece
+     */
+    public static AxisAlignedBB BASE_AABB = new AxisAlignedBB(0.295, 0.295, 0.295, 0.705, 0.705, 0.705);
 
     /**
      * Used to know the type of class a block needs to be a sub type of to connect to
@@ -89,91 +98,94 @@ public abstract class BlockPipeBase extends BlockBaseMachine {
     public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn) {
         addCollisionBoxToList(pos, entityBox, collidingBoxes, BASE_AABB);
         if (state.getValue(NORTH)) {
-            addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_AABB);
+            addCollisionBoxToList(pos, entityBox, collidingBoxes, aabbMap.get(EnumFacing.NORTH));
         }
         if (state.getValue(SOUTH)) {
-            addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_AABB);
+            addCollisionBoxToList(pos, entityBox, collidingBoxes, aabbMap.get(EnumFacing.SOUTH));
         }
         if (state.getValue(WEST)) {
-            addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_AABB);
+            addCollisionBoxToList(pos, entityBox, collidingBoxes, aabbMap.get(EnumFacing.WEST));
         }
         if (state.getValue(EAST)) {
-            addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_AABB);
-        }
-        if (state.getValue(DOWN)) {
-            addCollisionBoxToList(pos, entityBox, collidingBoxes, DOWN_AABB);
+            addCollisionBoxToList(pos, entityBox, collidingBoxes, aabbMap.get(EnumFacing.EAST));
         }
         if (state.getValue(UP)) {
-            addCollisionBoxToList(pos, entityBox, collidingBoxes, UP_AABB);
+            addCollisionBoxToList(pos, entityBox, collidingBoxes, aabbMap.get(EnumFacing.UP));
+        }
+        if (state.getValue(DOWN)) {
+            addCollisionBoxToList(pos, entityBox, collidingBoxes, aabbMap.get(EnumFacing.DOWN));
         }
     }
 
-    /*
-    @Nullable
     @Override
-    public RayTraceResult collisionRayTrace(IBlockState blockState, World worldIn, BlockPos pos, Vec3d start, Vec3d end) {
-        RayTraceResult result = new RayTraceResult(pos.);
-        if (result != null) {
-            if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
-                if (BoundingBoxUtil.isInSameLocation(result.hitVec, NORTH_AABB.offset(pos))) {
-                    result.hitInfo = EnumFacing.NORTH;
-                } else if (BoundingBoxUtil.isInSameLocation(result.hitVec, SOUTH_AABB.offset(pos))) {
-                    result.hitInfo = EnumFacing.SOUTH;
-                } else if (BoundingBoxUtil.isInSameLocation(result.hitVec, WEST_AABB.offset(pos))) {
-                    result.hitInfo = EnumFacing.WEST;
-                } else if (BoundingBoxUtil.isInSameLocation(result.hitVec, EAST_AABB.offset(pos))) {
-                    result.hitInfo = EnumFacing.EAST;
-                } else if (BoundingBoxUtil.isInSameLocation(result.hitVec, UP_AABB.offset(pos))) {
-                    result.hitInfo = EnumFacing.UP;
-                } else if (BoundingBoxUtil.isInSameLocation(result.hitVec, DOWN_AABB.offset(pos))) {
-                    result.hitInfo = EnumFacing.DOWN;
-                }
-            }
-        }
-        return result;
-    }*/
+    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
+        /*
+        if (world.isRemote) {
+            RayTraceResult rayTraceResult = Minecraft.getMinecraft().thePlayer.rayTrace(Minecraft.getMinecraft().playerController.getBlockReachDistance(), 1.0F);
 
-    /**
-     * Returns a bounding box for the pipe.
-     * connections using block models.
-     * @param state the block state
-     * @param source access to the world
-     * @param pos the position of the block
-     * @return the bounding box for this pipe
-     */
+            if (rayTraceResult != null && rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK) {
+                AxisAlignedBB box = new AxisAlignedBB(BASE_AABB.minX, BASE_AABB.minY, BASE_AABB.minZ, BASE_AABB.maxX, BASE_AABB.maxY, BASE_AABB.maxZ);
+                Vec3d hitVec = rayTraceResult.hitVec;
+                if (hitVec.xCoord > NORTH_AABB.minX && hitVec.xCoord < NORTH_AABB.maxX &&
+                        hitVec.yCoord > NORTH_AABB.minY && hitVec.yCoord < NORTH_AABB.maxY &&
+                        hitVec.zCoord > NORTH_AABB.minZ && hitVec.zCoord < NORTH_AABB.maxZ) {
+                    FMLLog.info("hitvec is inside north aabb");
+                    return NORTH_AABB;
+                }
+                if (SOUTH_AABB.isVecInside(hitVec)) {
+                    return SOUTH_AABB;
+                }
+                if (WEST_AABB.isVecInside(hitVec)) {
+                    return WEST_AABB;
+                }
+                if (EAST_AABB.isVecInside(hitVec)) {
+                    return EAST_AABB;
+                }
+                if (UP_AABB.isVecInside(hitVec)) {
+                    return UP_AABB;
+                }
+                if (DOWN_AABB.isVecInside(hitVec)) {
+                    return DOWN_AABB;
+                }
+                return box.offset(pos.getX(), pos.getY(), pos.getZ());
+            }
+            return super.getSelectedBoundingBox(state, world, pos).expand(-0.85F, -0.85F, -0.85F);
+        }
+        return super.getSelectedBoundingBox(state, world, pos);
+        */
+        return getBoundingBox(state, world, pos);
+    }
+
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return BASE_AABB;
+        AxisAlignedBB box = new AxisAlignedBB(BASE_AABB.minX, BASE_AABB.minY, BASE_AABB.minZ, BASE_AABB.maxX, BASE_AABB.maxY, BASE_AABB.maxZ); // copy
+
+        if (state.getValue(NORTH)) {
+            box = box.union(aabbMap.get(EnumFacing.NORTH));
+        }
+        if (state.getValue(SOUTH)) {
+            box = box.union(aabbMap.get(EnumFacing.SOUTH));
+        }
+        if (state.getValue(WEST)) {
+            box = box.union(aabbMap.get(EnumFacing.WEST));
+        }
+        if (state.getValue(EAST)) {
+            box = box.union(aabbMap.get(EnumFacing.EAST));
+        }
+        if (state.getValue(UP)) {
+            box = box.union(aabbMap.get(EnumFacing.UP));
+        }
+        if (state.getValue(DOWN)) {
+            box = box.union(aabbMap.get(EnumFacing.DOWN));
+        }
+
+        return box;
     }
 
+    @Nullable
     @Override
-    public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
-        /*
-        if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
-            EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-            double reachDistance = (double) Minecraft.getMinecraft().playerController.getBlockReachDistance();
-            RayTraceResult rayTrace = player.rayTrace(reachDistance, 1.0F);
-
-            if (rayTrace != null) {
-                switch ((EnumFacing) rayTrace.hitInfo) {
-                    case NORTH:
-                        return NORTH_AABB;
-                    case SOUTH:
-                        return SOUTH_AABB;
-                    case WEST:
-                        return WEST_AABB;
-                    case EAST:
-                        return EAST_AABB;
-                    case UP:
-                        return UP_AABB;
-                    case DOWN:
-                        return DOWN_AABB;
-                }
-            }
-        }
-        */
-
-        return BASE_AABB;
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+        return getBoundingBox(state, worldIn, pos);
     }
 
     /**
