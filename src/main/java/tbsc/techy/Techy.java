@@ -25,9 +25,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.init.ItemInit;
+import tbsc.techy.network.CPacketUpdateConfig;
 import tbsc.techy.proxy.IProxy;
 
 /**
@@ -143,6 +147,31 @@ public class Techy {
     @EventHandler
     public void imcMessage(FMLInterModComms.IMCEvent event) {
         proxy.imcMessageReceived(event);
+    }
+
+    /**
+     * When a player joins, send the config to him.
+     * Since the event doesn't give me the player that joined (?), I just send it
+     * to all players.
+     * Only called on the server.
+     */
+    @SideOnly(Side.SERVER)
+    @EventHandler
+    public void onServerJoin(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
+        if (!event.isLocal()) {
+            Techy.network.sendToAll(new CPacketUpdateConfig());
+        }
+    }
+
+    /**
+     * When the player finally disconnects, return to default values instead of the values
+     * the server sent. This is only called on client side.
+     * @param event
+     */
+    @SideOnly(Side.CLIENT)
+    @EventHandler
+    public void onServerLeave(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
+        Techy.syncConfig();
     }
 
     /**

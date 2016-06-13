@@ -26,6 +26,7 @@ import tbsc.techy.init.BlockInit;
 import tbsc.techy.init.ItemInit;
 import tbsc.techy.init.MiscInit;
 import tbsc.techy.misc.cmd.CommandRetroGen;
+import tbsc.techy.network.CPacketUpdateConfig;
 import tbsc.techy.network.SPacketSideConfigUpdate;
 import tbsc.techy.recipe.IMCRecipeHandler;
 
@@ -49,6 +50,7 @@ public abstract class CommonProxy implements IProxy {
         MiscInit.preInit();
         Techy.network = NetworkRegistry.INSTANCE.newSimpleChannel("Techy");
         Techy.network.registerMessage(SPacketSideConfigUpdate.Handler.class, SPacketSideConfigUpdate.class, nextID(), Side.SERVER);
+        Techy.network.registerMessage(CPacketUpdateConfig.Handler.class, CPacketUpdateConfig.class, nextID(), Side.CLIENT);
         Techy.config = new Configuration(event.getSuggestedConfigurationFile());
         Techy.syncConfig();
     }
