@@ -126,7 +126,7 @@ public class CrusherRecipes {
      * Adds a recipe with an ore dictionary ore name as the input, and 2 outputs with a chance
      */
     public void addOreDictionaryRecipe(@Nonnull String oreName, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
-        if (ItemHelper.oreProxy.getOre(oreName) != null) {
+        if (ItemHelper.oreProxy.oreNameExists(oreName)) {
             this.addIRecipeInputRecipe(OreRecipeInput.of(oreName), output, output2, output2Chance, experience, energyUsage);
         }
     }
