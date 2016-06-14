@@ -17,11 +17,13 @@ Everything here is divided by sections and is in tables, more information will b
 | Critical     | Important                              |   Later                            |
 |--------------|----------------------------------------|------------------------------------|
 | Power Cells  | Storage Blocks<sup>*<sup>1</sup></sup> | Fluid Pipes<sup>*<sup>2</sup></sup>|
-| Item Pipes   |                                        |                                    |
+| Item Pipes   | Interactor<sup>*<sup></sup>3</sup>     |                                    |
 
 *<sup>1</sup> - By storage blocks I mean stuff like copper blocks. Just a way to compact resources to a smaller form
 
 *<sup>2</sup> - I'll add these when they are needed. Right now nothing in my mod uses fluids, so there's no need for fluid pipes
+
+*<sup>3</sup> - Think of autonomous activators, more advanced and more versatile, with features such as multiple actions at once, per slot settings such as right/left click and redstone control, and automatic energy fill (it will fill energy items inside the inventory)
 
 ### Improvements
 
