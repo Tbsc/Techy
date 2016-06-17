@@ -21,13 +21,11 @@ import cofh.lib.gui.GuiBase;
 import cofh.lib.gui.element.ElementEnergyStored;
 import cofh.lib.render.RenderHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import tbsc.techy.client.gui.element.TabSides;
 import tbsc.techy.container.ContainerBase;
-import tbsc.techy.tile.TileBase;
 import tbsc.techy.tile.TileMachineBase;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
@@ -40,14 +38,13 @@ public abstract class GuiMachineBase extends GuiBase {
 
     public int tileInvSize;
     protected ResourceLocation guiTexture;
-    protected BlockPos machine;
-    protected World world;
+    @Nonnull
+    protected TileMachineBase tile;
     public TabSides tabSides;
 
-    protected GuiMachineBase(ContainerBase containerBase, BlockPos pos, World world, int tileInvSize, ResourceLocation guiTexture) {
+    protected GuiMachineBase(ContainerBase containerBase, TileMachineBase tile, int tileInvSize, ResourceLocation guiTexture) {
         super(containerBase, guiTexture);
-        this.machine = pos;
-        this.world = world;
+        this.tile = tile;
         this.tileInvSize = tileInvSize;
         this.guiTexture = guiTexture;
     }
@@ -55,7 +52,7 @@ public abstract class GuiMachineBase extends GuiBase {
     @Override
     public void initGui() {
         super.initGui();
-        addTab(this.tabSides = new TabSides(this, xSize + 1, 0, 22 + 28, 22 + 28, (TileBase) world.getTileEntity(machine)));
+        addTab(this.tabSides = new TabSides(this, xSize + 1, 0, 22 + 28, 22 + 28, tile));
     }
 
     protected int energyBarStartX = xSize - 24;
@@ -72,7 +69,6 @@ public abstract class GuiMachineBase extends GuiBase {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTick, int x, int y) {
         super.drawGuiContainerBackgroundLayer(partialTick, x, y);
-        TileMachineBase tile = (TileMachineBase) world.getTileEntity(machine);
         if (tile != null) {
             int percentage = tile.getField(0) * 42 / tile.getField(4);
             int i = (this.width - this.xSize) / 2;
@@ -87,7 +83,6 @@ public abstract class GuiMachineBase extends GuiBase {
     @Override
     public void addTooltips(List<String> tooltip) {
         super.addTooltips(tooltip);
-        TileMachineBase tile = (TileMachineBase) world.getTileEntity(machine);
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
         if (tile != null) {
@@ -164,7 +159,6 @@ public abstract class GuiMachineBase extends GuiBase {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        TileBase tile = (TileBase) world.getTileEntity(machine);
         if (tile != null) {
             fontRendererObj.drawString(tile.getName(), 8, 6, 0x404040);
         }

@@ -18,12 +18,9 @@
 package tbsc.techy.machine.crusher;
 
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import tbsc.techy.client.gui.GuiMachineBase;
 import tbsc.techy.client.gui.element.ElementProgressBar;
 import tbsc.techy.client.gui.element.ElementSlotRender;
-import tbsc.techy.tile.TileMachineBase;
 
 /**
  * GUI for the crusher
@@ -32,8 +29,8 @@ import tbsc.techy.tile.TileMachineBase;
  */
 public class GuiCrusher extends GuiMachineBase {
 
-    public GuiCrusher(ContainerCrusher container, BlockPos pos, World world) {
-        super(container, pos, world, BlockCrusher.tileInvSize, new ResourceLocation("Techy:textures/gui/container/guiCrusher.png"));
+    public GuiCrusher(ContainerCrusher container, TileCrusher tile) {
+        super(container, tile, BlockCrusher.tileInvSize, new ResourceLocation("Techy:textures/gui/container/guiCrusher.png"));
     }
 
     @Override
@@ -48,9 +45,6 @@ public class GuiCrusher extends GuiMachineBase {
     @Override
     protected void drawGuiContainerBackgroundLayer(float gameTicks, int x, int y) {
         super.drawGuiContainerBackgroundLayer(gameTicks, x, y);
-        TileMachineBase tile = (TileMachineBase) world.getTileEntity(machine);
-        if (tile != null) {
-            addElement(new ElementProgressBar(this, 72, 37, 22, 16, new ResourceLocation("Techy:textures/gui/element/furnaceProgressBar.png"), 0, 0, 22, 0, tile.getField(1), 16, tile.getField(2)));
-        }
+        addElement(new ElementProgressBar(this, 72, 37, 22, 16, new ResourceLocation("Techy:textures/gui/element/furnaceProgressBar.png"), 0, 0, 22, 0, tile.getField(1), 16, tile.getField(2)));
     }
 }
