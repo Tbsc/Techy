@@ -57,14 +57,14 @@ public class ConfigData {
 
     // WORLD GEN CONFIG //
 
-    public static int copperPerChunk = 16;
-    public static int tinPerChunk = 14;
-    public static int silverPerChunk = 11;
-    public static int aluminiumPerChunk = 17;
+    public static int copperPerChunk = 11;
+    public static int tinPerChunk = 9;
+    public static int silverPerChunk = 7;
+    public static int aluminiumPerChunk = 12;
     public static int lithiumPerChunk = 6;
 
     public static int copperPerVein = 6;
-    public static int tinPerVein = 10;
+    public static int tinPerVein = 9;
     public static int silverPerVein = 5;
     public static int aluminiumPerVein = 7;
     public static int lithiumPerVein = 3;
