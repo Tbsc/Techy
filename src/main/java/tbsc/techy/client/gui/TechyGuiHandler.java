@@ -30,6 +30,7 @@ import tbsc.techy.machine.furnace.GuiPoweredFurnace;
 import tbsc.techy.machine.furnace.TilePoweredFurnace;
 import tbsc.techy.machine.generator.ContainerGeneratorBase;
 import tbsc.techy.machine.generator.GuiGeneratorBase;
+import tbsc.techy.machine.generator.TileGeneratorBase;
 import tbsc.techy.tile.TileMachineBase;
 
 /**
@@ -77,13 +78,13 @@ public class TechyGuiHandler implements IGuiHandler {
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         if (ID == Techy.POWERED_FURNACE_GUI_ID) {
-            return new GuiPoweredFurnace(new ContainerPoweredFurnace(player.inventory, (TileMachineBase) world.getTileEntity(new BlockPos(x, y, z))), new BlockPos(x, y, z), world);
+            return new GuiPoweredFurnace(new ContainerPoweredFurnace(player.inventory, (TileMachineBase) world.getTileEntity(new BlockPos(x, y, z))), (TilePoweredFurnace) world.getTileEntity(new BlockPos(x, y, z)));
         }
         if (ID == Techy.CRUSHER_GUI_ID) {
-            return new GuiCrusher(new ContainerCrusher(player.inventory, (TileCrusher) world.getTileEntity(new BlockPos(x, y, z))), new BlockPos(x, y, z), world);
+            return new GuiCrusher(new ContainerCrusher(player.inventory, (TileCrusher) world.getTileEntity(new BlockPos(x, y, z))), (TileCrusher) world.getTileEntity(new BlockPos(x, y, z)));
         }
         if (ID == Techy.COAL_GENERATOR_GUI_ID) {
-            return new GuiGeneratorBase(new ContainerGeneratorBase(player.inventory, (TileMachineBase) world.getTileEntity(new BlockPos(x, y, z))), new BlockPos(x, y, z), world);
+            return new GuiGeneratorBase(new ContainerGeneratorBase(player.inventory, (TileMachineBase) world.getTileEntity(new BlockPos(x, y, z))), (TileGeneratorBase) world.getTileEntity(new BlockPos(x, y, z)));
         }
         return null;
     }
