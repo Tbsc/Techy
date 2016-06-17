@@ -57,6 +57,12 @@ public class ConfigData {
 
     // WORLD GEN CONFIG //
 
+    public static boolean shouldGenerateCopper = true;
+    public static boolean shouldGenerateTin = true;
+    public static boolean shouldGenerateSilver = true;
+    public static boolean shouldGenerateAluminium = true;
+    public static boolean shouldGenerateLithium = true;
+
     public static int copperPerChunk = 11;
     public static int tinPerChunk = 9;
     public static int silverPerChunk = 7;

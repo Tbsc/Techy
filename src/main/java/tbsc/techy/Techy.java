@@ -220,6 +220,18 @@ public class Techy {
             ConfigData.advancedPowerCellTransferRate = config.get("AdvancedPowerCell", "MaxTransferRate", ConfigData.advancedPowerCellTransferRate,
                     "Maximum amount of RF an advanced power cell can transfer per tick").getInt();
 
+            // World Gen - settings
+            ConfigData.shouldGenerateCopper = config.get("WorldGen", "ShouldGenerateCopper", ConfigData.shouldGenerateCopper,
+                    "Should Techy generate copper in the world").getBoolean();
+            ConfigData.shouldGenerateTin = config.get("WorldGen", "ShouldGenerateTin", ConfigData.shouldGenerateTin,
+                    "Should Techy generate tin in the world").getBoolean();
+            ConfigData.shouldGenerateSilver = config.get("WorldGen", "ShouldGenerateSilver", ConfigData.shouldGenerateSilver,
+                    "Should Techy generate silver in the world").getBoolean();
+            ConfigData.shouldGenerateAluminium = config.get("WorldGen", "ShouldGenerateAluminium", ConfigData.shouldGenerateAluminium,
+                    "Should Techy generate aluminium in the world").getBoolean();
+            ConfigData.shouldGenerateLithium = config.get("WorldGen", "ShouldGenerateLithium", ConfigData.shouldGenerateLithium,
+                    "Should Techy generate lithium in the world").getBoolean();
+            
             // World Gen - copper
             ConfigData.copperPerChunk = config.get("WorldGen", "CopperPerChunk", ConfigData.copperPerChunk,
                     "How much copper ores should be generated in each chunk (16x256x16)").getInt();
