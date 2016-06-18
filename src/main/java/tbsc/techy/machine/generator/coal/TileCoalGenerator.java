@@ -25,6 +25,8 @@ import tbsc.techy.ConfigData;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.machine.generator.TileGeneratorBase;
 
+import javax.annotation.Nonnull;
+
 /**
  * Implementation of {@link TileGeneratorBase} for coal generation
  *
@@ -55,6 +57,34 @@ public class TileCoalGenerator extends TileGeneratorBase implements IEnergyProvi
     public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
         markDirty();
         return energyStorage.extractEnergy(maxExtract, simulate);
+    }
+
+    @Nonnull
+    @Override
+    public int[] getEnergySlots() {
+        return new int[0];
+    }
+
+    @Nonnull
+    @Override
+    public int[] getInputSlots() {
+        return new int[] {
+                0
+        };
+    }
+
+    @Nonnull
+    @Override
+    public int[] getOutputSlots() {
+        return new int[0];
+    }
+
+    @Nonnull
+    @Override
+    public int[] getBoosterSlots() {
+        return new int[] {
+                1, 2, 3, 4
+        };
     }
 
 }

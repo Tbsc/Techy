@@ -26,13 +26,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import tbsc.techy.api.IBoosterItem;
-import tbsc.techy.api.SideConfiguration;
-import tbsc.techy.api.Sides;
 import tbsc.techy.block.BlockBaseFacingMachine;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.tile.TileMachineBase;
-
-import javax.annotation.Nonnull;
 
 /**
  * Base tile entity for generators
@@ -43,12 +39,6 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
 
     protected TileGeneratorBase(int capacity, int maxReceive, int invSize, int cookTime, int itemsPerTick) {
         super(capacity, maxReceive, invSize, cookTime, itemsPerTick);
-        setConfigurationForSide(Sides.FRONT, SideConfiguration.INPUT);
-        setConfigurationForSide(Sides.BACK, SideConfiguration.INPUT);
-        setConfigurationForSide(Sides.UP, SideConfiguration.INPUT);
-        setConfigurationForSide(Sides.DOWN, SideConfiguration.INPUT);
-        setConfigurationForSide(Sides.LEFT, SideConfiguration.INPUT);
-        setConfigurationForSide(Sides.RIGHT, SideConfiguration.INPUT);
     }
 
     @Override
@@ -185,34 +175,6 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
             }
             return getEnergyUsage(inventory[0]) + getEnergyStored() < getCapacity();
         }
-    }
-
-    @Nonnull
-    @Override
-    public int[] getEnergySlots() {
-        return new int[0];
-    }
-
-    @Nonnull
-    @Override
-    public int[] getInputSlots() {
-        return new int[] {
-                0
-        };
-    }
-
-    @Nonnull
-    @Override
-    public int[] getOutputSlots() {
-        return new int[0];
-    }
-
-    @Nonnull
-    @Override
-    public int[] getBoosterSlots() {
-        return new int[] {
-                1, 2, 3, 4
-        };
     }
 
     /**

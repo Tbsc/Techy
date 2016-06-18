@@ -134,6 +134,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         this.itemsPerTick = itemsPerTick;
         this.machineProcessTime = cookTime;
         this.energyStorage = new EnergyStorage(capacity, maxTransfer);
+        setAllSidesDisabled();
     }
 
     @Override
@@ -142,6 +143,15 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
             if (handleRedstone() || handleBoosters() || handleProcessing() || handleInsertion() || handleExtraction()) {
                 this.markDirty();
             }
+        }
+    }
+
+    /**
+     * The default side configuration is all sides disabled.
+     */
+    protected void setAllSidesDisabled() {
+        for (Sides side : Sides.values()) {
+            setConfigurationForSide(side, SideConfiguration.DISABLED);
         }
     }
 

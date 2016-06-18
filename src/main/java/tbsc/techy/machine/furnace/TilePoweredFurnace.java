@@ -25,8 +25,6 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import tbsc.techy.ConfigData;
 import tbsc.techy.api.IBoosterItem;
-import tbsc.techy.api.SideConfiguration;
-import tbsc.techy.api.Sides;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.recipe.PoweredFurnaceRecipes;
 import tbsc.techy.recipe.StackRecipeInput;
@@ -50,13 +48,6 @@ public class TilePoweredFurnace extends TileMachineBase implements IEnergyReceiv
 
     public TilePoweredFurnace() {
         super(40000, 640, BlockPoweredFurnace.tileInvSize, ConfigData.furnaceDefaultCookTime, 1);
-
-        setConfigurationForSide(Sides.UP, SideConfiguration.INPUT);
-        setConfigurationForSide(Sides.DOWN, SideConfiguration.OUTPUT);
-        setConfigurationForSide(Sides.FRONT, SideConfiguration.INPUT);
-        setConfigurationForSide(Sides.BACK, SideConfiguration.INPUT);
-        setConfigurationForSide(Sides.LEFT, SideConfiguration.INPUT);
-        setConfigurationForSide(Sides.RIGHT, SideConfiguration.INPUT);
     }
 
     /**

@@ -27,8 +27,6 @@ import net.minecraft.util.text.translation.I18n;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import tbsc.techy.ConfigData;
 import tbsc.techy.api.IBoosterItem;
-import tbsc.techy.api.SideConfiguration;
-import tbsc.techy.api.Sides;
 import tbsc.techy.recipe.CrusherRecipes;
 import tbsc.techy.recipe.StackRecipeInput;
 import tbsc.techy.tile.TileMachineBase;
@@ -45,13 +43,6 @@ public class TileCrusher extends TileMachineBase implements IEnergyReceiver {
 
     public TileCrusher() {
         super(50000, 700, BlockCrusher.tileInvSize, ConfigData.crusherDefaultProcessTime, 1);
-
-        setConfigurationForSide(Sides.UP, SideConfiguration.INPUT);
-        setConfigurationForSide(Sides.DOWN, SideConfiguration.OUTPUT);
-        setConfigurationForSide(Sides.FRONT, SideConfiguration.INPUT);
-        setConfigurationForSide(Sides.BACK, SideConfiguration.INPUT);
-        setConfigurationForSide(Sides.LEFT, SideConfiguration.INPUT);
-        setConfigurationForSide(Sides.RIGHT, SideConfiguration.INPUT);
     }
 
     @Override
