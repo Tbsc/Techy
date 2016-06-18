@@ -114,16 +114,18 @@ public class TilePipeEnergy extends TileEntity implements ITickable, IEnergyRece
             }
         }
 
-        int forEach = energyStorage.getEnergyStored() / sides.size();
+        if (sides.size() != 0) {
+            int forEach = energyStorage.getEnergyStored() / sides.size();
 
-        for (EnumFacing side : EnumFacing.VALUES) {
-            if (sides.contains(side)) {
-                BlockPos neighbor = pos.offset(side);
-                TileEntity tile = worldObj.getTileEntity(neighbor);
-                if (tile != null && tile instanceof IEnergyReceiver) {
-                    IEnergyReceiver receiver = (IEnergyReceiver) tile;
-                    if (receiver.getEnergyStored(side.getOpposite()) + forEach > receiver.getMaxEnergyStored(side.getOpposite())) { // can't hold more energy
-                        sides.remove(side);
+            for (EnumFacing side : EnumFacing.VALUES) {
+                if (sides.contains(side)) {
+                    BlockPos neighbor = pos.offset(side);
+                    TileEntity tile = worldObj.getTileEntity(neighbor);
+                    if (tile != null && tile instanceof IEnergyReceiver) {
+                        IEnergyReceiver receiver = (IEnergyReceiver) tile;
+                        if (receiver.getEnergyStored(side.getOpposite()) + forEach > receiver.getMaxEnergyStored(side.getOpposite())) { // can't hold more energy
+                            sides.remove(side);
+                        }
                     }
                 }
             }
