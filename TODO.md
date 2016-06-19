@@ -14,10 +14,10 @@ Everything here is divided by sections and is in tables, more information will b
 
 ### Features
 
-| Critical     | Important                              |   Later                            |
-|--------------|----------------------------------------|------------------------------------|
-| Power Cells  | Storage Blocks<sup>*<sup>1</sup></sup> | Fluid Pipes<sup>*<sup>2</sup></sup>|
-| Item Pipes   | Interactor<sup>*<sup></sup>3</sup>     |                                    |
+| Critical     | Important                              |   Later                                 |
+|--------------|----------------------------------------|-----------------------------------------|
+| Power Cells  | Storage Blocks<sup>*<sup>1</sup></sup> | Fluid Pipes<sup>*<sup>2</sup></sup> (WIP|
+| Item Pipes   | Interactor<sup>*<sup></sup>3</sup> WIP | Aqueous Accumulator                     |
 
 *<sup>1</sup> - By storage blocks I mean stuff like copper blocks. Just a way to compact resources to a smaller form
 
