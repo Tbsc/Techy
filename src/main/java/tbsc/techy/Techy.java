@@ -46,7 +46,11 @@ public class Techy {
      */
     public static final String MODID = "Techy";
     public static final String VERSION = "MC1.9.4-v8";
-    public static final String DEPENDENCIES = "required-after:Forge@[12.17.0.1954,)";
+    public static final String DEPENDENCIES = "required-after:Forge@[" // (taken from AE2) require forge
+            + net.minecraftforge.common.ForgeVersion.majorVersion + '.' // majorVersion
+            + net.minecraftforge.common.ForgeVersion.minorVersion + '.' // minorVersion
+            + net.minecraftforge.common.ForgeVersion.revisionVersion + '.' // revisionVersion
+            + net.minecraftforge.common.ForgeVersion.buildVersion + ",)"; // buildVersion
     public static final String CLIENT_PROXY = "tbsc.techy.proxy.ClientProxy";
     public static final String SERVER_PROXY = "tbsc.techy.proxy.ServerProxy";
 
@@ -57,6 +61,9 @@ public class Techy {
     public static final int CRUSHER_GUI_ID = 1;
     public static final int COAL_GENERATOR_GUI_ID = 2;
     public static final int POWER_CELL_GUI_ID = 3;
+    public static final int INTERACTOR_BASIC_GUI_ID = 4;
+    public static final int INTERACTOR_IMPROVED_GUI_ID = 5;
+    public static final int INTERACTOR_ADVANCED_GUI_ID = 6;
 
     /**
      * Instance of this class
