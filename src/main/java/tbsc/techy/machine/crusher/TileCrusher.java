@@ -26,7 +26,9 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import tbsc.techy.ConfigData;
+import tbsc.techy.Techy;
 import tbsc.techy.api.IBoosterItem;
+import tbsc.techy.network.CPacketEnergyChanged;
 import tbsc.techy.recipe.CrusherRecipes;
 import tbsc.techy.recipe.StackRecipeInput;
 import tbsc.techy.tile.TileMachineBase;
@@ -174,6 +176,8 @@ public class TileCrusher extends TileMachineBase implements IEnergyReceiver {
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
         markDirty();
+        worldObj.markBlockRangeForRenderUpdate(pos.add(-1, -1, -1), pos.add(1, 1, 1));
+        Techy.network.sendToAll(new CPacketEnergyChanged(pos, getEnergyStored()));
         return energyStorage.receiveEnergy(maxReceive, simulate);
     }
 

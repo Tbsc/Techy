@@ -24,8 +24,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import tbsc.techy.ConfigData;
+import tbsc.techy.Techy;
 import tbsc.techy.api.IBoosterItem;
 import tbsc.techy.init.BlockInit;
+import tbsc.techy.network.CPacketEnergyChanged;
 import tbsc.techy.recipe.PoweredFurnaceRecipes;
 import tbsc.techy.recipe.StackRecipeInput;
 import tbsc.techy.tile.TileMachineBase;
@@ -262,6 +264,8 @@ public class TilePoweredFurnace extends TileMachineBase implements IEnergyReceiv
     @Override
     public int receiveEnergy(EnumFacing from, int maxReceive, boolean simulate) {
         markDirty();
+        worldObj.markBlockRangeForRenderUpdate(pos.add(-1, -1, -1), pos.add(1, 1, 1));
+        Techy.network.sendToAll(new CPacketEnergyChanged(pos, getEnergyStored()));
         return energyStorage.receiveEnergy(maxReceive, simulate);
     }
 

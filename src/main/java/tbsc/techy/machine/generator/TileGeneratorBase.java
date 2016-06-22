@@ -25,9 +25,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
+import tbsc.techy.Techy;
 import tbsc.techy.api.IBoosterItem;
 import tbsc.techy.block.BlockBaseFacingMachine;
 import tbsc.techy.init.BlockInit;
+import tbsc.techy.network.CPacketEnergyChanged;
 import tbsc.techy.tile.TileMachineBase;
 
 /**
@@ -143,6 +145,8 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
     @Override
     public int extractEnergy(EnumFacing from, int maxExtract, boolean simulate) {
         this.markDirty();
+        worldObj.markBlockRangeForRenderUpdate(pos.add(-1, -1, -1), pos.add(1, 1, 1));
+        Techy.network.sendToAll(new CPacketEnergyChanged(pos, getEnergyStored()));
         return energyStorage.extractEnergy(maxExtract, simulate);
     }
 
