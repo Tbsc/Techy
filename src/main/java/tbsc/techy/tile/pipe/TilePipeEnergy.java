@@ -69,7 +69,9 @@ public class TilePipeEnergy extends TileEntity implements ITickable, IEnergyRece
                 if (tile != null) {
                     if (tile instanceof IEnergyReceiver) {
                         IEnergyReceiver receiver = (IEnergyReceiver) tile;
-                        receiver.receiveEnergy(side.getOpposite(), extractEnergy(side, forEach, false), false);
+                        if (receiver.canConnectEnergy(side.getOpposite())) { // If energy can be transferred on that side
+                            receiver.receiveEnergy(side.getOpposite(), extractEnergy(side, forEach, false), false);
+                        }
                     }
                 }
             }
@@ -124,6 +126,9 @@ public class TilePipeEnergy extends TileEntity implements ITickable, IEnergyRece
                     if (tile != null && tile instanceof IEnergyReceiver) {
                         IEnergyReceiver receiver = (IEnergyReceiver) tile;
                         if (receiver.getEnergyStored(side.getOpposite()) + forEach > receiver.getMaxEnergyStored(side.getOpposite())) { // can't hold more energy
+                            sides.remove(side);
+                        }
+                        if (!receiver.canConnectEnergy(side.getOpposite())) { // Can't connect on that side
                             sides.remove(side);
                         }
                     }
