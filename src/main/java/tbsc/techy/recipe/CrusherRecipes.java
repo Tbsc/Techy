@@ -21,9 +21,9 @@ import cofh.lib.util.helpers.ItemHelper;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.FMLLog;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import tbsc.techy.ConfigData;
+import tbsc.techy.api.util.DevUtil;
 import tbsc.techy.init.ItemInit;
 import tbsc.techy.item.ItemDusts;
 
@@ -136,7 +136,7 @@ public class CrusherRecipes {
      */
     public void addItemStackRecipe(@Nonnull ItemStack input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
         if (getSmeltingResult(StackRecipeInput.of(input)) != null) {
-            FMLLog.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
+            DevUtil.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
             return;
         }
         ImmutableTriple<ItemStack, ItemStack, Integer> key = new ImmutableTriple<>(output, output2, output2Chance);
@@ -150,7 +150,7 @@ public class CrusherRecipes {
      */
     public void addIRecipeInputRecipe(IRecipeInput input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
         if (getSmeltingResult(input) != null) {
-            FMLLog.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
+            DevUtil.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
             return;
         }
         ImmutableTriple<ItemStack, ItemStack, Integer> key = new ImmutableTriple<>(output, output2, output2Chance);

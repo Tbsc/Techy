@@ -22,8 +22,8 @@ import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
-import net.minecraftforge.fml.common.FMLLog;
 import tbsc.techy.ConfigData;
+import tbsc.techy.api.util.DevUtil;
 import tbsc.techy.block.BlockOreBase;
 import tbsc.techy.item.ItemDusts;
 
@@ -95,7 +95,7 @@ public class PoweredFurnaceRecipes {
      */
     public void addItemStackRecipe(ItemStack input, ItemStack output, float experience, int energyUsage) {
         if (getSmeltingResult(StackRecipeInput.of(input)) != null) {
-            FMLLog.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
+            DevUtil.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
             return;
         }
         this.recipeMap.put(StackRecipeInput.of(input), output);
@@ -108,7 +108,7 @@ public class PoweredFurnaceRecipes {
      */
     public void addIRecipeInputRecipe(IRecipeInput input, @Nonnull ItemStack output, float experience, int energyUsage) {
         if (getSmeltingResult(input) != null) {
-            FMLLog.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
+            DevUtil.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
             return;
         }
         this.recipeMap.put(input, output);
