@@ -19,6 +19,7 @@ package tbsc.techy.api.util;
 
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.IItemHandler;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
@@ -84,12 +85,50 @@ public class InventoryUtils {
     }
 
     /**
+     * Returns the first slot in the {@link IItemHandler} given that the item can be inserted to.
+     * It will check the slots in the inv given, and if any item can be inserted to
+     * any slot, it will return the slot. If not, then it'll return -1.
+     * @param inv The inventory to check
+     * @param insert stack checked
+     * @return first slot item can be inserted to
+     */
+    public static int getFirstAvailableSlot(IItemHandler inv, ItemStack insert) {
+        for (int slot = 0; slot < inv.getSlots(); ++slot) {
+            ItemStack slotItem = inv.getStackInSlot(slot);
+            if (slotItem == null) {
+                return slot;
+            } else if (slotItem.getItem() == insert.getItem()) {
+                if (insert.stackSize + slotItem.stackSize >= insert.stackSize) {
+                    return slot;
+                }
+            }
+        }
+        return -1;
+    }
+
+    /**
      * Returns the first slot that ISN'T empty. If you need an empty slot, use {@link #getFirstAvailableSlot(IInventory, int[])}.
      * @param inv to check
      * @param slots to check
      * @return first slot which has something in it, -1 if the whole inv is empty
      */
     public static int getFirstNonEmptySlot(IInventory inv, int[] slots) {
+        for (int slot : slots) {
+            ItemStack slotItem = inv.getStackInSlot(slot);
+            if (slotItem != null) {
+                return slot;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * Returns the first slot that ISN'T empty. If you need an empty slot, use {@link #getFirstAvailableSlot(IInventory, int[])}.
+     * @param inv to check
+     * @param slots to check
+     * @return first slot which has something in it, -1 if the whole inv is empty
+     */
+    public static int getFirstNonEmptySlot(IItemHandler inv, int[] slots) {
         for (int slot : slots) {
             ItemStack slotItem = inv.getStackInSlot(slot);
             if (slotItem != null) {
