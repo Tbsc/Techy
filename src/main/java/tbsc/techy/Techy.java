@@ -25,12 +25,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tbsc.techy.init.BlockInit;
-import tbsc.techy.init.ItemInit;
+import tbsc.techy.item.ItemWrench;
+import tbsc.techy.machine.furnace.BlockPoweredFurnace;
 import tbsc.techy.network.CPacketUpdateConfig;
 import tbsc.techy.proxy.IProxy;
 
@@ -93,7 +94,7 @@ public class Techy {
     public static CreativeTabs tabTechyItems = new CreativeTabs("techy.items") {
         @Override
         public Item getTabIconItem() {
-            return ItemInit.itemWrench;
+            return ItemWrench.instance;
         }
     };
 
@@ -103,7 +104,7 @@ public class Techy {
     public static CreativeTabs tabTechyBlocks = new CreativeTabs("techy.blocks") {
         @Override
         public Item getTabIconItem() {
-            return Item.getItemFromBlock(BlockInit.blockPoweredFurnace);
+            return Item.getItemFromBlock(BlockPoweredFurnace.instance);
         }
     };
 
@@ -163,7 +164,7 @@ public class Techy {
      * Only called on the server.
      */
     @SideOnly(Side.SERVER)
-    @EventHandler
+    @SubscribeEvent
     public void onServerJoin(FMLNetworkEvent.ServerConnectionFromClientEvent event) {
         if (!event.isLocal()) {
             Techy.network.sendToAll(new CPacketUpdateConfig());
@@ -176,7 +177,7 @@ public class Techy {
      * @param event
      */
     @SideOnly(Side.CLIENT)
-    @EventHandler
+    @SubscribeEvent
     public void onServerLeave(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
         Techy.syncConfig();
     }
@@ -190,6 +191,10 @@ public class Techy {
             config.load();
 
             // Config properties //
+
+            // Render //
+            ConfigData.tesseractModels = config.get("Render", "TesseractModels", ConfigData.tesseractModels,
+                    "Should machines use the 4D tesseract model or a normal block").getBoolean();
 
             // Furnace
             ConfigData.furnaceDefaultCookTime = config.get("Powered Furnace", "DefaultCookTime", ConfigData.furnaceDefaultCookTime,

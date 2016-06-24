@@ -26,6 +26,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import tbsc.techy.api.register.IHasTileEntity;
 import tbsc.techy.tile.pipe.TilePipeEnergy;
 
 import java.util.List;
@@ -35,7 +36,7 @@ import java.util.List;
  *
  * Created by tbsc on 5/9/16.
  */
-public class BlockPipeEnergy extends BlockPipeBase {
+public class BlockPipeEnergy extends BlockPipeBase implements IHasTileEntity {
 
     protected int capacity;
     protected int maxTransfer;
@@ -67,6 +68,16 @@ public class BlockPipeEnergy extends BlockPipeBase {
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TilePipeEnergy(capacity, maxTransfer);
+    }
+
+    @Override
+    public <T extends TileEntity> Class<T> getTileClass() {
+        return (Class<T>) TilePipeEnergy.class;
+    }
+
+    @Override
+    public String getTileID() {
+        return "pipeEnergy";
     }
 
 }

@@ -26,7 +26,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import org.apache.commons.lang3.ArrayUtils;
-import tbsc.techy.init.ItemInit;
+import tbsc.techy.api.register.RegisterInstance;
+import tbsc.techy.api.register.TechyRegister;
 
 import java.util.List;
 
@@ -37,12 +38,18 @@ import java.util.List;
  */
 public class ItemDusts extends ItemBase {
 
+    public static final String IDENTIFIER = "itemDust";
+
+    @RegisterInstance(identifier = IDENTIFIER, registerClass = ItemDusts.class)
+    public static ItemDusts instance;
+
+    @TechyRegister(identifier = IDENTIFIER)
     public ItemDusts() {
         super();
         setMaxDamage(0);
         setHasSubtypes(true);
         setMaxStackSize(64);
-        setRegistryName("itemDust");
+        setRegistryName(IDENTIFIER);
     }
 
     @Override
@@ -53,7 +60,7 @@ public class ItemDusts extends ItemBase {
     }
 
     @Override
-    public void initModel() {
+    public void initModel(Item item) {
         ResourceLocation[] textures = new ResourceLocation[] {};
         for (DustType type : DustType.values()) {
             if (type != DustType.IRON)
@@ -79,12 +86,12 @@ public class ItemDusts extends ItemBase {
         EMERALD("itemDustEmerald", "Emerald", 4, new ItemStack(Items.EMERALD)),
         WOOD("itemDustWood", "Wood", 5, null),
         STONE("itemDustStone", "Stone", 6, null),
-        COPPER("itemDustCopper", "Copper", 7, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.COPPER.id)),
-        TIN("itemDustTin", "Tin", 8, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.TIN.id)),
-        SILVER("itemDustSilver", "Silver", 9, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.SILVER.id)),
-        ALUMINIUM("itemDustAluminium", "Aluminium", 10, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.ALUMINIUM.id)),
-        LITHIUM("itemDustLithium", "Lithium", 11, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.LITHIUM.id)),
-        BRONZE("itemDustBronze", "Bronze", 12, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.BRONZE.id));
+        COPPER("itemDustCopper", "Copper", 7, new ItemStack(ItemIngots.instance, 1, ItemIngots.IngotType.COPPER.id)),
+        TIN("itemDustTin", "Tin", 8, new ItemStack(ItemIngots.instance, 1, ItemIngots.IngotType.TIN.id)),
+        SILVER("itemDustSilver", "Silver", 9, new ItemStack(ItemIngots.instance, 1, ItemIngots.IngotType.SILVER.id)),
+        ALUMINIUM("itemDustAluminium", "Aluminium", 10, new ItemStack(ItemIngots.instance, 1, ItemIngots.IngotType.ALUMINIUM.id)),
+        LITHIUM("itemDustLithium", "Lithium", 11, new ItemStack(ItemIngots.instance, 1, ItemIngots.IngotType.LITHIUM.id)),
+        BRONZE("itemDustBronze", "Bronze", 12, new ItemStack(ItemIngots.instance, 1, ItemIngots.IngotType.BRONZE.id));
 
         public int id;
         public String name;

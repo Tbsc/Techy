@@ -21,7 +21,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import tbsc.techy.container.ContainerBase;
 import tbsc.techy.container.slot.SlotBooster;
-import tbsc.techy.init.BlockInit;
 import tbsc.techy.tile.TileMachineBase;
 
 /**
@@ -32,7 +31,7 @@ import tbsc.techy.tile.TileMachineBase;
 public class ContainerGeneratorBase extends ContainerBase {
 
     public ContainerGeneratorBase(IInventory playerInv, TileMachineBase tileBase) {
-        super(playerInv, tileBase, BlockInit.blockCoalGenerator.tileInvSize);
+        super(playerInv, tileBase, tileBase.inventorySize);
     }
 
     @Override

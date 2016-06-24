@@ -23,7 +23,6 @@ import tbsc.techy.client.gui.GuiMachineBase;
 import tbsc.techy.client.gui.element.ElementProgressBar;
 import tbsc.techy.client.gui.element.ElementSlotRender;
 import tbsc.techy.container.ContainerBase;
-import tbsc.techy.init.BlockInit;
 
 /**
  * Gui for the coal generator
@@ -33,7 +32,7 @@ import tbsc.techy.init.BlockInit;
 public class GuiGeneratorBase extends GuiMachineBase {
 
     public GuiGeneratorBase(ContainerBase containerBase, TileGeneratorBase tile) {
-        super(containerBase, tile, BlockInit.blockCoalGenerator.tileInvSize, new ResourceLocation(Techy.MODID + ":textures/gui/container/guiItemGenerator.png"));
+        super(containerBase, tile, tile.inventorySize, new ResourceLocation(Techy.MODID + ":textures/gui/container/guiItemGenerator.png"));
     }
 
     @Override
