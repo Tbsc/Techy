@@ -28,10 +28,7 @@ import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import tbsc.techy.Techy;
-import tbsc.techy.api.register.IHasItemBlock;
-import tbsc.techy.api.register.IHasTileEntity;
-import tbsc.techy.api.register.RegisterInstance;
-import tbsc.techy.api.register.TechyRegister;
+import tbsc.techy.api.register.*;
 import tbsc.techy.api.util.AnnotationUtil;
 import tbsc.techy.init.BlockInit;
 import tbsc.techy.init.ItemInit;
@@ -121,6 +118,12 @@ public abstract class CommonProxy implements IProxy {
                     if (instance instanceof IForgeRegistryEntry) {
                         // Register to the game
                         GameRegistry.register((IForgeRegistryEntry<?>) instance);
+
+                        // Is it implementing ITechyRegister
+                        if (instance instanceof ITechyRegister) {
+                            ITechyRegister register = (ITechyRegister) instance;
+                            register.initModel();
+                        }
 
                         // Is it a block
                         if (instance instanceof Block) {
