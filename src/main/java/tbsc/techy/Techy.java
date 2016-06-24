@@ -192,10 +192,6 @@ public class Techy {
 
             // Config properties //
 
-            // Render //
-            ConfigData.tesseractModels = config.get("Render", "TesseractModels", ConfigData.tesseractModels,
-                    "Should machines use the 4D tesseract model or a normal block").getBoolean();
-
             // Furnace
             ConfigData.furnaceDefaultCookTime = config.get("Powered Furnace", "DefaultCookTime", ConfigData.furnaceDefaultCookTime,
                     "Define (in ticks) the processing time for vanilla recipes in the powered furnace.", 1, Integer.MAX_VALUE).getInt();
