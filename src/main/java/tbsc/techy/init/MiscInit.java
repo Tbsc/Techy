@@ -42,6 +42,13 @@ import tbsc.techy.client.gui.TechyGuiHandler;
 import tbsc.techy.event.GeneralEventHandler;
 import tbsc.techy.item.ItemDusts;
 import tbsc.techy.item.ItemIngots;
+import tbsc.techy.item.ItemWrench;
+import tbsc.techy.item.battery.ItemBatteryLarge;
+import tbsc.techy.item.battery.ItemBatteryMedium;
+import tbsc.techy.item.battery.ItemBatterySmall;
+import tbsc.techy.item.component.ItemGrindingComponent;
+import tbsc.techy.item.component.ItemHeatingComponent;
+import tbsc.techy.item.component.ItemIgnitionComponent;
 import tbsc.techy.machine.crusher.BlockCrusher;
 import tbsc.techy.machine.furnace.BlockPoweredFurnace;
 import tbsc.techy.machine.generator.coal.BlockCoalGenerator;
@@ -109,19 +116,19 @@ public class MiscInit {
                 "SIS",
                 "BFB",
                 "SHS",
-                'F', BlockMachineBaseBasic.instance, 'H', ItemInit.itemHeatingComponent, 'B', ItemInit.itemBatterySmall, 'S', "ingotSilver", 'I', "ingotIron"));
+                'F', BlockMachineBaseBasic.instance, 'H', ItemHeatingComponent.instance, 'B', ItemBatterySmall.instance, 'S', "ingotSilver", 'I', "ingotIron"));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(BlockCrusher.instance,
                 "IAI",
                 "BFB",
                 "IGI",
-                'F', BlockMachineBaseBasic.instance, 'B', ItemInit.itemBatterySmall, 'G', ItemInit.itemGrindingComponent, 'A', "ingotGold", 'I', "ingotTin"));
+                'F', BlockMachineBaseBasic.instance, 'B', ItemBatterySmall.instance, 'G', ItemGrindingComponent.instance, 'A', "ingotGold", 'I', "ingotTin"));
 
         GameRegistry.addRecipe(new ShapedOreRecipe(BlockCoalGenerator.instance,
                 "IAI",
                 "BFB",
                 "IGI",
-                'F', BlockMachineBaseBasic.instance, 'B', ItemInit.itemBatterySmall, 'G', ItemInit.itemIgnitionComponent, 'A', "ingotAluminium", 'I', "ingotIron"));
+                'F', BlockMachineBaseBasic.instance, 'B', ItemBatterySmall.instance, 'G', ItemIgnitionComponent.instance, 'A', "ingotAluminium", 'I', "ingotIron"));
 
         // MACHINE BASES //
 
@@ -143,17 +150,17 @@ public class MiscInit {
 
         // CRAFTING COMPONENTS //
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemHeatingComponent,
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemHeatingComponent.instance,
                 "III",
                 "SFS",
                 "RRR",
                 'F', Items.FLINT_AND_STEEL, 'I', "ingotGold", 'S', "ingotSilver", 'R', "dustRedstone"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemGrindingComponent,
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemGrindingComponent.instance,
                 "III",
                 "SFS",
                 "RRR",
                 'F', Items.IRON_PICKAXE, 'I', "ingotGold", 'S', "ingotSilver", 'R', "dustRedstone"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemIgnitionComponent,
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemIgnitionComponent.instance,
                 "III",
                 "SFS",
                 "RRR",
@@ -161,22 +168,22 @@ public class MiscInit {
 
         // ITEMS //
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemBatterySmall,
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemBatterySmall.instance,
                 " I ",
                 "IRI",
                 "ICI",
                 'I', "ingotIron", 'C', "ingotCopper", 'R', "dustRedstone")); // No dust because at that tier you don't have a crusher yet
-        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemBatteryMedium,
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemBatteryMedium.instance,
                 " D ",
                 "GRG",
                 "GSG",
-                'D', "dustGold", 'S', "dustSilver", 'G', "ingotGold", 'R', ItemInit.itemBatterySmall));
-        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemBatteryLarge,
+                'D', "dustGold", 'S', "dustSilver", 'G', "ingotGold", 'R', ItemBatterySmall.instance));
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemBatteryLarge.instance,
                 " D ",
                 "GRG",
                 "GLG",
-                'D', "dustDiamond", 'G', "gemDiamond", 'L', "dustLithium", 'R', ItemInit.itemBatteryMedium));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.BRONZE.id),
+                'D', "dustDiamond", 'G', "gemDiamond", 'L', "dustLithium", 'R', ItemBatteryMedium.instance));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemIngots.instance, 1, ItemIngots.IngotType.BRONZE.id),
                 "dustCopper", "dustTin"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockPipeEnergyBasic.instance, 8),
                 "GGG",
@@ -193,7 +200,7 @@ public class MiscInit {
                 "CRC",
                 "GGG",
                 'G', Blocks.GLASS, 'C', "dustLithium", 'R', "dustRedstone"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemWrench,
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemWrench.instance,
                 "T  ",
                 " I ",
                 "  I",
@@ -201,11 +208,11 @@ public class MiscInit {
 
         // Adding dusts to ore dictionary
         for (ItemDusts.DustType dustType : ItemDusts.DustType.values()) {
-            OreDictionary.registerOre("dust" + dustType.regName, new ItemStack(ItemInit.itemDusts, 1, dustType.id));
+            OreDictionary.registerOre("dust" + dustType.regName, new ItemStack(ItemDusts.instance, 1, dustType.id));
         }
         // Adding ingots to ore dictionary
         for (ItemIngots.IngotType ingotType : ItemIngots.IngotType.values()) {
-            OreDictionary.registerOre("ingot" + ingotType.regName, new ItemStack(ItemInit.itemIngots, 1, ingotType.id));
+            OreDictionary.registerOre("ingot" + ingotType.regName, new ItemStack(ItemIngots.instance, 1, ingotType.id));
         }
         // Adding ores to ore dictionary
         for (BlockOreBase.OreType oreType : BlockOreBase.OreType.values()) {
@@ -213,8 +220,8 @@ public class MiscInit {
         }
         // Since I need to be compatible with the ore dictionary, I am also registering it as aluminium
         OreDictionary.registerOre("oreAluminum", new ItemStack(BlockOreBase.OreType.ALUMINIUM.ore));
-        OreDictionary.registerOre("ingotAluminum", new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.ALUMINIUM.id));
-        OreDictionary.registerOre("dustAluminum", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.ALUMINIUM.id));
+        OreDictionary.registerOre("ingotAluminum", new ItemStack(ItemIngots.instance, 1, ItemIngots.IngotType.ALUMINIUM.id));
+        OreDictionary.registerOre("dustAluminum", new ItemStack(ItemDusts.instance, 1, ItemDusts.DustType.ALUMINIUM.id));
 
         // FURNACE RECIPES //
 
@@ -225,9 +232,9 @@ public class MiscInit {
         }
         for (ItemDusts.DustType dust : ItemDusts.DustType.values()) {
             if (dust.ingot != null) { // Not all dusts have an ingot form
-                if (dust.ingot.getMetadata() != ItemIngots.IngotType.LITHIUM.id) { // ONLY add if dust isn't lithium
-                    GameRegistry.addSmelting(new ItemStack(ItemInit.itemDusts, 1, dust.id), dust.ingot, 2);
-                }
+                // if (dust.ingot.getMetadata() != ItemIngots.IngotType.LITHIUM.id) { // ONLY add if dust isn't lithium
+                    // GameRegistry.addSmelting(new ItemStack(ItemDusts.instance, 1, dust.id), dust.ingot, 2);
+                // } TODO Uncomment
             }
         }
     }

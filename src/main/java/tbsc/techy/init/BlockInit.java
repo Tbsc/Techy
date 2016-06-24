@@ -41,7 +41,7 @@ public class BlockInit {
     /**
      * Gets called on preInit stage and loads all of the blocks and TileEntities.
      */
-    public static void init() {
+    public static void legacyInit() {
         blockOreCopper = new BlockOreBase("blockOreCopper");
         blockOreCopper.setHarvestLevel("pickaxe", Item.ToolMaterial.STONE.getHarvestLevel());
         blockOreTin = new BlockOreBase("blockOreTin");
@@ -70,7 +70,7 @@ public class BlockInit {
      * Each block needs to be added manually.
      */
     @SideOnly(Side.CLIENT)
-    public static void initModels() {
+    public static void initLegacyModels() {
         blockOreCopper.initModel(Item.getItemFromBlock(blockOreCopper));
         blockOreTin.initModel(Item.getItemFromBlock(blockOreTin));
         blockOreSilver.initModel(Item.getItemFromBlock(blockOreSilver));

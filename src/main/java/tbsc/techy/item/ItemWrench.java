@@ -30,6 +30,8 @@ import net.minecraft.world.World;
 import tbsc.techy.api.ITechyRotatable;
 import tbsc.techy.api.ITechyWrench;
 import tbsc.techy.api.ITechyWrenchable;
+import tbsc.techy.api.register.RegisterInstance;
+import tbsc.techy.api.register.TechyRegister;
 
 /**
  * Techy's wrench.
@@ -38,8 +40,14 @@ import tbsc.techy.api.ITechyWrenchable;
  */
 public class ItemWrench extends ItemBase implements ITechyWrench {
 
+    public static final String IDENTIFIER = "itemWrench";
+
+    @RegisterInstance(identifier = IDENTIFIER, registerClass = ItemWrench.class)
+    public static ItemWrench instance;
+
+    @TechyRegister(identifier = IDENTIFIER)
     public ItemWrench() {
-        super("itemWrench");
+        super(IDENTIFIER);
         setMaxStackSize(1);
     }
 

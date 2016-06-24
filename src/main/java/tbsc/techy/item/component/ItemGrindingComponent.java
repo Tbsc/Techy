@@ -15,21 +15,26 @@
  * License along with Techy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package tbsc.techy.item;
+package tbsc.techy.item.component;
+
+import tbsc.techy.api.register.RegisterInstance;
+import tbsc.techy.api.register.TechyRegister;
 
 /**
- * Basic crafting component.
- * Since most crafting components are just normal items with a texture, but
- * have no real functionality other than being used as a crafting ingredient
- * or used in another machine. Therefore 1 class that can be reused with
- * different unlocalized names is good.
+ * Grinding component
  *
- * Created by tbsc on 5/5/16.
+ * Created by tbsc on 6/24/16.
  */
-public class ItemGenericCraftingComponent extends ItemBase {
+public class ItemGrindingComponent extends ItemGenericCraftingComponent {
 
-    public ItemGenericCraftingComponent(String unlocalizedName) {
-        super(unlocalizedName);
+    public static final String IDENTIFIER = "itemGrindingComponent";
+
+    @RegisterInstance(identifier = IDENTIFIER, registerClass = ItemGrindingComponent.class)
+    public static ItemGrindingComponent instance;
+
+    @TechyRegister(identifier = IDENTIFIER)
+    public ItemGrindingComponent() {
+        super(IDENTIFIER);
     }
 
 }

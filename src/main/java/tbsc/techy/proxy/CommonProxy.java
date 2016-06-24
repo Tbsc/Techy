@@ -18,6 +18,7 @@
 package tbsc.techy.proxy;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLLog;
@@ -31,7 +32,6 @@ import tbsc.techy.Techy;
 import tbsc.techy.api.register.*;
 import tbsc.techy.api.util.AnnotationUtil;
 import tbsc.techy.init.BlockInit;
-import tbsc.techy.init.ItemInit;
 import tbsc.techy.init.MiscInit;
 import tbsc.techy.misc.cmd.CommandRetroGen;
 import tbsc.techy.network.CPacketEnergyChanged;
@@ -63,8 +63,7 @@ public abstract class CommonProxy implements IProxy {
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
-        BlockInit.init();
-        ItemInit.init();
+        BlockInit.legacyInit();
         loadTechyRegisters();
         MiscInit.preInit();
         Techy.network = NetworkRegistry.INSTANCE.newSimpleChannel("Techy");
@@ -130,8 +129,10 @@ public abstract class CommonProxy implements IProxy {
 
                             // Is it implementing ITechyRegister
                             if (instance instanceof ITechyRegister) {
-                                ITechyRegister register = (ITechyRegister) instance;
-                                register.initModel(itemBlock);
+                                if (itemBlock != null) {
+                                    ITechyRegister register = (ITechyRegister) instance;
+                                    register.initModel(itemBlock);
+                                }
                             }
 
                             // Should it register a tile entity
@@ -142,6 +143,14 @@ public abstract class CommonProxy implements IProxy {
                                 } catch (IllegalArgumentException e) {
                                     // If the tile entity is already registered, then silently ignore
                                 }
+                            }
+                        }
+
+                        if (instance instanceof Item) {
+                            // Is it implementing ITechyRegister
+                            if (instance instanceof ITechyRegister) {
+                                ITechyRegister register = (ITechyRegister) instance;
+                                register.initModel((Item) instance);
                             }
                         }
                     } else {

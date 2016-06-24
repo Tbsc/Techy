@@ -30,7 +30,7 @@ import net.minecraftforge.fml.common.network.FMLNetworkEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tbsc.techy.init.ItemInit;
+import tbsc.techy.item.ItemWrench;
 import tbsc.techy.machine.furnace.BlockPoweredFurnace;
 import tbsc.techy.network.CPacketUpdateConfig;
 import tbsc.techy.proxy.IProxy;
@@ -94,7 +94,7 @@ public class Techy {
     public static CreativeTabs tabTechyItems = new CreativeTabs("techy.items") {
         @Override
         public Item getTabIconItem() {
-            return ItemInit.itemWrench;
+            return ItemWrench.instance;
         }
     };
 
