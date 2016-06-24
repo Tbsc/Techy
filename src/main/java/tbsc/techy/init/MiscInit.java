@@ -63,6 +63,7 @@ public class MiscInit {
      */
     public static void preInit() {
         MinecraftForge.EVENT_BUS.register(new GeneralEventHandler());
+        MinecraftForge.EVENT_BUS.register(Techy.instance);
         NetworkRegistry.INSTANCE.registerGuiHandler(Techy.instance, new TechyGuiHandler());
     }
 
