@@ -118,25 +118,30 @@ public abstract class CommonProxy implements IProxy {
                     if (instance instanceof IForgeRegistryEntry) {
                         // Register to the game
                         GameRegistry.register((IForgeRegistryEntry<?>) instance);
-
-                        // Is it implementing ITechyRegister
-                        if (instance instanceof ITechyRegister) {
-                            ITechyRegister register = (ITechyRegister) instance;
-                            register.initModel();
-                        }
+                        ItemBlock itemBlock = null;
 
                         // Is it a block
                         if (instance instanceof Block) {
                             // Should it register an item block
                             if (instance instanceof IHasItemBlock) {
                                 // Register an ItemBlock instance of this block
-                                GameRegistry.register(new ItemBlock((Block) instance), ((Block) instance).getRegistryName());
+                                GameRegistry.register(itemBlock = new ItemBlock((Block) instance), ((Block) instance).getRegistryName());
+                            }
+
+                            // Is it implementing ITechyRegister
+                            if (instance instanceof ITechyRegister) {
+                                ITechyRegister register = (ITechyRegister) instance;
+                                register.initModel(itemBlock);
                             }
 
                             // Should it register a tile entity
                             if (instance instanceof IHasTileEntity) {
                                 // Register the tile entity class from the interface methods
-                                GameRegistry.registerTileEntity(((IHasTileEntity) instance).getTileClass(), ((IHasTileEntity) instance).getTileID());
+                                try {
+                                    GameRegistry.registerTileEntity(((IHasTileEntity) instance).getTileClass(), ((IHasTileEntity) instance).getTileID());
+                                } catch (IllegalArgumentException e) {
+                                    // If the tile entity is already registered, then silently ignore
+                                }
                             }
                         }
                     } else {

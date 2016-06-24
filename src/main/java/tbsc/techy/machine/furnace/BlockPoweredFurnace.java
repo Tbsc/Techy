@@ -32,6 +32,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tbsc.techy.Techy;
 import tbsc.techy.api.ITechyWrench;
+import tbsc.techy.api.register.IHasTileEntity;
+import tbsc.techy.api.register.RegisterInstance;
+import tbsc.techy.api.register.TechyRegister;
 import tbsc.techy.block.BlockBaseFacingMachine;
 
 import javax.annotation.Nullable;
@@ -41,7 +44,7 @@ import javax.annotation.Nullable;
  *
  * Created by tbsc on 3/27/16.
  */
-public class BlockPoweredFurnace extends BlockBaseFacingMachine {
+public class BlockPoweredFurnace extends BlockBaseFacingMachine implements IHasTileEntity {
 
     /**
      * Size of the inventory.
@@ -54,8 +57,14 @@ public class BlockPoweredFurnace extends BlockBaseFacingMachine {
      */
     public static int tileInvSize = 6;
 
+    public static final String IDENTIFIER = "blockPoweredFurnace";
+
+    @RegisterInstance(identifier = IDENTIFIER, registerClass = BlockPoweredFurnace.class)
+    public static BlockPoweredFurnace instance;
+
+    @TechyRegister(identifier = IDENTIFIER)
     public BlockPoweredFurnace() {
-        super(Material.IRON, "blockPoweredFurnace", tileInvSize);
+        super(Material.IRON, IDENTIFIER, tileInvSize);
         setHarvestLevel("pickaxe", Item.ToolMaterial.IRON.getHarvestLevel());
         setHardness(4.0F);
         setResistance(5.5F);
@@ -108,6 +117,16 @@ public class BlockPoweredFurnace extends BlockBaseFacingMachine {
             playerIn.openGui(Techy.instance, Techy.POWERED_FURNACE_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
+    }
+
+    @Override
+    public <T extends TileEntity> Class<T> getTileClass() {
+        return (Class<T>) TilePoweredFurnace.class;
+    }
+
+    @Override
+    public String getTileID() {
+        return "tilePoweredFurnace";
     }
 
 }

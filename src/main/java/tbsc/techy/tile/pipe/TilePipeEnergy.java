@@ -28,7 +28,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import tbsc.techy.block.pipe.BlockPipeBase;
-import tbsc.techy.init.BlockInit;
+import tbsc.techy.block.pipe.BlockPipeEnergyBasic;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -79,22 +79,22 @@ public class TilePipeEnergy extends TileEntity implements ITickable, IEnergyRece
 
         IBlockState state = worldObj.getBlockState(pos);
 
-        if (state.getValue(BlockPipeBase.NORTH) != BlockInit.blockPipeEnergyBasic.canConnectOnSide(worldObj, pos, EnumFacing.NORTH)) {
+        if (state.getValue(BlockPipeBase.NORTH) != BlockPipeEnergyBasic.instance.canConnectOnSide(worldObj, pos, EnumFacing.NORTH)) {
             worldObj.setBlockState(pos, state.withProperty(BlockPipeBase.NORTH, !state.getValue(BlockPipeBase.NORTH)));
         }
-        if (state.getValue(BlockPipeBase.SOUTH) != BlockInit.blockPipeEnergyBasic.canConnectOnSide(worldObj, pos, EnumFacing.SOUTH)) {
+        if (state.getValue(BlockPipeBase.SOUTH) != BlockPipeEnergyBasic.instance.canConnectOnSide(worldObj, pos, EnumFacing.SOUTH)) {
             worldObj.setBlockState(pos, state.withProperty(BlockPipeBase.SOUTH, !state.getValue(BlockPipeBase.SOUTH)));
         }
-        if (state.getValue(BlockPipeBase.WEST) != BlockInit.blockPipeEnergyBasic.canConnectOnSide(worldObj, pos, EnumFacing.WEST)) {
+        if (state.getValue(BlockPipeBase.WEST) != BlockPipeEnergyBasic.instance.canConnectOnSide(worldObj, pos, EnumFacing.WEST)) {
             worldObj.setBlockState(pos, state.withProperty(BlockPipeBase.WEST, !state.getValue(BlockPipeBase.WEST)));
         }
-        if (state.getValue(BlockPipeBase.EAST) != BlockInit.blockPipeEnergyBasic.canConnectOnSide(worldObj, pos, EnumFacing.EAST)) {
+        if (state.getValue(BlockPipeBase.EAST) != BlockPipeEnergyBasic.instance.canConnectOnSide(worldObj, pos, EnumFacing.EAST)) {
             worldObj.setBlockState(pos, state.withProperty(BlockPipeBase.EAST, !state.getValue(BlockPipeBase.EAST)));
         }
-        if (state.getValue(BlockPipeBase.UP) != BlockInit.blockPipeEnergyBasic.canConnectOnSide(worldObj, pos, EnumFacing.UP)) {
+        if (state.getValue(BlockPipeBase.UP) != BlockPipeEnergyBasic.instance.canConnectOnSide(worldObj, pos, EnumFacing.UP)) {
             worldObj.setBlockState(pos, state.withProperty(BlockPipeBase.UP, !state.getValue(BlockPipeBase.UP)));
         }
-        if (state.getValue(BlockPipeBase.DOWN) != BlockInit.blockPipeEnergyBasic.canConnectOnSide(worldObj, pos, EnumFacing.DOWN)) {
+        if (state.getValue(BlockPipeBase.DOWN) != BlockPipeEnergyBasic.instance.canConnectOnSide(worldObj, pos, EnumFacing.DOWN)) {
             worldObj.setBlockState(pos, state.withProperty(BlockPipeBase.DOWN, !state.getValue(BlockPipeBase.DOWN)));
         }
     }
