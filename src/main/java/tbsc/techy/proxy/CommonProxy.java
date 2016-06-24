@@ -90,6 +90,7 @@ public abstract class CommonProxy implements IProxy {
 
             // Loop through the classes
             for (Class clazz : classes) {
+                // Loop through constructors
                 for (Constructor constructor : clazz.getConstructors()) {
                     // Check if constructor is annotated with @TechyRegister
                     if (constructor.isAnnotationPresent(TechyRegister.class)) {
@@ -103,47 +104,59 @@ public abstract class CommonProxy implements IProxy {
             // The string is the identifier, and the object is the registered instance
             Map<String, ImmutablePair<Object, Constructor>> existingIdentifiers = new HashMap<>();
 
+            // Loop through the constructors to be registered
             for (Constructor constructor : registerConstructors) {
+                // Get the annotation for data
                 TechyRegister annotation = (TechyRegister) constructor.getAnnotation(TechyRegister.class);
 
+                // Make sure there are no duplicate identifiers
                 if (!existingIdentifiers.containsKey(annotation.identifier())) {
+                    // Create new instance
                     Object instance = constructor.newInstance();
 
+                    // Put it in the registered map so we know what we have registered
                     existingIdentifiers.put(annotation.identifier(), new ImmutablePair<>(instance, constructor));
 
                     // All annotated constructors should be registered as follows.
                     if (instance instanceof IForgeRegistryEntry) {
+                        // Register to the game
                         GameRegistry.register((IForgeRegistryEntry<?>) instance);
 
                         // Is it a block
                         if (instance instanceof Block) {
                             // Should it register an item block
                             if (instance instanceof IHasItemBlock) {
+                                // Register an ItemBlock instance of this block
                                 GameRegistry.register(new ItemBlock((Block) instance), ((Block) instance).getRegistryName());
                             }
 
                             // Should it register a tile entity
                             if (instance instanceof IHasTileEntity) {
+                                // Register the tile entity class from the interface methods
                                 GameRegistry.registerTileEntity(((IHasTileEntity) instance).getTileClass(), ((IHasTileEntity) instance).getTileID());
                             }
                         }
                     } else {
+                        // Something attempted to register a class that can't be registereed
                         FMLLog.bigWarning("Class %s has attempted to register without being registrable! This is very bad, and should be reported as a bug to the owner of the class! Silently ignoring", constructor.getDeclaringClass().getName());
                     }
                 } else {
+                    // Something used the same identifier as other class
                     FMLLog.warning("Found duplicate Techy register identifiers, silently ignoring");
                 }
             }
 
-            // Loop through the fields in that class
+            // Loop through the registered constructors
             for (Constructor constructor : registerConstructors) {
+                // Loop through the fields in the constructor's class
                 for (Field field : constructor.getDeclaringClass().getFields()) {
-                    // Is the RegisterInstance annotation present
+                    // Is the RegisterInstance annotation present on the field
                     if (field.isAnnotationPresent(RegisterInstance.class)) {
                         // Get annotation data
                         RegisterInstance instanceAnnotation = field.getAnnotation(RegisterInstance.class);
-                        // If the class for the identifier equals to the class of the annotation
+                        // If the identifier has been registered
                         if (existingIdentifiers.containsKey(instanceAnnotation.identifier())) {
+                            // If the classes are equal
                             if (existingIdentifiers.get(instanceAnnotation.identifier()).getRight().getDeclaringClass() == instanceAnnotation.registerClass()) {
                                 // Give access
                                 field.setAccessible(true);
@@ -157,8 +170,14 @@ public abstract class CommonProxy implements IProxy {
                 }
             }
         } catch (ClassNotFoundException | IOException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
-            // Exception, so crash
+            // Exception, so crash, although:
+            // - ClassNotFoundException can't occur, due to fetching classes from disk
+            // - IOException can occur, but very unlikely
+            // - InstantiationException can occur if the constructor annotated has parameters, therefore I can't init it
+            // - IllegalAccessException can't happen because I make sure that I have access
+            // - InvocationTargetException can't happen because there should be any exceptions
             e.printStackTrace();
+            // But even if something happens, then print the stack trace, and continue with the game cycle
         }
     }
 
