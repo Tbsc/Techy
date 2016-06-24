@@ -15,10 +15,7 @@
  * License along with Techy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package tbsc.techy.api;
-
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
+package tbsc.techy.api.register;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -26,16 +23,21 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * This annotation should be put on any class that can be registered using {@link GameRegistry#register(IForgeRegistryEntry)},
- * therefore any class that's implementing {@link IForgeRegistryEntry}.
- * What it'll do is register the class to the game, and based on what the class implements, register other things.
- * For example, if a block implements {@link net.minecraft.block.ITileEntityProvider}, it'll register the tile
- * entity for the block.
+ * After registration, if a field that is annotated with this annotation is found, and the class that it is
+ * pointing to has/will be registered, it assigns the instance of the registered object to the field
+ * that is annotated by this annotation.
+ * To know what class needs to be assigned by this field, a class object and an identifier need to be passed.
+ * A class to know by the type of the registered object, and an identifier if there are more than 1 instances
+ * of a class registered.
  *
  * Created by tbsc on 6/23/16.
  */
-@Target(value = ElementType.TYPE)
+@Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TechyRegister {
+public @interface RegisterInstance {
+
+    Class registerClass();
+
+    String identifier();
 
 }
