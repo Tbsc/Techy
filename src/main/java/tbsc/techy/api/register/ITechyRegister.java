@@ -17,10 +17,14 @@
 
 package tbsc.techy.api.register;
 
+import net.minecraft.item.Item;
+
+import javax.annotation.Nonnull;
+
 /**
  * In order for the registered class to be registered correctly, the class
  * needs to implement this so it has basic methods the registrar needs. for
- * example {@link #initModel()}
+ * example {@link #initModel(Item)}
  *
  * Created by tbsc on 6/24/16.
  */
@@ -30,6 +34,6 @@ public interface ITechyRegister {
      * Everything related to render of the block needs to be done in this method, for
      * example setting models based on metadata and other stuff.
      */
-    void initModel();
+    void initModel(@Nonnull Item item);
 
 }
