@@ -26,7 +26,6 @@ import net.minecraft.util.text.TextComponentString;
 import tbsc.techy.ConfigData;
 import tbsc.techy.Techy;
 import tbsc.techy.api.IBoosterItem;
-import tbsc.techy.init.BlockInit;
 import tbsc.techy.network.CPacketEnergyChanged;
 import tbsc.techy.recipe.PoweredFurnaceRecipes;
 import tbsc.techy.recipe.StackRecipeInput;
@@ -276,7 +275,7 @@ public class TilePoweredFurnace extends TileMachineBase implements IEnergyReceiv
      */
     @Override
     public String getName() {
-        return BlockInit.blockPoweredFurnace.getLocalizedName();
+        return BlockPoweredFurnace.instance.getLocalizedName();
     }
 
     /**
@@ -286,7 +285,7 @@ public class TilePoweredFurnace extends TileMachineBase implements IEnergyReceiv
      */
     @Override
     public ITextComponent getDisplayName() {
-        return new TextComponentString(BlockInit.blockPoweredFurnace.getLocalizedName());
+        return new TextComponentString(BlockPoweredFurnace.instance.getLocalizedName());
     }
 
 }

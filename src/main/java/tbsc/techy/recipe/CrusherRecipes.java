@@ -24,7 +24,6 @@ import net.minecraft.item.ItemStack;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import tbsc.techy.ConfigData;
 import tbsc.techy.api.util.DevUtil;
-import tbsc.techy.init.ItemInit;
 import tbsc.techy.item.ItemDusts;
 
 import javax.annotation.Nonnull;
@@ -59,53 +58,53 @@ public class CrusherRecipes {
     private CrusherRecipes() {}
 
     public void loadModRecipes() {
-        addOreDictionaryRecipe("ingotIron", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.IRON.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreIron", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.IRON.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockIron", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.IRON.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotIron", new ItemStack(ItemDusts.instance, 1, ItemDusts.DustType.IRON.id), null, 0, 2, 3000);
+        addOreDictionaryRecipe("oreIron", new ItemStack(ItemDusts.instance, 2, ItemDusts.DustType.IRON.id), null, 0, 4, 5000);
+        addOreDictionaryRecipe("blockIron", new ItemStack(ItemDusts.instance, 9, ItemDusts.DustType.IRON.id), null, 0, 2, 20000);
 
-        addOreDictionaryRecipe("ingotGold", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.GOLD.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreGold", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.GOLD.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockGold", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.GOLD.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotGold", new ItemStack(ItemDusts.instance, 1, ItemDusts.DustType.GOLD.id), null, 0, 2, 3000);
+        addOreDictionaryRecipe("oreGold", new ItemStack(ItemDusts.instance, 2, ItemDusts.DustType.GOLD.id), null, 0, 4, 5000);
+        addOreDictionaryRecipe("blockGold", new ItemStack(ItemDusts.instance, 9, ItemDusts.DustType.GOLD.id), null, 0, 2, 20000);
 
-        addOreDictionaryRecipe("gemDiamond", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.DIAMOND.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreDiamond", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.DIAMOND.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockDiamond", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.DIAMOND.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("gemDiamond", new ItemStack(ItemDusts.instance, 1, ItemDusts.DustType.DIAMOND.id), null, 0, 2, 3000);
+        addOreDictionaryRecipe("oreDiamond", new ItemStack(ItemDusts.instance, 2, ItemDusts.DustType.DIAMOND.id), null, 0, 4, 5000);
+        addOreDictionaryRecipe("blockDiamond", new ItemStack(ItemDusts.instance, 9, ItemDusts.DustType.DIAMOND.id), null, 0, 2, 20000);
 
-        addOreDictionaryRecipe("itemCoal", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.COAL.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("itemCharcoal", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.COAL.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreCoal", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.COAL.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockCoal", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.COAL.id), null, 0, 2, 20000);
-        addOreDictionaryRecipe("blockCharcoal", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.COAL.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("itemCoal", new ItemStack(ItemDusts.instance, 1, ItemDusts.DustType.COAL.id), null, 0, 2, 3000);
+        addOreDictionaryRecipe("itemCharcoal", new ItemStack(ItemDusts.instance, 1, ItemDusts.DustType.COAL.id), null, 0, 2, 3000);
+        addOreDictionaryRecipe("oreCoal", new ItemStack(ItemDusts.instance, 2, ItemDusts.DustType.COAL.id), null, 0, 4, 5000);
+        addOreDictionaryRecipe("blockCoal", new ItemStack(ItemDusts.instance, 9, ItemDusts.DustType.COAL.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("blockCharcoal", new ItemStack(ItemDusts.instance, 9, ItemDusts.DustType.COAL.id), null, 0, 2, 20000);
 
-        addOreDictionaryRecipe("ingotCopper", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.COPPER.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreCopper", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.COPPER.id), new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.GOLD.id), 30, 4, 5000);
-        addOreDictionaryRecipe("blockCopper", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.COPPER.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotCopper", new ItemStack(ItemDusts.instance, 1, ItemDusts.DustType.COPPER.id), null, 0, 2, 3000);
+        addOreDictionaryRecipe("oreCopper", new ItemStack(ItemDusts.instance, 2, ItemDusts.DustType.COPPER.id), new ItemStack(ItemDusts.instance, 1, ItemDusts.DustType.GOLD.id), 30, 4, 5000);
+        addOreDictionaryRecipe("blockCopper", new ItemStack(ItemDusts.instance, 9, ItemDusts.DustType.COPPER.id), null, 0, 2, 20000);
 
-        addOreDictionaryRecipe("ingotTin", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.TIN.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreTin", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.TIN.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockTin", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.TIN.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotTin", new ItemStack(ItemDusts.instance, 1, ItemDusts.DustType.TIN.id), null, 0, 2, 3000);
+        addOreDictionaryRecipe("oreTin", new ItemStack(ItemDusts.instance, 2, ItemDusts.DustType.TIN.id), null, 0, 4, 5000);
+        addOreDictionaryRecipe("blockTin", new ItemStack(ItemDusts.instance, 9, ItemDusts.DustType.TIN.id), null, 0, 2, 20000);
 
-        addOreDictionaryRecipe("ingotSilver", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.SILVER.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreSilver", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.SILVER.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockSilver", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.SILVER.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotSilver", new ItemStack(ItemDusts.instance, 1, ItemDusts.DustType.SILVER.id), null, 0, 2, 3000);
+        addOreDictionaryRecipe("oreSilver", new ItemStack(ItemDusts.instance, 2, ItemDusts.DustType.SILVER.id), null, 0, 4, 5000);
+        addOreDictionaryRecipe("blockSilver", new ItemStack(ItemDusts.instance, 9, ItemDusts.DustType.SILVER.id), null, 0, 2, 20000);
 
-        addOreDictionaryRecipe("ingotAluminum", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.ALUMINIUM.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreAluminum", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.ALUMINIUM.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockAluminum", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.ALUMINIUM.id), null, 0, 2, 20000);
-        addOreDictionaryRecipe("ingotAluminium", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.ALUMINIUM.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreAluminium", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.ALUMINIUM.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockAluminium", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.ALUMINIUM.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotAluminum", new ItemStack(ItemDusts.instance, 1, ItemDusts.DustType.ALUMINIUM.id), null, 0, 2, 3000);
+        addOreDictionaryRecipe("oreAluminum", new ItemStack(ItemDusts.instance, 2, ItemDusts.DustType.ALUMINIUM.id), null, 0, 4, 5000);
+        addOreDictionaryRecipe("blockAluminum", new ItemStack(ItemDusts.instance, 9, ItemDusts.DustType.ALUMINIUM.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotAluminium", new ItemStack(ItemDusts.instance, 1, ItemDusts.DustType.ALUMINIUM.id), null, 0, 2, 3000);
+        addOreDictionaryRecipe("oreAluminium", new ItemStack(ItemDusts.instance, 2, ItemDusts.DustType.ALUMINIUM.id), null, 0, 4, 5000);
+        addOreDictionaryRecipe("blockAluminium", new ItemStack(ItemDusts.instance, 9, ItemDusts.DustType.ALUMINIUM.id), null, 0, 2, 20000);
 
-        addOreDictionaryRecipe("ingotLithium", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.LITHIUM.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreLithium", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.LITHIUM.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockLithium", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.LITHIUM.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotLithium", new ItemStack(ItemDusts.instance, 1, ItemDusts.DustType.LITHIUM.id), null, 0, 2, 3000);
+        addOreDictionaryRecipe("oreLithium", new ItemStack(ItemDusts.instance, 2, ItemDusts.DustType.LITHIUM.id), null, 0, 4, 5000);
+        addOreDictionaryRecipe("blockLithium", new ItemStack(ItemDusts.instance, 9, ItemDusts.DustType.LITHIUM.id), null, 0, 2, 20000);
 
-        addOreDictionaryRecipe("ingotBronze", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.BRONZE.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("blockBronze", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.BRONZE.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotBronze", new ItemStack(ItemDusts.instance, 1, ItemDusts.DustType.BRONZE.id), null, 0, 2, 3000);
+        addOreDictionaryRecipe("blockBronze", new ItemStack(ItemDusts.instance, 9, ItemDusts.DustType.BRONZE.id), null, 0, 2, 20000);
 
-        addOreDictionaryRecipe("logWood", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.WOOD.id), null, 0, 2, 4000);
+        addOreDictionaryRecipe("logWood", new ItemStack(ItemDusts.instance, 2, ItemDusts.DustType.WOOD.id), null, 0, 2, 4000);
 
-        addOreDictionaryRecipe("stone", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.STONE.id), null, 0, 2, 4000);
+        addOreDictionaryRecipe("stone", new ItemStack(ItemDusts.instance, 2, ItemDusts.DustType.STONE.id), null, 0, 2, 4000);
     }
 
     /**
