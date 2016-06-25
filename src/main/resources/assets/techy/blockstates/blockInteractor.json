@@ -1,0 +1,74 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "Techy:blockInteractor"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{
+      "transform": "forge:default-block"
+    }],
+    "facing": {
+      "north": {},
+      "south": {"y": 180},
+      "west": {"y": 270},
+      "east": {"y": 90}
+    },
+    "north": {
+      "false": {},
+      "true": {
+        "submodel": "Techy:machineConnectionNorth"
+      }
+    },
+    "south": {
+      "false": {},
+      "true": {
+        "submodel": {
+          "connectionSouth": {
+            "model": "Techy:machineConnectionNorth", "y": 180
+          }
+        }
+      }
+    },
+    "west": {
+      "false": {},
+      "true": {
+        "submodel": {
+          "connectionEast": {
+            "model": "Techy:machineConnectionNorth", "y": 270
+          }
+        }
+      }
+    },
+    "east": {
+      "false": {},
+      "true": {
+        "submodel": {
+          "connectionWest": {
+            "model": "Techy:machineConnectionNorth", "y": 90
+          }
+        }
+      }
+    },
+    "up": {
+      "false": {},
+      "true": {
+        "submodel": {
+          "connectionUp": {
+            "model": "Techy:machineConnectionNorth", "x": 270
+          }
+        }
+      }
+    },
+    "down": {
+      "false": {},
+      "true": {
+        "submodel": {
+          "connectionDown": {
+            "model": "Techy:machineConnectionNorth", "x": 90
+          }
+        }
+      }
+    }
+  }
+}
