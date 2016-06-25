@@ -26,6 +26,11 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 import tbsc.techy.api.SideConfiguration;
 import tbsc.techy.api.Sides;
 import tbsc.techy.block.BlockBaseFacingMachine;
@@ -39,6 +44,9 @@ public abstract class TileBase extends TileEntity implements ISidedInventory {
 
     public ItemStack[] inventory;
     public int inventorySize;
+
+    @CapabilityInject(CapabilityItemHandler.class)
+    public static final Capability<IItemHandler> CAPABILITY_ITEM_HANDLER = null;
 
     /**
      *
@@ -137,6 +145,21 @@ public abstract class TileBase extends TileEntity implements ISidedInventory {
             return Sides.DOWN;
         }
         return Sides.UNKNOWN; // seriously, wtf, it can't return unknown because I just checked every type of EnumFacing
+    }
+
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            return (T) new SidedInvWrapper(this, facing);
+        return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return true;
+        }
+        return super.hasCapability(capability, facing);
     }
 
     /**
