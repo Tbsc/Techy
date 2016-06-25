@@ -63,8 +63,7 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
             if (!isRunning) {
                 if (inventory[i] != null) {
                     if (canGenerateFromItem(inventory[0]) && canOperate() && shouldOperate()) {
-                        double timePercentage = timeModifier / 100;
-                        totalProgress = (int) timePercentage * getBurnTimeFromItem(inventory[0]);
+                        totalProgress = getBurnTimeFromItem(inventory[0]);
 
                         // NOTE: This sets {@link #energyConsumptionPerTick} to the amount of energy to be given every tick
                         energyConsumptionPerTick = getEnergyUsage(inventory[0]);
@@ -79,17 +78,21 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
                         markDirty = true;
                     } else {
                         stopOperating(true);
-                        if (worldObj.isBlockLoaded(pos)) {
-                            if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) {
-                                BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                        if (!canOperate()) {
+                            if (worldObj.isBlockLoaded(pos)) {
+                                if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) {
+                                    BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                                }
                             }
                         }
                     }
                 } else {
                     stopOperating(true);
-                    if (worldObj.isBlockLoaded(pos)) {
-                        if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) {
-                            BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                    if (!canOperate()) {
+                        if (worldObj.isBlockLoaded(pos)) {
+                            if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) {
+                                BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                            }
                         }
                     }
                 }
@@ -98,7 +101,7 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
 
         if (shouldOperate()) {
             if (isOperating()) {
-                ++progress;
+                progress = (int) (progress * timeModifier);
 
                 // Not enough room for added energy
                 if (energyConsumptionPerTick + getEnergyStored() <= getCapacity()) {
@@ -107,9 +110,11 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
 
                 if (progress >= totalProgress) {
                     doOperation();
-                    BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
                     progress = totalProgress = 0;
                     setOperationStatus(false);
+                    if (!canOperate()) {
+                        BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                    }
                     markDirty = true;
                 }
             }
