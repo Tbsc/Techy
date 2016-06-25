@@ -224,6 +224,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
                 if (getConfigurationForSide(blockSide) == SideConfiguration.INPUT) { // If side is configured to input mode
                     BlockPos nearbyPos = pos.offset(side);
                     TileEntity tile = worldObj.getTileEntity(nearbyPos);
+                    EnumFacing neighborSide = side.getOpposite();
 
                     if (tile != null) { // If there is a tile
                         if (tile instanceof IInventory) { // If tile has an inventory
@@ -244,7 +245,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
                                     if (inv instanceof ISidedInventory) {
                                         ISidedInventory sidedInv = (ISidedInventory) inv;
 
-                                        for (int slot : sidedInv.getSlotsForFace(side.getOpposite())) { // Looping through slots in the neighbor tile, for side
+                                        for (int slot : sidedInv.getSlotsForFace(neighborSide)) { // Looping through slots in the neighbor tile, for side
                                             ItemStack stack = sidedInv.getStackInSlot(slot);
 
                                             if (stack != null && canInsertItem(firstAvailableSlot, stack, side)) { // Condition is OK
@@ -458,13 +459,15 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
                     energyStorage.modifyEnergyStored(getEnergyStored() - energyConsumptionPerTick);
                     if (progress >= totalProgress) {
                         doOperation();
-                        if (worldObj.isBlockLoaded(pos)) {
-                            if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) {
-                                BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
-                            }
-                        }
                         progress = totalProgress = 0;
                         setOperationStatus(false);
+                        if (!canOperate()) { // No operation afterwards, so return to default texture
+                            if (worldObj.isBlockLoaded(pos)) {
+                                if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) {
+                                    BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                                }
+                            }
+                        }
                         markDirty = true;
                     }
                 } else {
