@@ -79,17 +79,21 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
                         markDirty = true;
                     } else {
                         stopOperating(true);
-                        if (worldObj.isBlockLoaded(pos)) {
-                            if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) {
-                                BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                        if (!canOperate()) {
+                            if (worldObj.isBlockLoaded(pos)) {
+                                if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) {
+                                    BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                                }
                             }
                         }
                     }
                 } else {
                     stopOperating(true);
-                    if (worldObj.isBlockLoaded(pos)) {
-                        if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) {
-                            BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                    if (!canOperate()) {
+                        if (worldObj.isBlockLoaded(pos)) {
+                            if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) {
+                                BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                            }
                         }
                     }
                 }
@@ -107,9 +111,11 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
 
                 if (progress >= totalProgress) {
                     doOperation();
-                    BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
                     progress = totalProgress = 0;
                     setOperationStatus(false);
+                    if (!canOperate()) {
+                        BlockBaseFacingMachine.setWorkingState(false, worldObj, pos);
+                    }
                     markDirty = true;
                 }
             }
