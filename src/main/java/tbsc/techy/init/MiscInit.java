@@ -90,23 +90,23 @@ public class MiscInit {
      */
     public static void init() {
         if (ConfigData.shouldGenerateCopper) {
-            GameRegistry.registerWorldGenerator(copperGenerator = new OreWorldGenerator(BlockInit.blockOreCopper.getDefaultState(),
+            GameRegistry.registerWorldGenerator(copperGenerator = new OreWorldGenerator(LegacyInit.blockOreCopper.getDefaultState(),
                     ConfigData.copperPerVein, ConfigData.copperMaxHeight, ConfigData.copperPerChunk), 0);
         }
         if (ConfigData.shouldGenerateTin) {
-            GameRegistry.registerWorldGenerator(tinGenerator = new OreWorldGenerator(BlockInit.blockOreTin.getDefaultState(),
+            GameRegistry.registerWorldGenerator(tinGenerator = new OreWorldGenerator(LegacyInit.blockOreTin.getDefaultState(),
                     ConfigData.tinPerVein, ConfigData.tinMaxHeight, ConfigData.tinPerChunk), 0);
         }
         if (ConfigData.shouldGenerateSilver) {
-            GameRegistry.registerWorldGenerator(silverGenerator = new OreWorldGenerator(BlockInit.blockOreSilver.getDefaultState(),
+            GameRegistry.registerWorldGenerator(silverGenerator = new OreWorldGenerator(LegacyInit.blockOreSilver.getDefaultState(),
                     ConfigData.silverPerVein, ConfigData.silverMaxHeight, ConfigData.silverPerChunk), 0);
         }
         if (ConfigData.shouldGenerateAluminium) {
-            GameRegistry.registerWorldGenerator(aluminiumGenerator = new OreWorldGenerator(BlockInit.blockOreAluminium.getDefaultState(),
+            GameRegistry.registerWorldGenerator(aluminiumGenerator = new OreWorldGenerator(LegacyInit.blockOreAluminium.getDefaultState(),
                     ConfigData.aluminiumPerVein, ConfigData.aluminiumMaxHeight, ConfigData.aluminiumPerChunk), 0);
         }
         if (ConfigData.shouldGenerateLithium) {
-            GameRegistry.registerWorldGenerator(lithiumGenerator = new OreWorldGenerator(BlockInit.blockOreLithium.getDefaultState(),
+            GameRegistry.registerWorldGenerator(lithiumGenerator = new OreWorldGenerator(LegacyInit.blockOreLithium.getDefaultState(),
                     ConfigData.lithiumPerVein, ConfigData.lithiumMaxHeight, ConfigData.lithiumPerChunk), 0);
         }
 
@@ -183,7 +183,7 @@ public class MiscInit {
                 "GRG",
                 "GLG",
                 'D', "dustDiamond", 'G', "gemDiamond", 'L', "dustLithium", 'R', ItemBatteryMedium.instance));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemIngots.instance, 1, ItemIngots.IngotType.BRONZE.id),
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(LegacyInit.itemIngots, 1, ItemIngots.IngotType.BRONZE.id),
                 "dustCopper", "dustTin"));
         GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockPipeEnergyBasic.instance, 8),
                 "GGG",
@@ -208,11 +208,11 @@ public class MiscInit {
 
         // Adding dusts to ore dictionary
         for (ItemDusts.DustType dustType : ItemDusts.DustType.values()) {
-            OreDictionary.registerOre("dust" + dustType.regName, new ItemStack(ItemDusts.instance, 1, dustType.id));
+            OreDictionary.registerOre("dust" + dustType.regName, new ItemStack(LegacyInit.itemDusts, 1, dustType.id));
         }
         // Adding ingots to ore dictionary
         for (ItemIngots.IngotType ingotType : ItemIngots.IngotType.values()) {
-            OreDictionary.registerOre("ingot" + ingotType.regName, new ItemStack(ItemIngots.instance, 1, ingotType.id));
+            OreDictionary.registerOre("ingot" + ingotType.regName, new ItemStack(LegacyInit.itemIngots, 1, ingotType.id));
         }
         // Adding ores to ore dictionary
         for (BlockOreBase.OreType oreType : BlockOreBase.OreType.values()) {
@@ -220,21 +220,21 @@ public class MiscInit {
         }
         // Since I need to be compatible with the ore dictionary, I am also registering it as aluminium
         OreDictionary.registerOre("oreAluminum", new ItemStack(BlockOreBase.OreType.ALUMINIUM.ore));
-        OreDictionary.registerOre("ingotAluminum", new ItemStack(ItemIngots.instance, 1, ItemIngots.IngotType.ALUMINIUM.id));
-        OreDictionary.registerOre("dustAluminum", new ItemStack(ItemDusts.instance, 1, ItemDusts.DustType.ALUMINIUM.id));
+        OreDictionary.registerOre("ingotAluminum", new ItemStack(LegacyInit.itemIngots, 1, ItemIngots.IngotType.ALUMINIUM.id));
+        OreDictionary.registerOre("dustAluminum", new ItemStack(LegacyInit.itemDusts, 1, ItemDusts.DustType.ALUMINIUM.id));
 
         // FURNACE RECIPES //
 
         for (BlockOreBase.OreType ore : BlockOreBase.OreType.values()) {
-            if (ore.ore != BlockInit.blockOreLithium) { // ONLY add if ore isn't lithium
+            if (ore.ore != LegacyInit.blockOreLithium) { // ONLY add if ore isn't lithium
                 GameRegistry.addSmelting(ore.ore, ore.ingot, 2);
             }
         }
         for (ItemDusts.DustType dust : ItemDusts.DustType.values()) {
             if (dust.ingot != null) { // Not all dusts have an ingot form
-                // if (dust.ingot.getMetadata() != ItemIngots.IngotType.LITHIUM.id) { // ONLY add if dust isn't lithium
-                    // GameRegistry.addSmelting(new ItemStack(ItemDusts.instance, 1, dust.id), dust.ingot, 2);
-                // } TODO Uncomment
+                if (dust.id != ItemDusts.DustType.LITHIUM.id) { // ONLY add if dust isn't lithium
+                    GameRegistry.addSmelting(new ItemStack(LegacyInit.itemDusts, 1, dust.id), dust.ingot, 2);
+                }
             }
         }
     }

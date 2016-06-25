@@ -20,7 +20,7 @@ package tbsc.techy.proxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import tbsc.techy.init.BlockInit;
+import tbsc.techy.init.LegacyInit;
 
 /**
  * Anything run here will work only client-side
@@ -34,7 +34,7 @@ public class ClientProxy extends CommonProxy {
     public void preInit(FMLPreInitializationEvent event) {
         super.preInit(event);
         FMLInterModComms.sendMessage("Waila", "register", "tbsc.techy.api.compat.waila.TechyWAILAPlugin.callbackRegister");
-        BlockInit.initLegacyModels();
+        LegacyInit.initLegacyModels();
     }
 
     @Override

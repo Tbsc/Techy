@@ -26,8 +26,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import org.apache.commons.lang3.ArrayUtils;
-import tbsc.techy.api.register.RegisterInstance;
-import tbsc.techy.api.register.TechyRegister;
 
 import java.util.List;
 
@@ -41,10 +39,6 @@ public class ItemIngots extends ItemBase {
 
     public static final String IDENTIFIER = "itemIngot";
 
-    @RegisterInstance(identifier = IDENTIFIER, registerClass = ItemIngots.class)
-    public static ItemIngots instance;
-
-    @TechyRegister(identifier = IDENTIFIER)
     public ItemIngots() {
         super();
         setMaxDamage(0);

@@ -23,13 +23,15 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tbsc.techy.block.BlockOreBase;
+import tbsc.techy.item.ItemDusts;
+import tbsc.techy.item.ItemIngots;
 
 /**
  * Loads and contains the blocks (+ TileEntities) of Techy,
  *
  * Created by tbsc on 3/26/16.
  */
-public class BlockInit {
+public class LegacyInit {
 
     // Instances of blocks
     public static BlockOreBase blockOreCopper;
@@ -38,10 +40,16 @@ public class BlockInit {
     public static BlockOreBase blockOreAluminium;
     public static BlockOreBase blockOreLithium;
 
+    // Instances of items
+    public static ItemIngots itemIngots;
+    public static ItemDusts itemDusts;
+
     /**
-     * Gets called on preInit stage and loads all of the blocks and TileEntities.
+     * Gets called on preInit stage and loads all of the ores
      */
-    public static void legacyInit() {
+    public static void init() {
+        itemIngots = new ItemIngots();
+        itemDusts = new ItemDusts();
         blockOreCopper = new BlockOreBase("blockOreCopper");
         blockOreCopper.setHarvestLevel("pickaxe", Item.ToolMaterial.STONE.getHarvestLevel());
         blockOreTin = new BlockOreBase("blockOreTin");
@@ -53,6 +61,8 @@ public class BlockInit {
         blockOreLithium = new BlockOreBase("blockOreLithium");
         blockOreLithium.setHarvestLevel("pickaxe", Item.ToolMaterial.DIAMOND.getHarvestLevel());
 
+        GameRegistry.register(itemIngots);
+        GameRegistry.register(itemDusts);
         GameRegistry.register(blockOreCopper);
         GameRegistry.register(new ItemBlock(blockOreCopper), blockOreCopper.getRegistryName());
         GameRegistry.register(blockOreTin);
@@ -76,6 +86,9 @@ public class BlockInit {
         blockOreSilver.initModel(Item.getItemFromBlock(blockOreSilver));
         blockOreAluminium.initModel(Item.getItemFromBlock(blockOreAluminium));
         blockOreLithium.initModel(Item.getItemFromBlock(blockOreLithium));
+
+        itemDusts.initModel(itemDusts);
+        itemIngots.initModel(itemIngots);
     }
 
 }

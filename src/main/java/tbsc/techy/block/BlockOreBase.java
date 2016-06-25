@@ -19,7 +19,7 @@ package tbsc.techy.block;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
-import tbsc.techy.init.BlockInit;
+import tbsc.techy.init.LegacyInit;
 import tbsc.techy.item.ItemIngots;
 
 /**
@@ -36,11 +36,11 @@ public class BlockOreBase extends BlockBase {
     }
 
     public enum OreType {
-        COPPER("blockOreCopper", "Copper", BlockInit.blockOreCopper, new ItemStack(ItemIngots.instance, 1, ItemIngots.IngotType.COPPER.id)),
-        TIN("blockOreTin", "Tin", BlockInit.blockOreTin, new ItemStack(ItemIngots.instance, 1, ItemIngots.IngotType.TIN.id)),
-        SILVER("blockOreSilver", "Silver", BlockInit.blockOreSilver, new ItemStack(ItemIngots.instance, 1, ItemIngots.IngotType.SILVER.id)),
-        ALUMINIUM("blockOreAluminium", "Aluminium", BlockInit.blockOreAluminium, new ItemStack(ItemIngots.instance, 1, ItemIngots.IngotType.ALUMINIUM.id)),
-        LITHIUM("blockOreLithium", "Lithium", BlockInit.blockOreLithium, new ItemStack(ItemIngots.instance, 1, ItemIngots.IngotType.LITHIUM.id));
+        COPPER("blockOreCopper", "Copper", LegacyInit.blockOreCopper, new ItemStack(LegacyInit.itemIngots, 1, ItemIngots.IngotType.COPPER.id)),
+        TIN("blockOreTin", "Tin", LegacyInit.blockOreTin, new ItemStack(LegacyInit.itemIngots, 1, ItemIngots.IngotType.TIN.id)),
+        SILVER("blockOreSilver", "Silver", LegacyInit.blockOreSilver, new ItemStack(LegacyInit.itemIngots, 1, ItemIngots.IngotType.SILVER.id)),
+        ALUMINIUM("blockOreAluminium", "Aluminium", LegacyInit.blockOreAluminium, new ItemStack(LegacyInit.itemIngots, 1, ItemIngots.IngotType.ALUMINIUM.id)),
+        LITHIUM("blockOreLithium", "Lithium", LegacyInit.blockOreLithium, new ItemStack(LegacyInit.itemIngots, 1, ItemIngots.IngotType.LITHIUM.id));
 
         public BlockOreBase ore;
         public ItemStack ingot;

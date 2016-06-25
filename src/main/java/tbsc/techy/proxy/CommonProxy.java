@@ -31,7 +31,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import tbsc.techy.Techy;
 import tbsc.techy.api.register.*;
 import tbsc.techy.api.util.AnnotationUtil;
-import tbsc.techy.init.BlockInit;
+import tbsc.techy.init.LegacyInit;
 import tbsc.techy.init.MiscInit;
 import tbsc.techy.misc.cmd.CommandRetroGen;
 import tbsc.techy.network.CPacketEnergyChanged;
@@ -63,7 +63,7 @@ public abstract class CommonProxy implements IProxy {
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
-        BlockInit.legacyInit();
+        LegacyInit.init();
         loadTechyRegisters();
         MiscInit.preInit();
         Techy.network = NetworkRegistry.INSTANCE.newSimpleChannel("Techy");

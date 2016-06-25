@@ -60,7 +60,7 @@ public class PoweredFurnaceRecipes {
 
     public void loadModRecipes() {
         for (ItemDusts.DustType type : ItemDusts.DustType.values()) {
-            if (type.ingot != null) {
+            if (ItemHelper.getOre("dust" + type.regName) != null) {
                 addOreDictionaryRecipe("dust" + type.regName, type.ingot, 3, 4800);
             }
         }
@@ -87,7 +87,9 @@ public class PoweredFurnaceRecipes {
      * Adds a recipe with an ore dictionary ore name as the input, and 2 outputs with a chance
      */
     public void addOreDictionaryRecipe(@Nonnull String oreName, @Nonnull ItemStack output, float experience, int energyUsage) {
-        this.addIRecipeInputRecipe(OreRecipeInput.of(oreName), output, experience, energyUsage);
+        if (ItemHelper.oreProxy.oreNameExists(oreName)) {
+            this.addIRecipeInputRecipe(OreRecipeInput.of(oreName), output, experience, energyUsage);
+        }
     }
 
     /**
@@ -158,7 +160,7 @@ public class PoweredFurnaceRecipes {
      * Checks if the two itemstacks are equal
      */
     private boolean compareItemStacks(ItemStack stack1, ItemStack stack2) {
-        return stack2.getItem() == stack1.getItem() && (stack2.getMetadata() == 32767 || stack2.getMetadata() == stack1.getMetadata());
+        return stack1 != null && stack2 != null && stack1.isItemEqual(stack2);
     }
 
     /**
