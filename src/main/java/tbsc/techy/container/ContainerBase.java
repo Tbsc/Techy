@@ -25,7 +25,6 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
-import tbsc.techy.recipe.PoweredFurnaceRecipes;
 import tbsc.techy.tile.TileMachineBase;
 
 /**
@@ -40,7 +39,7 @@ public abstract class ContainerBase extends Container {
 
     public IInventory playerInv;
     public TileMachineBase tileBase;
-    protected int tileInvSize;
+    public int tileInvSize;
     private int nextAvailableSlot = 0;
 
     protected ContainerBase(IInventory playerInv, TileMachineBase tileBase, int tileInvSize) {
@@ -128,17 +127,6 @@ public abstract class ContainerBase extends Container {
             if (current.stackSize == previous.stackSize)
                 return null;
             slot.onPickupFromSlot(playerIn, current);
-        }
-
-        if (tileBase.getOutputSlots().length >= 1) {
-            for (int outputSlot : tileBase.getOutputSlots()) {
-                if (index == outputSlot) {
-                    if (inventorySlots.get(index).getStack() != null) {
-                        int experience = (int) ((tileBase.experienceModifier / 100) * PoweredFurnaceRecipes.instance().getSmeltingExperience(inventorySlots.get(index).getStack()));
-                        spawnXPOrb(experience, inventorySlots.get(index).getStack().stackSize);
-                    }
-                }
-            }
         }
 
         return previous;
