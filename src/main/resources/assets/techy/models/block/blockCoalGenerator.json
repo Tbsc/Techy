@@ -5,8 +5,8 @@
     "west": "Techy:blocks/blockGenericSide",
     "east": "Techy:blocks/blockGenericSide",
     "south": "Techy:blocks/blockGenericSide",
-    "up": "Techy:blocks/blockGenericTop",
-    "down": "Techy:blocks/blockGenericTop",
+    "up": "Techy:blocks/blockGenericSide",
+    "down": "Techy:blocks/blockGenericSide",
     "line": "Techy:blocks/machineLine",
     "cube": "Techy:blocks/machineTinyCube"
   }
