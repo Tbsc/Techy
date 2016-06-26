@@ -32,6 +32,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tbsc.techy.Techy;
 import tbsc.techy.api.ITechyWrench;
+import tbsc.techy.api.register.IHasTileEntity;
+import tbsc.techy.api.register.RegisterInstance;
+import tbsc.techy.api.register.TechyRegister;
 import tbsc.techy.block.BlockBaseFacingMachine;
 
 import javax.annotation.Nullable;
@@ -42,12 +45,18 @@ import java.util.ArrayList;
  *
  * Created by tbsc on 5/4/16.
  */
-public class BlockCrusher extends BlockBaseFacingMachine {
+public class BlockCrusher extends BlockBaseFacingMachine implements IHasTileEntity {
+
+    public static final String IDENTIFIER = "blockCrusher";
+
+    @RegisterInstance(identifier = IDENTIFIER, registerClass = BlockCrusher.class)
+    public static BlockCrusher instance;
 
     public static int tileInvSize = 7;
 
+    @TechyRegister(identifier = IDENTIFIER)
     public BlockCrusher() {
-        super(Material.IRON, "blockCrusher", tileInvSize);
+        super(Material.IRON, IDENTIFIER, tileInvSize);
         setHarvestLevel("pickaxe", Item.ToolMaterial.IRON.getHarvestLevel());
         setHardness(4.0F);
         setResistance(5.5F);
@@ -106,4 +115,15 @@ public class BlockCrusher extends BlockBaseFacingMachine {
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileCrusher();
     }
+
+    @Override
+    public <T extends TileEntity> Class<T> getTileClass() {
+        return (Class<T>) TileCrusher.class;
+    }
+
+    @Override
+    public String getTileID() {
+        return "tileCrusher";
+    }
+
 }

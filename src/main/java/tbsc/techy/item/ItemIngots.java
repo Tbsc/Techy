@@ -37,12 +37,14 @@ import java.util.List;
  */
 public class ItemIngots extends ItemBase {
 
+    public static final String IDENTIFIER = "itemIngot";
+
     public ItemIngots() {
         super();
         setMaxDamage(0);
         setHasSubtypes(true);
         setMaxStackSize(64);
-        setRegistryName("itemIngot");
+        setRegistryName(IDENTIFIER);
     }
 
     @Override
@@ -53,7 +55,7 @@ public class ItemIngots extends ItemBase {
     }
 
     @Override
-    public void initModel() {
+    public void initModel(Item item) {
         ResourceLocation[] textures = new ResourceLocation[] {};
         for (IngotType type : IngotType.values()) {
             if (type != IngotType.COPPER)

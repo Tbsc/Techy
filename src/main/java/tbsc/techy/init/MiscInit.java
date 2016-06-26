@@ -32,10 +32,26 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import tbsc.techy.ConfigData;
 import tbsc.techy.Techy;
 import tbsc.techy.block.BlockOreBase;
+import tbsc.techy.block.machine.BlockMachineBaseAdvanced;
+import tbsc.techy.block.machine.BlockMachineBaseBasic;
+import tbsc.techy.block.machine.BlockMachineBaseImproved;
+import tbsc.techy.block.pipe.BlockPipeEnergyAdvanced;
+import tbsc.techy.block.pipe.BlockPipeEnergyBasic;
+import tbsc.techy.block.pipe.BlockPipeEnergyImproved;
 import tbsc.techy.client.gui.TechyGuiHandler;
 import tbsc.techy.event.GeneralEventHandler;
 import tbsc.techy.item.ItemDusts;
 import tbsc.techy.item.ItemIngots;
+import tbsc.techy.item.ItemWrench;
+import tbsc.techy.item.battery.ItemBatteryLarge;
+import tbsc.techy.item.battery.ItemBatteryMedium;
+import tbsc.techy.item.battery.ItemBatterySmall;
+import tbsc.techy.item.component.ItemGrindingComponent;
+import tbsc.techy.item.component.ItemHeatingComponent;
+import tbsc.techy.item.component.ItemIgnitionComponent;
+import tbsc.techy.machine.crusher.BlockCrusher;
+import tbsc.techy.machine.furnace.BlockPoweredFurnace;
+import tbsc.techy.machine.generator.coal.BlockCoalGenerator;
 import tbsc.techy.misc.OreWorldGenerator;
 import tbsc.techy.recipe.CrusherRecipes;
 import tbsc.techy.recipe.PoweredFurnaceRecipes;
@@ -63,6 +79,7 @@ public class MiscInit {
      */
     public static void preInit() {
         MinecraftForge.EVENT_BUS.register(new GeneralEventHandler());
+        MinecraftForge.EVENT_BUS.register(Techy.instance);
         NetworkRegistry.INSTANCE.registerGuiHandler(Techy.instance, new TechyGuiHandler());
     }
 
@@ -73,77 +90,77 @@ public class MiscInit {
      */
     public static void init() {
         if (ConfigData.shouldGenerateCopper) {
-            GameRegistry.registerWorldGenerator(copperGenerator = new OreWorldGenerator(BlockInit.blockOreCopper.getDefaultState(),
+            GameRegistry.registerWorldGenerator(copperGenerator = new OreWorldGenerator(LegacyInit.blockOreCopper.getDefaultState(),
                     ConfigData.copperPerVein, ConfigData.copperMaxHeight, ConfigData.copperPerChunk), 0);
         }
         if (ConfigData.shouldGenerateTin) {
-            GameRegistry.registerWorldGenerator(tinGenerator = new OreWorldGenerator(BlockInit.blockOreTin.getDefaultState(),
+            GameRegistry.registerWorldGenerator(tinGenerator = new OreWorldGenerator(LegacyInit.blockOreTin.getDefaultState(),
                     ConfigData.tinPerVein, ConfigData.tinMaxHeight, ConfigData.tinPerChunk), 0);
         }
         if (ConfigData.shouldGenerateSilver) {
-            GameRegistry.registerWorldGenerator(silverGenerator = new OreWorldGenerator(BlockInit.blockOreSilver.getDefaultState(),
+            GameRegistry.registerWorldGenerator(silverGenerator = new OreWorldGenerator(LegacyInit.blockOreSilver.getDefaultState(),
                     ConfigData.silverPerVein, ConfigData.silverMaxHeight, ConfigData.silverPerChunk), 0);
         }
         if (ConfigData.shouldGenerateAluminium) {
-            GameRegistry.registerWorldGenerator(aluminiumGenerator = new OreWorldGenerator(BlockInit.blockOreAluminium.getDefaultState(),
+            GameRegistry.registerWorldGenerator(aluminiumGenerator = new OreWorldGenerator(LegacyInit.blockOreAluminium.getDefaultState(),
                     ConfigData.aluminiumPerVein, ConfigData.aluminiumMaxHeight, ConfigData.aluminiumPerChunk), 0);
         }
         if (ConfigData.shouldGenerateLithium) {
-            GameRegistry.registerWorldGenerator(lithiumGenerator = new OreWorldGenerator(BlockInit.blockOreLithium.getDefaultState(),
+            GameRegistry.registerWorldGenerator(lithiumGenerator = new OreWorldGenerator(LegacyInit.blockOreLithium.getDefaultState(),
                     ConfigData.lithiumPerVein, ConfigData.lithiumMaxHeight, ConfigData.lithiumPerChunk), 0);
         }
 
         // MACHINES //
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockPoweredFurnace,
+        GameRegistry.addRecipe(new ShapedOreRecipe(BlockPoweredFurnace.instance,
                 "SIS",
                 "BFB",
                 "SHS",
-                'F', BlockInit.blockMachineBaseBasic, 'H', ItemInit.itemHeatingComponent, 'B', ItemInit.itemBatterySmall, 'S', "ingotSilver", 'I', "ingotIron"));
+                'F', BlockMachineBaseBasic.instance, 'H', ItemHeatingComponent.instance, 'B', ItemBatterySmall.instance, 'S', "ingotSilver", 'I', "ingotIron"));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockCrusher,
+        GameRegistry.addRecipe(new ShapedOreRecipe(BlockCrusher.instance,
                 "IAI",
                 "BFB",
                 "IGI",
-                'F', BlockInit.blockMachineBaseBasic, 'B', ItemInit.itemBatterySmall, 'G', ItemInit.itemGrindingComponent, 'A', "ingotGold", 'I', "ingotTin"));
+                'F', BlockMachineBaseBasic.instance, 'B', ItemBatterySmall.instance, 'G', ItemGrindingComponent.instance, 'A', "ingotGold", 'I', "ingotTin"));
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockCoalGenerator,
+        GameRegistry.addRecipe(new ShapedOreRecipe(BlockCoalGenerator.instance,
                 "IAI",
                 "BFB",
                 "IGI",
-                'F', BlockInit.blockMachineBaseBasic, 'B', ItemInit.itemBatterySmall, 'G', ItemInit.itemIgnitionComponent, 'A', "ingotAluminium", 'I', "ingotIron"));
+                'F', BlockMachineBaseBasic.instance, 'B', ItemBatterySmall.instance, 'G', ItemIgnitionComponent.instance, 'A', "ingotAluminium", 'I', "ingotIron"));
 
         // MACHINE BASES //
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockMachineBaseBasic,
+        GameRegistry.addRecipe(new ShapedOreRecipe(BlockMachineBaseBasic.instance,
                 "ACA",
                 "CIC",
                 "ACA",
                 'C', "ingotCopper", 'A', "ingotAluminium", 'I', "ingotIron"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockMachineBaseImproved,
+        GameRegistry.addRecipe(new ShapedOreRecipe(BlockMachineBaseImproved.instance,
                 "ACA",
                 "CBC",
                 "ACA",
-                'C', "ingotBronze", 'A', "ingotAluminium", 'B', BlockInit.blockMachineBaseBasic));
-        GameRegistry.addRecipe(new ShapedOreRecipe(BlockInit.blockMachineBaseAdvanced,
+                'C', "ingotBronze", 'A', "ingotAluminium", 'B', BlockMachineBaseBasic.instance));
+        GameRegistry.addRecipe(new ShapedOreRecipe(BlockMachineBaseAdvanced.instance,
                 "ACA",
                 "CBC",
                 "ACA",
-                'C', "ingotLithium", 'A', "ingotAluminium", 'B', BlockInit.blockMachineBaseImproved));
+                'C', "ingotLithium", 'A', "ingotAluminium", 'B', BlockMachineBaseImproved.instance));
 
         // CRAFTING COMPONENTS //
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemHeatingComponent,
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemHeatingComponent.instance,
                 "III",
                 "SFS",
                 "RRR",
                 'F', Items.FLINT_AND_STEEL, 'I', "ingotGold", 'S', "ingotSilver", 'R', "dustRedstone"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemGrindingComponent,
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemGrindingComponent.instance,
                 "III",
                 "SFS",
                 "RRR",
                 'F', Items.IRON_PICKAXE, 'I', "ingotGold", 'S', "ingotSilver", 'R', "dustRedstone"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemIgnitionComponent,
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemIgnitionComponent.instance,
                 "III",
                 "SFS",
                 "RRR",
@@ -151,39 +168,39 @@ public class MiscInit {
 
         // ITEMS //
 
-        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemBatterySmall,
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemBatterySmall.instance,
                 " I ",
                 "IRI",
                 "ICI",
                 'I', "ingotIron", 'C', "ingotCopper", 'R', "dustRedstone")); // No dust because at that tier you don't have a crusher yet
-        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemBatteryMedium,
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemBatteryMedium.instance,
                 " D ",
                 "GRG",
                 "GSG",
-                'D', "dustGold", 'S', "dustSilver", 'G', "ingotGold", 'R', ItemInit.itemBatterySmall));
-        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemBatteryLarge,
+                'D', "dustGold", 'S', "dustSilver", 'G', "ingotGold", 'R', ItemBatterySmall.instance));
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemBatteryLarge.instance,
                 " D ",
                 "GRG",
                 "GLG",
-                'D', "dustDiamond", 'G', "gemDiamond", 'L', "dustLithium", 'R', ItemInit.itemBatteryMedium));
-        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.BRONZE.id),
+                'D', "dustDiamond", 'G', "gemDiamond", 'L', "dustLithium", 'R', ItemBatteryMedium.instance));
+        GameRegistry.addRecipe(new ShapelessOreRecipe(new ItemStack(LegacyInit.itemIngots, 1, ItemIngots.IngotType.BRONZE.id),
                 "dustCopper", "dustTin"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockInit.blockPipeEnergyBasic, 8),
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockPipeEnergyBasic.instance, 8),
                 "GGG",
                 "CRC",
                 "GGG",
                 'G', Blocks.GLASS, 'C', "dustCopper", 'R', "dustRedstone"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockInit.blockPipeEnergyImproved, 8),
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockPipeEnergyImproved.instance, 8),
                 "GGG",
                 "CRC",
                 "GGG",
                 'G', Blocks.GLASS, 'C', "dustSilver", 'R', "dustRedstone"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockInit.blockPipeEnergyAdvanced, 8),
+        GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockPipeEnergyAdvanced.instance, 8),
                 "GGG",
                 "CRC",
                 "GGG",
                 'G', Blocks.GLASS, 'C', "dustLithium", 'R', "dustRedstone"));
-        GameRegistry.addRecipe(new ShapedOreRecipe(ItemInit.itemWrench,
+        GameRegistry.addRecipe(new ShapedOreRecipe(ItemWrench.instance,
                 "T  ",
                 " I ",
                 "  I",
@@ -191,11 +208,11 @@ public class MiscInit {
 
         // Adding dusts to ore dictionary
         for (ItemDusts.DustType dustType : ItemDusts.DustType.values()) {
-            OreDictionary.registerOre("dust" + dustType.regName, new ItemStack(ItemInit.itemDusts, 1, dustType.id));
+            OreDictionary.registerOre("dust" + dustType.regName, new ItemStack(LegacyInit.itemDusts, 1, dustType.id));
         }
         // Adding ingots to ore dictionary
         for (ItemIngots.IngotType ingotType : ItemIngots.IngotType.values()) {
-            OreDictionary.registerOre("ingot" + ingotType.regName, new ItemStack(ItemInit.itemIngots, 1, ingotType.id));
+            OreDictionary.registerOre("ingot" + ingotType.regName, new ItemStack(LegacyInit.itemIngots, 1, ingotType.id));
         }
         // Adding ores to ore dictionary
         for (BlockOreBase.OreType oreType : BlockOreBase.OreType.values()) {
@@ -203,20 +220,20 @@ public class MiscInit {
         }
         // Since I need to be compatible with the ore dictionary, I am also registering it as aluminium
         OreDictionary.registerOre("oreAluminum", new ItemStack(BlockOreBase.OreType.ALUMINIUM.ore));
-        OreDictionary.registerOre("ingotAluminum", new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.ALUMINIUM.id));
-        OreDictionary.registerOre("dustAluminum", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.ALUMINIUM.id));
+        OreDictionary.registerOre("ingotAluminum", new ItemStack(LegacyInit.itemIngots, 1, ItemIngots.IngotType.ALUMINIUM.id));
+        OreDictionary.registerOre("dustAluminum", new ItemStack(LegacyInit.itemDusts, 1, ItemDusts.DustType.ALUMINIUM.id));
 
         // FURNACE RECIPES //
 
         for (BlockOreBase.OreType ore : BlockOreBase.OreType.values()) {
-            if (ore.ore != BlockInit.blockOreLithium) { // ONLY add if ore isn't lithium
+            if (ore.ore != LegacyInit.blockOreLithium) { // ONLY add if ore isn't lithium
                 GameRegistry.addSmelting(ore.ore, ore.ingot, 2);
             }
         }
         for (ItemDusts.DustType dust : ItemDusts.DustType.values()) {
             if (dust.ingot != null) { // Not all dusts have an ingot form
-                if (dust.ingot.getMetadata() != ItemIngots.IngotType.LITHIUM.id) { // ONLY add if dust isn't lithium
-                    GameRegistry.addSmelting(new ItemStack(ItemInit.itemDusts, 1, dust.id), dust.ingot, 2);
+                if (dust.id != ItemDusts.DustType.LITHIUM.id) { // ONLY add if dust isn't lithium
+                    GameRegistry.addSmelting(new ItemStack(LegacyInit.itemDusts, 1, dust.id), dust.ingot, 2);
                 }
             }
         }

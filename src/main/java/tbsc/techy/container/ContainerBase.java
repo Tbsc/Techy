@@ -18,11 +18,13 @@
 package tbsc.techy.container;
 
 
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.MathHelper;
 import tbsc.techy.tile.TileMachineBase;
 
 /**
@@ -128,6 +130,26 @@ public abstract class ContainerBase extends Container {
         }
 
         return previous;
+    }
+
+    public void spawnXPOrb(int xpAmount, int stackSize) {
+        if (xpAmount == 0.0F) {
+            stackSize = 0;
+        } else if (xpAmount < 1.0F) {
+            int j = MathHelper.floor_float((float) stackSize * xpAmount);
+
+            if (j < MathHelper.ceiling_float_int((float) stackSize * xpAmount) && Math.random() < (double) ((float) stackSize * xpAmount - (float) j)) {
+                ++j;
+            }
+
+            stackSize = j;
+        }
+
+        while (stackSize > 0) {
+            int k = EntityXPOrb.getXPSplit(stackSize);
+            stackSize -= k;
+            tileBase.getWorld().spawnEntityInWorld(new EntityXPOrb(tileBase.getWorld(), tileBase.getPos().getX(), tileBase.getPos().getY() + 0.5D, tileBase.getPos().getZ() + 0.5D, k));
+        }
     }
 
 }
