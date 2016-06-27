@@ -19,6 +19,7 @@ package tbsc.techy.network;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -40,13 +41,13 @@ import tbsc.techy.tile.TileMachineBase;
 public class CPacketEnergyChanged implements IMessage {
 
     private BlockPos pos;
-    public int energyStored;
+    private int energyStored;
 
     public CPacketEnergyChanged() {}
 
-    public CPacketEnergyChanged(BlockPos pos, int energyStored) {
-        this.pos = pos;
-        this.energyStored = energyStored;
+    public CPacketEnergyChanged(NBTTagCompound tileData) {
+        this.pos = new BlockPos(tileData.getInteger("x"), tileData.getInteger("y"), tileData.getInteger("z"));
+        this.energyStored = tileData.getInteger("Energy");
     }
 
     @Override

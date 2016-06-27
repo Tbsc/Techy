@@ -143,7 +143,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
     public void update() {
 //        ++countdown;
 //        if (countdown >= 10) {
-//             Techy.network.sendToAll(new CPacketEnergyChanged(pos, getEnergyStored())); Figure out why this causes issues
+//            Techy.network.sendToAll(new CPacketEnergyChanged(writeToNBT(new NBTTagCompound())));
 //            countdown = 0;
 //        }
 
