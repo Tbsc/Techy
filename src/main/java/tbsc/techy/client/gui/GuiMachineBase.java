@@ -69,15 +69,13 @@ public abstract class GuiMachineBase extends GuiBase {
     @Override
     protected void drawGuiContainerBackgroundLayer(float partialTick, int x, int y) {
         super.drawGuiContainerBackgroundLayer(partialTick, x, y);
-        if (tile != null) {
-            int percentage = tile.getField(0) * 42 / tile.getField(4);
-            int i = (this.width - this.xSize) / 2;
-            int j = (this.height - this.ySize) / 2;
+        int percentage = tile.getField(0) * 42 / tile.getField(4);
+        int i = (this.width - this.xSize) / 2;
+        int j = (this.height - this.ySize) / 2;
 
-            RenderHelper.bindTexture(ElementEnergyStored.DEFAULT_TEXTURE);
-            drawSizedTexturedModalRect(i + energyBarStartX, j + energyBarStartY, 0, 0, 16, 42, 32, 64);
-            drawSizedTexturedModalRect(i + energyBarStartX, j + energyBarStartY + energyBarHeight - percentage, energyBarWidth, energyBarHeight - percentage, 16, percentage, 32, 64);
-        }
+        RenderHelper.bindTexture(ElementEnergyStored.DEFAULT_TEXTURE);
+        drawSizedTexturedModalRect(i + energyBarStartX, j + energyBarStartY, 0, 0, 16, 42, 32, 64);
+        drawSizedTexturedModalRect(i + energyBarStartX, j + energyBarStartY + energyBarHeight - percentage, energyBarWidth, energyBarHeight - percentage, 16, percentage, 32, 64);
     }
 
     @Override
@@ -85,15 +83,13 @@ public abstract class GuiMachineBase extends GuiBase {
         super.addTooltips(tooltip);
         int i = (this.width - this.xSize) / 2;
         int j = (this.height - this.ySize) / 2;
-        if (tile != null) {
-            if (mouseX >= energyBarStartX && mouseX <= energyBarStartX + energyBarWidth && mouseY >= energyBarStartY && mouseY <= energyBarStartY + energyBarHeight) { // Mouse is currently on the energy bar
-                if (tile.getField(4) < 0) {
-                    tooltip.add("Infinite RF");
-                } else {
-                    tooltip.add(tile.getField(0) + " / " + tile.getField(4) + " RF");
-                }
-                tooltip.add(tile.getField(3) + " RF/t");
+        if (mouseX >= energyBarStartX && mouseX <= energyBarStartX + energyBarWidth && mouseY >= energyBarStartY && mouseY <= energyBarStartY + energyBarHeight) { // Mouse is currently on the energy bar
+            if (tile.getField(4) < 0) {
+                tooltip.add("Infinite RF");
+            } else {
+                tooltip.add(tile.getField(0) + " / " + tile.getField(4) + " RF");
             }
+            tooltip.add(tile.getField(3) + " RF/t");
         }
     }
 
@@ -159,9 +155,7 @@ public abstract class GuiMachineBase extends GuiBase {
     @Override
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
-        if (tile != null) {
-            fontRendererObj.drawString(tile.getName(), 8, 6, 0x404040);
-        }
+        fontRendererObj.drawString(tile.getName(), 8, 6, 0x404040);
     }
 
 }
