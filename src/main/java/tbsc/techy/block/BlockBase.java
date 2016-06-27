@@ -28,17 +28,13 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tbsc.techy.Techy;
-import tbsc.techy.api.register.IHasItemBlock;
-import tbsc.techy.api.register.ITechyRegister;
-
-import javax.annotation.Nonnull;
 
 /**
  * Base block class, the superclass of all blocks from the Techy mod.
  *
  * Created by tbsc on 3/27/16.
  */
-public class BlockBase extends Block implements ITechyRegister, IHasItemBlock {
+public class BlockBase extends Block {
 
     /**
      * It is protected since you shouldn't make an instance of BlockBase!
@@ -68,9 +64,8 @@ public class BlockBase extends Block implements ITechyRegister, IHasItemBlock {
      * Loads the model for the block dynamically.
      */
     @SideOnly(Side.CLIENT)
-    @Override
-    public void initModel(@Nonnull Item item) {
-        ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
+    public void initModel() {
+        ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(this), 0, new ModelResourceLocation(getRegistryName(), "inventory"));
     }
 
 }

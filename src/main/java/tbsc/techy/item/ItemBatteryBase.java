@@ -15,7 +15,7 @@
  * License along with Techy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package tbsc.techy.item.battery;
+package tbsc.techy.item;
 
 import cofh.api.energy.IEnergyContainerItem;
 import net.minecraft.creativetab.CreativeTabs;
@@ -23,7 +23,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import tbsc.techy.item.ItemBase;
 
 import java.util.List;
 
@@ -38,7 +37,7 @@ public class ItemBatteryBase extends ItemBase implements IEnergyContainerItem {
     protected int maxReceive;
     protected int maxExtract;
 
-    protected ItemBatteryBase(String unlocalized, int capacity, int maxReceive, int maxExtract) {
+    public ItemBatteryBase(String unlocalized, int capacity, int maxReceive, int maxExtract) {
         super(unlocalized);
         this.capacity = capacity;
         this.maxExtract = maxExtract;

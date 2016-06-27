@@ -32,9 +32,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import tbsc.techy.Techy;
 import tbsc.techy.api.ITechyWrench;
-import tbsc.techy.api.register.IHasTileEntity;
-import tbsc.techy.api.register.RegisterInstance;
-import tbsc.techy.api.register.TechyRegister;
 import tbsc.techy.block.BlockBaseFacingMachine;
 
 import javax.annotation.Nullable;
@@ -44,14 +41,10 @@ import javax.annotation.Nullable;
  *
  * Created by tbsc on 5/20/16.
  */
-public class BlockCoalGenerator extends BlockBaseFacingMachine implements IHasTileEntity {
+public class BlockCoalGenerator extends BlockBaseFacingMachine {
 
     public static final String IDENTIFIER = "blockCoalGenerator";
 
-    @RegisterInstance(identifier = IDENTIFIER, registerClass = BlockCoalGenerator.class)
-    public static BlockCoalGenerator instance;
-
-    @TechyRegister(identifier = IDENTIFIER)
     public BlockCoalGenerator() {
         super(Material.CIRCUITS, IDENTIFIER, 5);
         setHarvestLevel("pickaxe", Item.ToolMaterial.IRON.getHarvestLevel());
@@ -88,16 +81,6 @@ public class BlockCoalGenerator extends BlockBaseFacingMachine implements IHasTi
             playerIn.openGui(Techy.instance, Techy.COAL_GENERATOR_GUI_ID, worldIn, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
-    }
-
-    @Override
-    public <T extends TileEntity> Class<T> getTileClass() {
-        return (Class<T>) TileCoalGenerator.class;
-    }
-
-    @Override
-    public String getTileID() {
-        return "tileCoalGenerator";
     }
 
 }

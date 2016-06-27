@@ -34,13 +34,10 @@ import tbsc.techy.api.compat.jei.category.TechyGenericRecipeCategory;
 import tbsc.techy.api.compat.jei.handler.TechyCrusherRecipeHandler;
 import tbsc.techy.api.compat.jei.handler.TechyFurnaceRecipeHandler;
 import tbsc.techy.api.compat.jei.wrapper.TechyRecipeWrapper;
-import tbsc.techy.init.LegacyInit;
-import tbsc.techy.machine.crusher.BlockCrusher;
+import tbsc.techy.init.BlockInit;
 import tbsc.techy.machine.crusher.GuiCrusher;
-import tbsc.techy.machine.furnace.BlockPoweredFurnace;
 import tbsc.techy.machine.furnace.GuiPoweredFurnace;
 import tbsc.techy.machine.generator.GuiGeneratorBase;
-import tbsc.techy.machine.generator.coal.BlockCoalGenerator;
 import tbsc.techy.recipe.CrusherRecipes;
 import tbsc.techy.recipe.IRecipeInput;
 import tbsc.techy.recipe.PoweredFurnaceRecipes;
@@ -144,10 +141,10 @@ public class TechyJEIPlugin extends BlankModPlugin {
         registry.addAdvancedGuiHandlers(new TechyAdvancedGuiHandler<>(GuiCrusher.class));
         registry.addAdvancedGuiHandlers(new TechyAdvancedGuiHandler<>(GuiGeneratorBase.class));
 
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockPoweredFurnace.instance), FURNACE_UID);
-        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockCrusher.instance), CRUSHER_UID);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockInit.blockPoweredFurnace), FURNACE_UID);
+        registry.addRecipeCategoryCraftingItem(new ItemStack(BlockInit.blockCrusher), CRUSHER_UID);
 
-        registry.addDescription(Lists.newArrayList(new ItemStack(BlockPoweredFurnace.instance), new ItemStack(BlockCrusher.instance), new ItemStack(BlockCoalGenerator.instance)),
+        registry.addDescription(Lists.newArrayList(new ItemStack(BlockInit.blockPoweredFurnace), new ItemStack(BlockInit.blockCrusher), new ItemStack(BlockInit.blockCoalGenerator)),
                 "Techy Machines",
                 "",
                 "Reconfigurable sides can be configured using the tab on the right side. " +
@@ -161,41 +158,41 @@ public class TechyJEIPlugin extends BlankModPlugin {
                         "While some boosters will make a machine operate better, some may make it operate worse (tier 0 boosters). " +
                         "It also depends on the machine. Energy boosters will make generators perform worse (in terms of energy generation).");
 
-        registry.addDescription(new ItemStack(LegacyInit.blockOreCopper),
+        registry.addDescription(new ItemStack(BlockInit.blockOreCopper),
                 "Copper Ore Generation",
                 "",
                 "Max ores per vein: " + ConfigData.copperPerVein,
                 "Max ores per chunk: " + ConfigData.copperPerChunk,
                 "Maximum height for copper generation: "+ ConfigData.copperMaxHeight,
-                "Harvest level: " + LegacyInit.blockOreCopper.getHarvestLevel(LegacyInit.blockOreCopper.getBlockState().getBaseState()));
-        registry.addDescription(new ItemStack(LegacyInit.blockOreTin),
+                "Harvest level: " + BlockInit.blockOreCopper.getHarvestLevel(BlockInit.blockOreCopper.getBlockState().getBaseState()));
+        registry.addDescription(new ItemStack(BlockInit.blockOreTin),
                 "Tin Ore Generation",
                 "",
                 "Max ores per vein: " + ConfigData.tinPerVein,
                 "Max ores per chunk: " + ConfigData.tinPerChunk,
                 "Maximum height for tin generation: "+ ConfigData.tinMaxHeight,
-                "Harvest level: " + LegacyInit.blockOreTin.getHarvestLevel(LegacyInit.blockOreTin.getBlockState().getBaseState()));
-        registry.addDescription(new ItemStack(LegacyInit.blockOreSilver),
+                "Harvest level: " + BlockInit.blockOreTin.getHarvestLevel(BlockInit.blockOreTin.getBlockState().getBaseState()));
+        registry.addDescription(new ItemStack(BlockInit.blockOreSilver),
                 "Silver Ore Generation",
                 "",
                 "Max ores per vein: " + ConfigData.silverPerVein,
                 "Max ores per chunk: " + ConfigData.silverPerChunk,
                 "Maximum height for copper generation: "+ ConfigData.silverMaxHeight,
-                "Harvest level: " + LegacyInit.blockOreSilver.getHarvestLevel(LegacyInit.blockOreSilver.getBlockState().getBaseState()));
-        registry.addDescription(new ItemStack(LegacyInit.blockOreAluminium),
+                "Harvest level: " + BlockInit.blockOreSilver.getHarvestLevel(BlockInit.blockOreSilver.getBlockState().getBaseState()));
+        registry.addDescription(new ItemStack(BlockInit.blockOreAluminium),
                 "Aluminium Ore Generation",
                 "",
                 "Max ores per vein: " + ConfigData.aluminiumPerVein,
                 "Max ores per chunk: " + ConfigData.aluminiumPerChunk,
                 "Maximum height: "+ ConfigData.aluminiumMaxHeight,
-                "Harvest level: " + LegacyInit.blockOreAluminium.getHarvestLevel(LegacyInit.blockOreAluminium.getBlockState().getBaseState()));
-        registry.addDescription(new ItemStack(LegacyInit.blockOreLithium),
+                "Harvest level: " + BlockInit.blockOreAluminium.getHarvestLevel(BlockInit.blockOreAluminium.getBlockState().getBaseState()));
+        registry.addDescription(new ItemStack(BlockInit.blockOreLithium),
                 "Lithium Ore Generation",
                 "",
                 "Max ores per vein: " + ConfigData.lithiumPerVein,
                 "Max ores per chunk: " + ConfigData.lithiumPerChunk,
                 "Maximum height: "+ ConfigData.lithiumMaxHeight,
-                "Harvest level: " + LegacyInit.blockOreLithium.getHarvestLevel(LegacyInit.blockOreLithium.getBlockState().getBaseState()));
+                "Harvest level: " + BlockInit.blockOreLithium.getHarvestLevel(BlockInit.blockOreLithium.getBlockState().getBaseState()));
 
 
         List<TechyRecipeWrapper> recipes = new ArrayList<>();

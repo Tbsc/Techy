@@ -22,6 +22,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import tbsc.techy.ConfigData;
+import tbsc.techy.init.BlockInit;
 import tbsc.techy.machine.generator.TileGeneratorBase;
 
 import javax.annotation.Nonnull;
@@ -34,7 +35,7 @@ import javax.annotation.Nonnull;
 public class TileCoalGenerator extends TileGeneratorBase implements IEnergyProvider {
 
     public TileCoalGenerator() {
-        super(128000, 80, BlockCoalGenerator.instance.tileInvSize, 0, 1); // cookTime of zero since it's not used
+        super(128000, 80, BlockInit.blockCoalGenerator.tileInvSize, 0, 1); // cookTime of zero since it's not used
     }
 
     @Override

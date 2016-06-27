@@ -15,25 +15,21 @@
  * License along with Techy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package tbsc.techy.api.register;
-
-import net.minecraft.item.Item;
-
-import javax.annotation.Nonnull;
+package tbsc.techy.item;
 
 /**
- * In order for the registered class to be registered correctly, the class
- * needs to implement this so it has basic methods the registrar needs. for
- * example {@link #initModel(Item)}
+ * Basic crafting component.
+ * Since most crafting components are just normal items with a texture, but
+ * have no real functionality other than being used as a crafting ingredient
+ * or used in another machine. Therefore 1 class that can be reused with
+ * different unlocalized names is good.
  *
- * Created by tbsc on 6/24/16.
+ * Created by tbsc on 5/5/16.
  */
-public interface ITechyRegister {
+public class ItemGenericCraftingComponent extends ItemBase {
 
-    /**
-     * Everything related to render of the block needs to be done in this method, for
-     * example setting models based on metadata and other stuff.
-     */
-    void initModel(@Nonnull Item item);
+    public ItemGenericCraftingComponent(String unlocalizedName) {
+        super(unlocalizedName);
+    }
 
 }

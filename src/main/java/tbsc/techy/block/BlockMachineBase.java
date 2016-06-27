@@ -15,26 +15,21 @@
  * License along with Techy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package tbsc.techy.block.machine;
+package tbsc.techy.block;
 
-import tbsc.techy.api.register.RegisterInstance;
-import tbsc.techy.api.register.TechyRegister;
+import net.minecraft.block.material.Material;
 
 /**
- * Class for the advanced machine base.
+ * NOTE: This is a REAL block, and a crafting component. For the base class,
+ * look at {@link BlockBaseMachine}.
  *
- * Created by tbsc on 6/24/16.
+ * Created by tbsc on 5/6/16.
  */
-public class BlockMachineBaseAdvanced extends BlockMachineBase {
+public class BlockMachineBase extends BlockBase {
 
-    public static final String IDENTIFIER = "blockMachineBaseAdvanced";
-
-    @RegisterInstance(identifier = IDENTIFIER, registerClass = BlockMachineBaseAdvanced.class)
-    public static BlockMachineBaseAdvanced instance;
-
-    @TechyRegister(identifier = IDENTIFIER)
-    public BlockMachineBaseAdvanced() {
-        super(IDENTIFIER);
+    public BlockMachineBase(String unlocalizedName) {
+        super(Material.CIRCUITS, unlocalizedName);
+        setHardness(5.0F);
     }
 
 }

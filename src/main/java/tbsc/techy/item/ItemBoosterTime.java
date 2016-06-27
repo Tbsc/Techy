@@ -24,8 +24,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
-import tbsc.techy.api.register.RegisterInstance;
-import tbsc.techy.api.register.TechyRegister;
 import tbsc.techy.tile.TileMachineBase;
 
 import java.util.List;
@@ -39,10 +37,6 @@ public class ItemBoosterTime extends ItemBoosterBase {
 
     public static final String IDENTIFIER = "itemBoosterTime";
 
-    @RegisterInstance(identifier = IDENTIFIER, registerClass = ItemBoosterTime.class)
-    public static ItemBoosterTime instance;
-
-    @TechyRegister(identifier = IDENTIFIER)
     public ItemBoosterTime() {
         super(IDENTIFIER);
 
@@ -58,7 +52,7 @@ public class ItemBoosterTime extends ItemBoosterBase {
     }
 
     @Override
-    public void initModel(Item item) {
+    public void initModel() {
         ModelBakery.registerItemVariants(this, new ResourceLocation(getRegistryName() + "T0"), new ResourceLocation(getRegistryName() + "T1"), new ResourceLocation(getRegistryName() + "T2"), new ResourceLocation(getRegistryName() + "T3"));
         ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName() + "T0", "inventory"));
         ModelLoader.setCustomModelResourceLocation(this, 1, new ModelResourceLocation(getRegistryName() + "T1", "inventory"));

@@ -55,7 +55,7 @@ public class ItemIngots extends ItemBase {
     }
 
     @Override
-    public void initModel(Item item) {
+    public void initModel() {
         ResourceLocation[] textures = new ResourceLocation[] {};
         for (IngotType type : IngotType.values()) {
             if (type != IngotType.COPPER)

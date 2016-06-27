@@ -23,7 +23,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import tbsc.techy.Techy;
-import tbsc.techy.api.register.ITechyRegister;
 
 /**
  * Basic item class.
@@ -31,7 +30,7 @@ import tbsc.techy.api.register.ITechyRegister;
  *
  * Created by tbsc on 3/27/16.
  */
-public abstract class ItemBase extends Item implements ITechyRegister {
+public abstract class ItemBase extends Item {
 
     protected ItemBase(String unlocalizedName) {
         setCreativeTab(Techy.tabTechyItems);
@@ -47,7 +46,7 @@ public abstract class ItemBase extends Item implements ITechyRegister {
     }
 
     @SideOnly(Side.CLIENT)
-    public void initModel(Item item) {
+    public void initModel() {
         ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
     }
 

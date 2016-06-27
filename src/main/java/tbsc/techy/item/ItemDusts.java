@@ -26,7 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import org.apache.commons.lang3.ArrayUtils;
-import tbsc.techy.init.LegacyInit;
+import tbsc.techy.init.ItemInit;
 
 import java.util.List;
 
@@ -55,7 +55,7 @@ public class ItemDusts extends ItemBase {
     }
 
     @Override
-    public void initModel(Item item) {
+    public void initModel() {
         ResourceLocation[] textures = new ResourceLocation[] {};
         for (DustType type : DustType.values()) {
             if (type != DustType.IRON)
@@ -81,12 +81,12 @@ public class ItemDusts extends ItemBase {
         EMERALD("itemDustEmerald", "Emerald", 4, new ItemStack(Items.EMERALD)),
         WOOD("itemDustWood", "Wood", 5, null),
         STONE("itemDustStone", "Stone", 6, null),
-        COPPER("itemDustCopper", "Copper", 7, new ItemStack(LegacyInit.itemIngots, 1, ItemIngots.IngotType.COPPER.id)),
-        TIN("itemDustTin", "Tin", 8, new ItemStack(LegacyInit.itemIngots, 1, ItemIngots.IngotType.TIN.id)),
-        SILVER("itemDustSilver", "Silver", 9, new ItemStack(LegacyInit.itemIngots, 1, ItemIngots.IngotType.SILVER.id)),
-        ALUMINIUM("itemDustAluminium", "Aluminium", 10, new ItemStack(LegacyInit.itemIngots, 1, ItemIngots.IngotType.ALUMINIUM.id)),
-        LITHIUM("itemDustLithium", "Lithium", 11, new ItemStack(LegacyInit.itemIngots, 1, ItemIngots.IngotType.LITHIUM.id)),
-        BRONZE("itemDustBronze", "Bronze", 12, new ItemStack(LegacyInit.itemIngots, 1, ItemIngots.IngotType.BRONZE.id));
+        COPPER("itemDustCopper", "Copper", 7, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.COPPER.id)),
+        TIN("itemDustTin", "Tin", 8, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.TIN.id)),
+        SILVER("itemDustSilver", "Silver", 9, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.SILVER.id)),
+        ALUMINIUM("itemDustAluminium", "Aluminium", 10, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.ALUMINIUM.id)),
+        LITHIUM("itemDustLithium", "Lithium", 11, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.LITHIUM.id)),
+        BRONZE("itemDustBronze", "Bronze", 12, new ItemStack(ItemInit.itemIngots, 1, ItemIngots.IngotType.BRONZE.id));
 
         public int id;
         public String name;

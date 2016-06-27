@@ -1,0 +1,13 @@
+{
+  "parent": "Techy:block/machineTemplate",
+  "textures": {
+    "front": "Techy:blocks/blockSolarGenerator",
+    "west": "Techy:blocks/blockGenericSide",
+    "east": "Techy:blocks/blockGenericSide",
+    "south": "Techy:blocks/blockGenericSide",
+    "up": "Techy:blocks/blockGenericSide",
+    "down": "Techy:blocks/blockGenericSide",
+    "cube": "Techy:blocks/machineTinyCube",
+    "line": "Techy:blocks/machineLine"
+  }
+}
