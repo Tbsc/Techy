@@ -137,8 +137,16 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         setAllSidesDisabled();
     }
 
+//    int countdown = 0;
+
     @Override
     public void update() {
+//        ++countdown;
+//        if (countdown >= 10) {
+//             Techy.network.sendToAll(new CPacketEnergyChanged(pos, getEnergyStored())); Figure out why this causes issues
+//            countdown = 0;
+//        }
+
         if (BlockBaseFacingMachine.isCorrectBlock(worldObj, pos, BlockBaseFacingMachine.class)) { // Only run if block is there
             if (handleRedstone() || handleBoosters() || handleProcessing() || handleInsertion() || handleExtraction()) {
                 this.markDirty();

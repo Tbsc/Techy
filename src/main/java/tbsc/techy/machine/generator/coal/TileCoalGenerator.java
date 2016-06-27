@@ -87,4 +87,9 @@ public class TileCoalGenerator extends TileGeneratorBase implements IEnergyProvi
         };
     }
 
+    @Override
+    public String getName() {
+        return BlockInit.blockCoalGenerator.getLocalizedName();
+    }
+
 }

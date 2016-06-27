@@ -28,7 +28,6 @@ import net.minecraft.util.text.TextComponentString;
 import tbsc.techy.Techy;
 import tbsc.techy.api.IBoosterItem;
 import tbsc.techy.block.BlockBaseFacingMachine;
-import tbsc.techy.init.BlockInit;
 import tbsc.techy.network.CPacketEnergyChanged;
 import tbsc.techy.tile.TileMachineBase;
 
@@ -216,11 +215,6 @@ public abstract class TileGeneratorBase extends TileMachineBase implements IEner
             default:
                 return false;
         }
-    }
-
-    @Override
-    public String getName() {
-        return BlockInit.blockCoalGenerator.getLocalizedName();
     }
 
     @Override
