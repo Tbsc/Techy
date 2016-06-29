@@ -58,7 +58,9 @@ public class TechyWAILAPlugin implements IWailaDataProvider {
         TileMachineBase tile = (TileMachineBase) data.getTileEntity();
         list.clear();
         list.add(tile.getField(0) + " / " + tile.getField(4) + " RF");
-        if (tile.getField(2) == 0) {
+        if (tile.isOperating() && tile.getField(2) == 0) {
+            list.add("Operating");
+        } else if (tile.getField(2) == 0) {
             list.add("Not Operating");
         } else {
             list.add("Operating: " + tile.getField(1) * 100 / tile.getField(2) + "%");
