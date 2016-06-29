@@ -110,7 +110,7 @@ public class PositionUtil {
      * @return Is the position representing the highest block on the y coordinate of the position
      */
     public static boolean isBlockHighest(World world, BlockPos pos) {
-        return world.getTopSolidOrLiquidBlock(pos) == pos;
+        return world.getTopSolidOrLiquidBlock(pos).equals(pos);
     }
 
 }
