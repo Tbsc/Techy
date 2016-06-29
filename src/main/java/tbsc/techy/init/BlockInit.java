@@ -32,14 +32,9 @@ import tbsc.techy.machine.furnace.BlockPoweredFurnace;
 import tbsc.techy.machine.furnace.TilePoweredFurnace;
 import tbsc.techy.machine.generator.coal.BlockCoalGenerator;
 import tbsc.techy.machine.generator.coal.TileCoalGenerator;
-import tbsc.techy.tile.pipe.TilePipeEnergy;
-
-/*
 import tbsc.techy.machine.generator.solar.BlockSolarGenerator;
 import tbsc.techy.machine.generator.solar.TileSolarGenerator;
-import tbsc.techy.machine.interactor.BlockInteractor;
-import tbsc.techy.machine.interactor.TileInteractor;
-*/
+import tbsc.techy.tile.pipe.TilePipeEnergy;
 
 /**
  * Loads and contains the blocks (+ TileEntities) of Techy,
@@ -51,9 +46,8 @@ public class BlockInit {
     // Instances of blocks
     public static BlockBaseFacingMachine blockPoweredFurnace;
     public static BlockBaseFacingMachine blockCrusher;
-//    public static BlockBaseFacingMachine blockInteractor;
     public static BlockBaseFacingMachine blockCoalGenerator;
-//    public static BlockBaseFacingMachine blockSolarGenerator;
+    public static BlockBaseFacingMachine blockSolarGenerator;
     public static BlockMachineBase blockMachineBaseBasic;
     public static BlockMachineBase blockMachineBaseImproved;
     public static BlockMachineBase blockMachineBaseAdvanced;
@@ -72,9 +66,8 @@ public class BlockInit {
     public static void init() {
         blockPoweredFurnace = new BlockPoweredFurnace();
         blockCrusher = new BlockCrusher();
-//        blockInteractor = new BlockInteractor();
         blockCoalGenerator = new BlockCoalGenerator();
-//        blockSolarGenerator = new BlockSolarGenerator();
+        blockSolarGenerator = new BlockSolarGenerator();
         blockMachineBaseBasic = new BlockMachineBase("blockMachineBaseBasic");
         blockMachineBaseImproved = new BlockMachineBase("blockMachineBaseImproved");
         blockMachineBaseAdvanced = new BlockMachineBase("blockMachineBaseAdvanced");
@@ -96,12 +89,10 @@ public class BlockInit {
         GameRegistry.register(new ItemBlock(blockPoweredFurnace), blockPoweredFurnace.getRegistryName());
         GameRegistry.register(blockCrusher);
         GameRegistry.register(new ItemBlock(blockCrusher), blockCrusher.getRegistryName());
-//        GameRegistry.register(blockInteractor);
-//        GameRegistry.register(new ItemBlock(blockInteractor), blockInteractor.getRegistryName());
         GameRegistry.register(blockCoalGenerator);
         GameRegistry.register(new ItemBlock(blockCoalGenerator), blockCoalGenerator.getRegistryName());
-//        GameRegistry.register(blockSolarGenerator);
-//        GameRegistry.register(new ItemBlock(blockSolarGenerator), blockSolarGenerator.getRegistryName());
+        GameRegistry.register(blockSolarGenerator);
+        GameRegistry.register(new ItemBlock(blockSolarGenerator), blockSolarGenerator.getRegistryName());
         GameRegistry.register(blockMachineBaseBasic);
         GameRegistry.register(new ItemBlock(blockMachineBaseBasic), blockMachineBaseBasic.getRegistryName());
         GameRegistry.register(blockMachineBaseImproved);
@@ -127,10 +118,9 @@ public class BlockInit {
 
         GameRegistry.registerTileEntity(TilePoweredFurnace.class, "tilePoweredFurnace");
         GameRegistry.registerTileEntity(TileCrusher.class, "tileCrusher");
-//        GameRegistry.registerTileEntity(TileInteractor.class, "tileInteractor");
         GameRegistry.registerTileEntity(TilePipeEnergy.class, "pipeEnergy");
         GameRegistry.registerTileEntity(TileCoalGenerator.class, "tileCoalGenerator");
-//        GameRegistry.registerTileEntity(TileSolarGenerator.class, "tileSolarGenerator");
+        GameRegistry.registerTileEntity(TileSolarGenerator.class, "tileSolarGenerator");
     }
 
     /**
@@ -141,9 +131,8 @@ public class BlockInit {
     public static void initModels() {
         blockPoweredFurnace.initModel();
         blockCrusher.initModel();
-//        blockInteractor.initModel();
         blockCoalGenerator.initModel();
-//        blockSolarGenerator.initModel();
+        blockSolarGenerator.initModel();
         blockMachineBaseBasic.initModel();
         blockMachineBaseImproved.initModel();
         blockMachineBaseAdvanced.initModel();

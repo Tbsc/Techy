@@ -57,7 +57,9 @@ item.Techy:itemBoosterBonus.name=Bonus Booster
 ## Machines ##
 tile.Techy:blockPoweredFurnace.name=Powered Furnace
 tile.Techy:blockCrusher.name=Crusher
+tile.Techy:blockInteractor.name=Interactor
 tile.Techy:blockCoalGenerator.name=Coal Generator
+tile.Techy:blockSolarGenerator.name=Solar Generator
 
 ## Misc ##
 tile.Techy:blockMachineBaseBasic.name=Basic Machine Base
