@@ -22,6 +22,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
@@ -100,6 +101,16 @@ public class PositionUtil {
             } else currentClosest = pos;
         }
         return currentClosest;
+    }
+
+    /**
+     * Checks if the position given is the highest on the y coordinates.
+     * @param world The world
+     * @param pos Position of the block
+     * @return Is the position representing the highest block on the y coordinate of the position
+     */
+    public static boolean isBlockHighest(World world, BlockPos pos) {
+        return world.getTopSolidOrLiquidBlock(pos) == pos;
     }
 
 }
