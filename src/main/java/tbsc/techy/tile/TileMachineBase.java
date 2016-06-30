@@ -17,8 +17,9 @@
 
 package tbsc.techy.tile;
 
-import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyHandler;
+import net.darkhax.tesla.api.ITeslaHolder;
+import net.darkhax.tesla.capability.TeslaCapabilities;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ISidedInventory;
@@ -30,11 +31,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import org.apache.commons.lang3.ArrayUtils;
-import tbsc.techy.api.IBoosterItem;
-import tbsc.techy.api.IOperator;
-import tbsc.techy.api.SideConfiguration;
-import tbsc.techy.api.Sides;
+import tbsc.techy.api.*;
 import tbsc.techy.api.util.InventoryUtils;
 import tbsc.techy.block.BlockBaseFacingMachine;
 
@@ -125,7 +125,10 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
      */
     public EnumMap<Sides, SideConfiguration> sideConfigMap = new EnumMap<>(Sides.class);
 
-    public EnergyStorage energyStorage;
+    @CapabilityInject(TeslaCapabilities.CapabilityTeslaHolder.class)
+    public static final Capability<ITeslaHolder> CAPABILITY_TESLA_HOLDER = null;
+
+    public ModularEnergyStorage energyStorage;
     protected boolean isRunning;
     protected boolean shouldRun = true;
 
@@ -133,7 +136,7 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         super(invSize);
         this.itemsPerTick = itemsPerTick;
         this.machineProcessTime = cookTime;
-        this.energyStorage = new EnergyStorage(capacity, maxTransfer);
+        this.energyStorage = new ModularEnergyStorage(capacity, maxTransfer);
         setAllSidesDisabled();
     }
 
@@ -185,6 +188,20 @@ public abstract class TileMachineBase extends TileBase implements IEnergyHandler
         experienceModifier = experienceModifierSet;
         additionalItemModifier = additionalItemModifierSet;
         return false;
+    }
+
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CAPABILITY_TESLA_HOLDER)
+            return (T) energyStorage;
+        return super.getCapability(capability, facing);
+    }
+
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        if (capability == CAPABILITY_TESLA_HOLDER)
+            return true;
+        return super.hasCapability(capability, facing);
     }
 
     /**
