@@ -25,7 +25,7 @@ All machines require energy to operate, and therefore a mandatory object is the 
 
 That's it for objects that must be in all recipes. Now for the specific ones.
 
-## Crusher
+### Crusher
 
 The crusher needs to also know the second output stack, and the chance to get it.
 
