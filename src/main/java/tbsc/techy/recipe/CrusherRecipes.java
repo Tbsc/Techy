@@ -23,6 +23,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.lang3.tuple.ImmutableTriple;
 import tbsc.techy.ConfigData;
 import tbsc.techy.api.util.DevUtil;
@@ -61,85 +62,144 @@ public class CrusherRecipes {
     private CrusherRecipes() {}
 
     public void loadModRecipes() {
-        addBlockRecipe(Blocks.COBBLESTONE, new ItemStack(Blocks.GRAVEL), new ItemStack(Blocks.SAND), 20, 2, 3000);
-        addBlockRecipe(Blocks.GRAVEL, new ItemStack(Blocks.SAND), null, 0, 2, 2800);
-        addBlockRecipe(Blocks.SAND, new ItemStack(Items.CLAY_BALL), null, 0, 2, 2800);
+        addBlockRecipe(Blocks.COBBLESTONE, new ItemStack(Blocks.GRAVEL), new ItemStack(Blocks.SAND), 20, 3000);
+        addBlockRecipe(Blocks.GRAVEL, new ItemStack(Blocks.SAND), null, 0, 2800);
+        addBlockRecipe(Blocks.SAND, new ItemStack(Items.CLAY_BALL), null, 0, 2800);
 
-        addOreDictionaryRecipe("ingotIron", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.IRON.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreIron", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.IRON.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockIron", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.IRON.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotIron", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.IRON.id), null, 0, 3000);
+        addOreDictionaryRecipe("oreIron", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.IRON.id), null, 0, 5000);
+        addOreDictionaryRecipe("blockIron", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.IRON.id), null, 0, 20000);
 
-        addOreDictionaryRecipe("ingotGold", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.GOLD.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreGold", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.GOLD.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockGold", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.GOLD.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotGold", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.GOLD.id), null, 0, 3000);
+        addOreDictionaryRecipe("oreGold", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.GOLD.id), null, 0, 5000);
+        addOreDictionaryRecipe("blockGold", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.GOLD.id), null, 0, 20000);
 
-        addOreDictionaryRecipe("gemDiamond", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.DIAMOND.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreDiamond", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.DIAMOND.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockDiamond", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.DIAMOND.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("gemDiamond", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.DIAMOND.id), null, 0, 3000);
+        addOreDictionaryRecipe("oreDiamond", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.DIAMOND.id), null, 0, 5000);
+        addOreDictionaryRecipe("blockDiamond", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.DIAMOND.id), null, 0, 20000);
 
-        addOreDictionaryRecipe("itemCoal", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.COAL.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("itemCharcoal", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.COAL.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreCoal", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.COAL.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockCoal", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.COAL.id), null, 0, 2, 20000);
-        addOreDictionaryRecipe("blockCharcoal", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.COAL.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("itemCoal", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.COAL.id), null, 0, 3000);
+        addOreDictionaryRecipe("itemCharcoal", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.COAL.id), null, 2, 3000);
+        addOreDictionaryRecipe("oreCoal", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.COAL.id), null, 0, 5000);
+        addOreDictionaryRecipe("blockCoal", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.COAL.id), null, 0, 20000);
+        addOreDictionaryRecipe("blockCharcoal", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.COAL.id), null, 0, 20000);
 
-        addOreDictionaryRecipe("ingotCopper", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.COPPER.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreCopper", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.COPPER.id), new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.GOLD.id), 30, 4, 5000);
-        addOreDictionaryRecipe("blockCopper", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.COPPER.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotCopper", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.COPPER.id), null, 0, 3000);
+        addOreDictionaryRecipe("oreCopper", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.COPPER.id), new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.GOLD.id), 30, 5000);
+        addOreDictionaryRecipe("blockCopper", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.COPPER.id), null, 0, 20000);
 
-        addOreDictionaryRecipe("ingotTin", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.TIN.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreTin", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.TIN.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockTin", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.TIN.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotTin", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.TIN.id), null, 0, 3000);
+        addOreDictionaryRecipe("oreTin", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.TIN.id), null, 0, 5000);
+        addOreDictionaryRecipe("blockTin", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.TIN.id), null, 0, 20000);
 
-        addOreDictionaryRecipe("ingotSilver", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.SILVER.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreSilver", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.SILVER.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockSilver", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.SILVER.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotSilver", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.SILVER.id), null, 0, 3000);
+        addOreDictionaryRecipe("oreSilver", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.SILVER.id), null, 0, 5000);
+        addOreDictionaryRecipe("blockSilver", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.SILVER.id), null, 0, 20000);
 
-        addOreDictionaryRecipe("ingotAluminum", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.ALUMINIUM.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreAluminum", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.ALUMINIUM.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockAluminum", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.ALUMINIUM.id), null, 0, 2, 20000);
-        addOreDictionaryRecipe("ingotAluminium", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.ALUMINIUM.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreAluminium", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.ALUMINIUM.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockAluminium", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.ALUMINIUM.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotAluminum", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.ALUMINIUM.id), null, 0, 3000);
+        addOreDictionaryRecipe("oreAluminum", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.ALUMINIUM.id), null, 0, 5000);
+        addOreDictionaryRecipe("blockAluminum", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.ALUMINIUM.id), null, 0, 20000);
+        addOreDictionaryRecipe("ingotAluminium", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.ALUMINIUM.id), null, 0, 3000);
+        addOreDictionaryRecipe("oreAluminium", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.ALUMINIUM.id), null, 0, 5000);
+        addOreDictionaryRecipe("blockAluminium", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.ALUMINIUM.id), null, 0, 20000);
 
-        addOreDictionaryRecipe("ingotLithium", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.LITHIUM.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("oreLithium", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.LITHIUM.id), null, 0, 4, 5000);
-        addOreDictionaryRecipe("blockLithium", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.LITHIUM.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotLithium", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.LITHIUM.id), null, 0, 3000);
+        addOreDictionaryRecipe("oreLithium", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.LITHIUM.id), null, 0, 5000);
+        addOreDictionaryRecipe("blockLithium", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.LITHIUM.id), null, 0, 20000);
 
-        addOreDictionaryRecipe("ingotBronze", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.BRONZE.id), null, 0, 2, 3000);
-        addOreDictionaryRecipe("blockBronze", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.BRONZE.id), null, 0, 2, 20000);
+        addOreDictionaryRecipe("ingotBronze", new ItemStack(ItemInit.itemDusts, 1, ItemDusts.DustType.BRONZE.id), null, 0, 3000);
+        addOreDictionaryRecipe("blockBronze", new ItemStack(ItemInit.itemDusts, 9, ItemDusts.DustType.BRONZE.id), null, 0, 20000);
 
-        addOreDictionaryRecipe("logWood", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.WOOD.id), null, 0, 2, 4000);
+        addOreDictionaryRecipe("logWood", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.WOOD.id), null, 0, 4000);
 
-        addOreDictionaryRecipe("stone", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.STONE.id), null, 0, 2, 4000);
+        addOreDictionaryRecipe("stone", new ItemStack(ItemInit.itemDusts, 2, ItemDusts.DustType.STONE.id), null, 0, 4000);
     }
 
     /**
-     * Adds a recipe with a block as the input
+     * Adds a recipe with a block instance as an input
+     * @param input The block instance to be acceptable as input (this means NBT, metadata and damage are ignored)
+     * @param output The output stack of the recipe
+     * @param output2 The secondary output of the recipe
+     * @param output2Chance The change in percentages to get the second output
+     * @param experience NO-OP
+     * @param energyUsage The amount of energy to be consumed in this recipe
+     * @deprecated Experience no longer in use -- see {@link #addBlockRecipe(Block, ItemStack, ItemStack, int, int)}
      */
+    @Deprecated
     public void addBlockRecipe(@Nonnull Block input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
-        this.addItemRecipe(Item.getItemFromBlock(input), output, output2, output2Chance, experience, energyUsage);
+        this.addBlockRecipe(input, output, output2, output2Chance, energyUsage);
+    }
+
+    public void addBlockRecipe(@Nonnull Block input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, int energyUsage) {
+        this.addItemRecipe(Item.getItemFromBlock(input), output, output2, output2Chance, energyUsage);
     }
 
     /**
-     * Adds a recipe with an item as the input, and 2 outputs with a chance
+     * Adds a recipe with an item instance as an input
+     * @param input The item instance to be acceptable as input (this means NBT, metadata and damage are ignored)
+     * @param output The output stack of the recipe
+     * @param output2 The secondary output of the recipe
+     * @param output2Chance The change in percentages to get the second output
+     * @param experience NO-OP
+     * @param energyUsage The amount of energy to be consumed in this recipe
+     * @deprecated Experience no longer in use -- see {@link #addItemRecipe(Item, ItemStack, ItemStack, int, int)}
      */
     public void addItemRecipe(@Nonnull Item input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
-        this.addItemStackRecipe(new ItemStack(input, 1, 32767), output, output2, output2Chance, experience, energyUsage);
+        this.addItemRecipe(input, output, output2, output2Chance, energyUsage);
     }
 
     /**
-     * Adds a recipe with an ore dictionary ore name as the input, and 2 outputs with a chance
+     * Adds a recipe with an item instance as an input
+     * @param input The item instance to be acceptable as input (this means NBT, metadata and damage are ignored)
+     * @param output The output stack of the recipe
+     * @param output2 The secondary output of the recipe
+     * @param output2Chance The change in percentages to get the second output
+     * @param energyUsage The amount of energy to be consumed in this recipe
      */
+    public void addItemRecipe(@Nonnull Item input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, int energyUsage) {
+        this.addItemStackRecipe(new ItemStack(input, 1, OreDictionary.WILDCARD_VALUE), output, output2, output2Chance, energyUsage);
+    }
+
+    /**
+     * Adds a recipe with an ore dictionary string identifier as the input
+     * @param oreName The string identifier for the input ore names acceptable
+     * @param output The output stack of the recipe
+     * @param output2 The secondary output of the recipe
+     * @param output2Chance The change in percentages to get the second output
+     * @param experience NO-OP
+     * @param energyUsage The amount of energy to be consumed in this recipe
+     * @deprecated Experience no longer in use -- see {@link #addOreDictionaryRecipe(String, ItemStack, ItemStack, int, int)}
+     */
+    @Deprecated
     public void addOreDictionaryRecipe(@Nonnull String oreName, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
+        this.addOreDictionaryRecipe(oreName, output, output2, output2Chance, energyUsage);
+    }
+
+    /**
+     * Adds a recipe with an ore dictionary string identifier as the input
+     * @param oreName The string identifier for the input ore names acceptable
+     * @param output The output stack of the recipe
+     * @param output2 The secondary output of the recipe
+     * @param output2Chance The change in percentages to get the second output
+     * @param energyUsage The amount of energy to be consumed in this recipe
+     */
+    public void addOreDictionaryRecipe(@Nonnull String oreName, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, int energyUsage) {
         if (ItemHelper.oreProxy.oreNameExists(oreName)) {
-            this.addIRecipeInputRecipe(OreRecipeInput.of(oreName), output, output2, output2Chance, experience, energyUsage);
+            this.addIRecipeInputRecipe(OreRecipeInput.of(oreName), output, output2, output2Chance, energyUsage);
         }
     }
 
     /**
      * Adds a recipe with an ItemStack as the input
+     * @param input The {@link IRecipeInput} to add to the recipe map
+     * @param output The output stack of the recipe
+     * @param output2 The secondary output of the recipe
+     * @param output2Chance The change in percentages to get the second output
+     * @param experience NO-OP
+     * @param energyUsage The amount of energy to be consumed in this recipe
+     * @deprecated Experience no longer in use -- see {@link #addItemStackRecipe(ItemStack, ItemStack, ItemStack, int, int)}
      */
+    @Deprecated
     public void addItemStackRecipe(@Nonnull ItemStack input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
         if (getSmeltingResult(StackRecipeInput.of(input)) != null) {
             DevUtil.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
@@ -147,13 +207,38 @@ public class CrusherRecipes {
         }
         ImmutableTriple<ItemStack, ItemStack, Integer> key = new ImmutableTriple<>(output, output2, output2Chance);
         this.recipeMap.put(StackRecipeInput.of(input), key);
-        this.experienceMap.put(key, experience);
         this.energyMap.put(key, energyUsage);
     }
 
     /**
      * Adds a recipe with an ItemStack as the input
+     * @param input The {@link ItemStack} input to add to the recipe map
+     * @param output The output stack of the recipe
+     * @param output2 The secondary output of the recipe
+     * @param output2Chance The change in percentages to get the second output
+     * @param energyUsage The amount of energy to be consumed in this recipe
      */
+    public void addItemStackRecipe(@Nonnull ItemStack input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, int energyUsage) {
+        if (getSmeltingResult(StackRecipeInput.of(input)) != null) {
+            DevUtil.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
+            return;
+        }
+        ImmutableTriple<ItemStack, ItemStack, Integer> key = new ImmutableTriple<>(output, output2, output2Chance);
+        this.recipeMap.put(StackRecipeInput.of(input), key);
+        this.energyMap.put(key, energyUsage);
+    }
+
+    /**
+     * Adds a recipe with an {@link IRecipeInput} as the input
+     * @param input The {@link IRecipeInput} input to add to the recipe map
+     * @param output The output stack of the recipe
+     * @param output2 The secondary output of the recipe
+     * @param output2Chance The change in percentages to get the second output
+     * @param experience NO-OP
+     * @param energyUsage The amount of energy to be consumed in this recipe
+     * @deprecated Experience no longer in use -- see {@link #addIRecipeInputRecipe(IRecipeInput, ItemStack, ItemStack, int, int)}
+     */
+    @Deprecated
     public void addIRecipeInputRecipe(IRecipeInput input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, float experience, int energyUsage) {
         if (getSmeltingResult(input) != null) {
             DevUtil.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
@@ -161,7 +246,24 @@ public class CrusherRecipes {
         }
         ImmutableTriple<ItemStack, ItemStack, Integer> key = new ImmutableTriple<>(output, output2, output2Chance);
         this.recipeMap.put(input, key);
-        this.experienceMap.put(key, experience);
+        this.energyMap.put(key, energyUsage);
+    }
+
+    /**
+     * Adds a recipe with an {@link IRecipeInput} as the input
+     * @param input The {@link IRecipeInput} input to add to the recipe map
+     * @param output The output stack of the recipe
+     * @param output2 The secondary output of the recipe
+     * @param output2Chance The change in percentages to get the second output
+     * @param energyUsage The amount of energy to be consumed in this recipe
+     */
+    public void addIRecipeInputRecipe(IRecipeInput input, @Nonnull ItemStack output, @Nullable ItemStack output2, int output2Chance, int energyUsage) {
+        if (getSmeltingResult(input) != null) {
+            DevUtil.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
+            return;
+        }
+        ImmutableTriple<ItemStack, ItemStack, Integer> key = new ImmutableTriple<>(output, output2, output2Chance);
+        this.recipeMap.put(input, key);
         this.energyMap.put(key, energyUsage);
     }
 

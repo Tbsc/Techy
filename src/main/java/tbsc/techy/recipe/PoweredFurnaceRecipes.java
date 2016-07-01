@@ -18,10 +18,12 @@
 package tbsc.techy.recipe;
 
 import cofh.lib.util.helpers.ItemHelper;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraftforge.oredict.OreDictionary;
 import tbsc.techy.ConfigData;
 import tbsc.techy.api.util.DevUtil;
 import tbsc.techy.block.BlockOreBase;
@@ -36,6 +38,7 @@ public class PoweredFurnaceRecipes {
 
     private static final PoweredFurnaceRecipes instance = new PoweredFurnaceRecipes();
     private Map<IRecipeInput, ItemStack> recipeMap = new HashMap<>();
+    @Deprecated
     private Map<ItemStack, Float> experienceMap = new HashMap<>();
     private Map<ItemStack, Integer> energyMap = new HashMap<>();
 
@@ -53,68 +56,108 @@ public class PoweredFurnaceRecipes {
      */
     public void loadVanillaRecipes() {
         for (ItemStack input : FurnaceRecipes.instance().getSmeltingList().keySet()) {
-            addItemStackRecipe(input, FurnaceRecipes.instance().getSmeltingResult(input),
-                    FurnaceRecipes.instance().getSmeltingExperience(input), ConfigData.furnaceDefaultEnergyUsage);
+            addItemStackRecipe(input, FurnaceRecipes.instance().getSmeltingResult(input), ConfigData.furnaceDefaultEnergyUsage);
         }
     }
 
     public void loadModRecipes() {
         for (ItemDusts.DustType type : ItemDusts.DustType.values()) {
             if (ItemHelper.getOre("dust" + type.regName) != null) {
-                addOreDictionaryRecipe("dust" + type.regName, type.ingot, 3, 4800);
+                addOreDictionaryRecipe("dust" + type.regName, type.ingot, 4800);
             }
         }
         for (BlockOreBase.OreType type : BlockOreBase.OreType.values()) {
-            addOreDictionaryRecipe("ore" + type.regName, type.ingot, 3, 4800);
+            addOreDictionaryRecipe("ore" + type.regName, type.ingot, 4800);
         }
     }
 
     /**
      * Adds a recipe with a block as the input
+     * @deprecated Machines no longer give experience, the parameter is ignored
      */
-    public void addBlockRecipe(Block input, ItemStack output, float experience, int energyUsage) {
-        this.addItemRecipe(Item.getItemFromBlock(input), output, experience, energyUsage);
+    @Deprecated
+    public void addBlockRecipe(Block input, ItemStack output, @Ignore float experience, int energyUsage) {
+        this.addBlockRecipe(input, output, energyUsage);
+    }
+
+    public void addBlockRecipe(Block input, ItemStack output, int energyUsage) {
+        this.addItemRecipe(Item.getItemFromBlock(input), output, energyUsage);
     }
 
     /**
      * Adds a recipe with an item as the input
+     * @deprecated Machines no longer give experience, the parameter is ignored
      */
+    @Deprecated
     public void addItemRecipe(Item input, ItemStack output, float experience, int energyUsage) {
-        this.addItemStackRecipe(new ItemStack(input, 1, 32767), output, experience, energyUsage);
+        this.addItemRecipe(input, output, energyUsage);
+    }
+
+    @Deprecated
+    public void addItemRecipe(Item input, ItemStack output, int energyUsage) {
+        this.addItemStackRecipe(new ItemStack(input, 1, OreDictionary.WILDCARD_VALUE), output, energyUsage);
     }
 
     /**
      * Adds a recipe with an ore dictionary ore name as the input, and 2 outputs with a chance
+     * @deprecated Machines no longer give experience, the parameter is ignored
      */
+    @Deprecated
     public void addOreDictionaryRecipe(@Nonnull String oreName, @Nonnull ItemStack output, float experience, int energyUsage) {
         if (ItemHelper.oreProxy.oreNameExists(oreName)) {
-            this.addIRecipeInputRecipe(OreRecipeInput.of(oreName), output, experience, energyUsage);
+            this.addIRecipeInputRecipe(OreRecipeInput.of(oreName), output, energyUsage);
+        }
+    }
+
+    public void addOreDictionaryRecipe(@Nonnull String oreName, @Nonnull ItemStack output, int energyUsage) {
+        if (ItemHelper.oreProxy.oreNameExists(oreName)) {
+            this.addIRecipeInputRecipe(OreRecipeInput.of(oreName), output, energyUsage);
         }
     }
 
     /**
      * Adds a recipe with an ItemStack as the input
+     * @deprecated Machines no longer give experience, the parameter is ignored
      */
+    @Deprecated
     public void addItemStackRecipe(ItemStack input, ItemStack output, float experience, int energyUsage) {
         if (getSmeltingResult(StackRecipeInput.of(input)) != null) {
             DevUtil.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
             return;
         }
         this.recipeMap.put(StackRecipeInput.of(input), output);
-        this.experienceMap.put(output, experience);
+        this.energyMap.put(output, energyUsage);
+    }
+
+    public void addItemStackRecipe(ItemStack input, ItemStack output, int energyUsage) {
+        if (getSmeltingResult(StackRecipeInput.of(input)) != null) {
+            DevUtil.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
+            return;
+        }
+        this.recipeMap.put(StackRecipeInput.of(input), output);
         this.energyMap.put(output, energyUsage);
     }
 
     /**
      * Adds a recipe with an IRecipeInput as the input
+     * @deprecated Machines no longer give experience, the parameter is ignored
      */
+    @Deprecated
     public void addIRecipeInputRecipe(IRecipeInput input, @Nonnull ItemStack output, float experience, int energyUsage) {
         if (getSmeltingResult(input) != null) {
             DevUtil.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
             return;
         }
         this.recipeMap.put(input, output);
-        this.experienceMap.put(output, experience);
+        this.energyMap.put(output, energyUsage);
+    }
+
+    public void addIRecipeInputRecipe(IRecipeInput input, @Nonnull ItemStack output, int energyUsage) {
+        if (getSmeltingResult(input) != null) {
+            DevUtil.info("Ignored smelting recipe with conflicting input: " + input + " = " + output);
+            return;
+        }
+        this.recipeMap.put(input, output);
         this.energyMap.put(output, energyUsage);
     }
 
@@ -174,7 +217,9 @@ public class PoweredFurnaceRecipes {
     /**
      * Returns the Outputs --> Experience float map
      * @return experience map instance
+     * @deprecated Map is empty, but method stays to maintain backwards compatibility
      */
+    @Deprecated
     public Map<ItemStack, Float> getExperienceMap() { return this.experienceMap; }
 
     /**
@@ -186,18 +231,11 @@ public class PoweredFurnaceRecipes {
     /**
      * Returns the amount of experience that should be given upon smelting
      * @param output ***OUTPUT*** item
-     * @return how much experience is given upon operation completion
+     * @return ALWAYS returns 0.0F, experience is deprecated
+     * @deprecated
      */
+    @Deprecated
     public float getSmeltingExperience(ItemStack output) {
-        float ret = output.getItem().getSmeltingExperience(output);
-        if (ret != -1) return ret;
-
-        for (Entry<ItemStack, Float> entry : this.experienceMap.entrySet()) {
-            if (this.compareItemStacks(output, entry.getKey())) {
-                return entry.getValue();
-            }
-        }
-
         return 0.0F;
     }
 

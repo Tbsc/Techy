@@ -45,30 +45,28 @@ public class IMCRecipeHandler {
                     if (isRecipe.equalsIgnoreCase("PoweredFurnace")) {
                         Object input = messageNBT.getTag("Input");
                         ItemStack output = ItemStack.loadItemStackFromNBT(messageNBT.getCompoundTag("Output"));
-                        float experience = messageNBT.getFloat("Experience");
                         int energyUsage = messageNBT.getInteger("EnergyUsage");
                         if (input instanceof NBTTagString) {
-                            PoweredFurnaceRecipes.instance().addOreDictionaryRecipe(((NBTTagString) input).getString(), output, experience, energyUsage);
+                            PoweredFurnaceRecipes.instance().addOreDictionaryRecipe(((NBTTagString) input).getString(), output, energyUsage);
                             DevUtil.info("Powered furnace recipe with " + ((NBTTagString) input).getString() + " input ore name and " + output.getDisplayName() + " output. Energy usage of " + energyUsage);
                         } else if (input instanceof NBTTagCompound) {
                             ItemStack inputStack = ItemStack.loadItemStackFromNBT((NBTTagCompound) input);
-                            PoweredFurnaceRecipes.instance().addItemStackRecipe(inputStack, output, experience, energyUsage);
+                            PoweredFurnaceRecipes.instance().addItemStackRecipe(inputStack, output, energyUsage);
                             DevUtil.info("Powered furnace recipe with " + inputStack.getDisplayName() + " input stack and " + output.getDisplayName() + " output. Energy usage of " + energyUsage);
                         }
                     }
                     if (isRecipe.equalsIgnoreCase("Crusher")) {
                         Object input = messageNBT.getTag("Input");
-                        ItemStack output = ItemStack.loadItemStackFromNBT(messageNBT.getCompoundTag("FirstOutput"));
+                        ItemStack output = ItemStack.loadItemStackFromNBT(messageNBT.getCompoundTag("Output"));
                         ItemStack output2 = ItemStack.loadItemStackFromNBT(messageNBT.getCompoundTag("SecondOutput"));
                         int output2Chance = messageNBT.getInteger("SecondOutputChance");
-                        float experience = messageNBT.getFloat("Experience");
                         int energyUsage = messageNBT.getInteger("EnergyUsage");
                         if (input instanceof NBTTagString) {
-                            CrusherRecipes.instance().addOreDictionaryRecipe(((NBTTagString) input).getString(), output, output2, output2Chance, experience, energyUsage);
+                            CrusherRecipes.instance().addOreDictionaryRecipe(((NBTTagString) input).getString(), output, output2, output2Chance, energyUsage);
                             DevUtil.info("Powered furnace recipe with " + ((NBTTagString) input).getString() + " input ore name and " + output.getDisplayName() + " output. Energy usage of " + energyUsage);
                         } else if (input instanceof NBTTagCompound) {
                             ItemStack inputStack = ItemStack.loadItemStackFromNBT((NBTTagCompound) input);
-                            CrusherRecipes.instance().addItemStackRecipe(inputStack, output, output2, output2Chance, experience, energyUsage);
+                            CrusherRecipes.instance().addItemStackRecipe(inputStack, output, output2, output2Chance, energyUsage);
                             DevUtil.info("Powered furnace recipe with " + inputStack.getDisplayName() + " input stack, " + output.getDisplayName() + " first output and " + output2.getDisplayName() + " second output. Energy usage of " + energyUsage);
                         }
                     }
