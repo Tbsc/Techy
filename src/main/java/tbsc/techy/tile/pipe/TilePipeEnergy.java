@@ -20,6 +20,8 @@ package tbsc.techy.tile.pipe;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
+import net.darkhax.tesla.api.ITeslaConsumer;
+import net.darkhax.tesla.capability.TeslaCapabilities;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -67,11 +69,12 @@ public class TilePipeEnergy extends TileEntity implements ITickable, IEnergyRece
                 TileEntity tile = worldObj.getTileEntity(neighbor);
                 // Double checking
                 if (tile != null) {
-                    if (tile instanceof IEnergyReceiver) {
-                        IEnergyReceiver receiver = (IEnergyReceiver) tile;
-                        if (receiver.canConnectEnergy(side.getOpposite())) { // If energy can be transferred on that side
-                            receiver.receiveEnergy(side.getOpposite(), extractEnergy(side, forEach, false), false);
-                        }
+                    if (tile instanceof IEnergyReceiver && tile.hasCapability(TeslaCapabilities.CAPABILITY_CONSUMER, side.getOpposite())) {
+                        transferRFToTile((IEnergyReceiver) tile, side, forEach);
+                    } else if (tile instanceof IEnergyReceiver) {
+                        transferRFToTile((IEnergyReceiver) tile, side, forEach);
+                    } else if (tile.hasCapability(TeslaCapabilities.CAPABILITY_CONSUMER, side.getOpposite())) {
+                        transferTeslaToTile(tile.getCapability(TeslaCapabilities.CAPABILITY_CONSUMER, side.getOpposite()), side, forEach);
                     }
                 }
             }
@@ -97,6 +100,28 @@ public class TilePipeEnergy extends TileEntity implements ITickable, IEnergyRece
         if (state.getValue(BlockPipeBase.DOWN) != BlockInit.blockPipeEnergyBasic.canConnectOnSide(worldObj, pos, EnumFacing.DOWN)) {
             worldObj.setBlockState(pos, state.withProperty(BlockPipeBase.DOWN, !state.getValue(BlockPipeBase.DOWN)));
         }
+    }
+
+    /**
+     * Transfers RF from this tile entity to the energy receiver given.
+     * @param receiver The tile entity that will receive the energy
+     * @param side The side of this pipe to transfer energy to
+     * @param energyAmount How much energy to transfer from this pipe to the tile entity
+     */
+    private void transferRFToTile(IEnergyReceiver receiver, EnumFacing side, int energyAmount) {
+        if (receiver.canConnectEnergy(side.getOpposite())) { // If energy can be transferred on that side
+            receiver.receiveEnergy(side.getOpposite(), extractEnergy(side, energyAmount, false), false);
+        }
+    }
+
+    /**
+     * Transfers Tesla from this tile entity to the energy consumer given.
+     * @param consumer The tile entity that will receive the energy
+     * @param side The side of this pipe to transfer energy to
+     * @param energyAmount How much energy to transfer from this pipe to the tile entity
+     */
+    private void transferTeslaToTile(ITeslaConsumer consumer, EnumFacing side, int energyAmount) {
+        consumer.givePower(extractEnergy(side, energyAmount, false), false);
     }
 
     /**
