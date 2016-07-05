@@ -1,7 +1,7 @@
 # Techy
 Tech mod for 1.9.4+
 
-**NOTE: Techy is being rewritten currently! Expect *little to no support* for Techy 1.x.x.
+**NOTE: Techy is being rewritten currently! Expect *little to no support* for Techy 1.x.x.**
 
 License: LGPLv3. TL;DR: You can copy, distribute, link proprietary code and modify the software as long as you track changes in source files. Any modifications to or software including (via compiler) my code must also be made available under the GPL license too.
 
