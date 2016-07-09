@@ -1,4 +1,4 @@
-package tbsc.techy.api;
+package tbsc.techy.api.iface;
 
 import tbsc.techy.common.loader.ObjectLoader;
 

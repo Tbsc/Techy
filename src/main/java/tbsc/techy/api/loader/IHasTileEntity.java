@@ -15,21 +15,31 @@
  * License along with Butter.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package tbsc.techy.api;
+package tbsc.techy.api.loader;
+
+import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.tileentity.TileEntity;
 
 /**
- * This runnable is intended to be used to load instances based on the interfaces they are implementing, without
- * having to hard code support for those interfaces.
+ * Used to mark blocks with a tile entity, for the butter loader to register it.
+ * Extends ITileEntityProvider to automatically let Minecraft know block that
+ * implement this interface are tile entities.
+ * Uses type parameter {@link T} for the tile entity.
  *
  * Created by tbsc on 04/07/2016.
  */
-public interface InstanceLoader {
+public interface IHasTileEntity<T extends TileEntity> extends ITileEntityProvider {
 
     /**
-     * Lets the loader do whatever it wants with the instance, based on the type of
-     * interface.
-     * @param instance The instance to be applied to
+     * Used to register the tile entity to the game.
+     * @return The class of the tile entity
      */
-    void load(Object instance);
+    Class<T> getTileClass();
+
+    /**
+     * Returns the identifier for the tile entity.
+     * @return Tile identifier
+     */
+    String getTileIdentifier();
 
 }

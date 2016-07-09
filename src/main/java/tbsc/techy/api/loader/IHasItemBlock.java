@@ -15,27 +15,25 @@
  * License along with Butter.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package tbsc.techy.api;
+package tbsc.techy.api.loader;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraft.item.ItemBlock;
 
 /**
- * To be implemented on any block or item that has a model. The loader will detect the interface and
- * call {@link #loadCustomModel()};
- * Since models can be only loaded from the client side, this interface is annotated with {@link SideOnly},
- * to make sure it only runs on the client
+ * This interface should only be implemented on blocks (or nothing would happen), and is used to note
+ * that this block class should also be registered to the game as an {@link ItemBlock}.
+ * The {@link ItemBlock} that will be registered is gotten from {@link #getItemBlock()},
  *
  * Created by tbsc on 03/07/2016.
  */
-@SideOnly(Side.CLIENT)
-public interface IHasCustomModel {
+public interface IHasItemBlock<B extends ItemBlock> {
 
     /**
-     * Everything needed to load the model of the block or item needs to be done from here.
-     * Obviously calling other methods to do this is fine, just do it from here and from the
-     * constructor or something.
+     * Returns the {@link ItemBlock} class to be registered to the game.
+     * Can be used to register advanced {@link ItemBlock}s without needing to register
+     * one, just by letting the loader class do it.
+     * @return The item block to register.
      */
-    void loadCustomModel();
+    B getItemBlock();
 
 }
