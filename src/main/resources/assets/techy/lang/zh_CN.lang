@@ -1,0 +1,82 @@
+### Misc ###
+
+## Creative Tabs ##
+itemGroup.techy.items=Techy|物品
+itemGroup.techy.blocks=Techy|方块
+
+## JEI ##
+techy.jei.furnace=动力熔炉
+techy.jei.crusher=粉碎机
+
+
+### Items ###
+item.Techy:itemWrench.name=扳手
+item.Techy:itemBatterySmall.name=小型充电电池
+item.Techy:itemBatteryMedium.name=中型充电电池
+item.Techy:itemBatteryLarge.name=大型充电电池
+
+## Dusts ##
+item.Techy:itemDustIron.name=铁粉
+item.Techy:itemDustGold.name=金粉
+item.Techy:itemDustDiamond.name=钻石粉
+item.Techy:itemDustCoal.name=煤粉
+item.Techy:itemDustEmerald.name=绿宝石粉
+item.Techy:itemDustWood.name=锯末
+item.Techy:itemDustStone.name=石粉
+item.Techy:itemDustCopper.name=铜粉
+item.Techy:itemDustTin.name=锡粉
+item.Techy:itemDustSilver.name=银粉
+item.Techy:itemDustAluminium.name=铝粉
+item.Techy:itemDustLithium.name=锂粉
+item.Techy:itemDustBronze.name=青铜粉
+
+## Ingots ##
+item.Techy:itemIngotCopper.name=铜锭
+item.Techy:itemIngotTin.name=锡锭
+item.Techy:itemIngotSilver.name=银锭
+item.Techy:itemIngotAluminium.name=铝锭
+item.Techy:itemIngotLithium.name=锂锭
+item.Techy:itemIngotBronze.name=青铜锭
+
+## Crafting Components ##
+item.Techy:itemHeatingComponent.name=加热元件
+item.Techy:itemGrindingComponent.name=粉碎元件
+item.Techy:itemIgnitionComponent.name=点火元件
+
+## Boosters ##
+# Energy
+item.Techy:itemBoosterEnergy.name=能耗改良元件
+# Time
+item.Techy:itemBoosterTime.name=时间优化元件
+# Bonus
+item.Techy:itemBoosterBonus.name=产出提升元件
+
+
+### Blocks ###
+
+## Machines ##
+tile.Techy:blockPoweredFurnace.name=动力熔炉
+tile.Techy:blockCrusher.name=粉碎机
+tile.Techy:blockInteractor.name=交互设备
+tile.Techy:blockCoalGenerator.name=燃煤发电机
+tile.Techy:blockSolarGenerator.name=太阳能发电机
+
+## Misc ##
+tile.Techy:blockMachineBaseBasic.name=基础机器框架
+tile.Techy:blockMachineBaseImproved.name=改良机器框架
+tile.Techy:blockMachineBaseAdvanced.name=高级机器框架
+tile.Techy:blockOreCopper.name=铜矿石
+tile.Techy:blockOreTin.name=锡矿石
+tile.Techy:blockOreSilver.name=银矿石
+tile.Techy:blockOreAluminium.name=铝矿石
+tile.Techy:blockOreLithium.name=锂矿石
+
+## Pipes ##
+tile.Techy:blockPipeEnergyBasic.name=基础能量管道
+tile.Techy:blockPipeEnergyImproved.name=改良能量管道
+tile.Techy:blockPipeEnergyAdvanced.name=高级能量管道
+
+## Power Cells ##
+tile.Techy:blockPowerCellBasic.name=基础能量单元
+tile.Techy:blockPowerCellImproved.name=改良能量单元
+tile.Techy:blockPowerCellAdvanced.name=高级能量单元
