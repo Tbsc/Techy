@@ -49,26 +49,6 @@ def parseConfig(File config) {
     }
 }
 
-repositories {
-    maven {
-        name 'prog'
-        url "http://dvs1.progwml6.com/files/maven"
-    }
-    maven {
-        name "Mobius Repo"
-        url "http://mobiusstrip.eu/maven"
-    }
-    maven {
-        url 'http://maven.epoxide.xyz'
-    }
-}
-
-dependencies {
-    compile "mcp.mobius.waila:Waila:1.7.0-B3_1.9.4"
-    deobfCompile "mezz.jei:jei_1.9.4:3.4.0.204"
-    compile "net.darkhax.tesla:Tesla:1.9.4-1.1.0.24"
-}
-
 processResources
 {
     // this will ensure that this task is redone when the versions change.
