@@ -15,7 +15,7 @@
  * License along with Butter.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package tbsc.techy.common.loader.iface;
+package tbsc.techy.api;
 
 import net.minecraft.item.ItemBlock;
 

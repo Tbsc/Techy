@@ -25,10 +25,10 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.Level;
 import tbsc.techy.common.loader.annotation.Register;
-import tbsc.techy.common.loader.iface.IHasCustomModel;
-import tbsc.techy.common.loader.iface.IHasItemBlock;
-import tbsc.techy.common.loader.iface.IHasTileEntity;
-import tbsc.techy.common.loader.iface.InstanceLoader;
+import tbsc.techy.api.IHasCustomModel;
+import tbsc.techy.api.IHasItemBlock;
+import tbsc.techy.api.IHasTileEntity;
+import tbsc.techy.api.InstanceLoader;
 
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;

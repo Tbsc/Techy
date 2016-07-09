@@ -18,8 +18,8 @@
 package tbsc.techy.common.loader.annotation;
 
 import net.minecraft.block.Block;
-import tbsc.techy.common.loader.iface.IHasCustomModel;
-import tbsc.techy.common.loader.iface.IHasItemBlock;
+import tbsc.techy.api.IHasCustomModel;
+import tbsc.techy.api.IHasItemBlock;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
