@@ -22,13 +22,14 @@ import net.minecraftforge.fml.common.*;
 import net.minecraftforge.fml.common.discovery.ASMDataTable;
 import net.minecraftforge.fml.common.discovery.ASMDataTable.ASMData;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.IForgeRegistryEntry;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.Level;
-import tbsc.techy.common.loader.annotation.Register;
 import tbsc.techy.api.loader.IHasCustomModel;
 import tbsc.techy.api.loader.IHasItemBlock;
 import tbsc.techy.api.loader.IHasTileEntity;
 import tbsc.techy.api.loader.InstanceLoader;
+import tbsc.techy.common.loader.annotation.Register;
 
 import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
@@ -132,8 +133,16 @@ public class ObjectLoader {
                 targetField.setAccessible(true);
                 // Get the instance the field has
                 Object instance = targetField.get(null);
-                // Register everything
-                registerInstance(instance);
+                // Null check
+                if (instance == null) {
+                    throw new NullPointerException("[Techy] Cannot register null object to the game");
+                }
+                // Normal register
+                if (instance instanceof IForgeRegistryEntry) {
+                    GameRegistry.register((IForgeRegistryEntry) instance);
+                }
+                // Register instance loaders
+                loadInstanceLoaders(instance);
                 // Deny access to the field
                 targetField.setAccessible(false);
             } catch (Exception e) { // Caught exception
@@ -157,8 +166,16 @@ public class ObjectLoader {
                 }
                 // Create instance for the class
                 Object instance = targetClass.newInstance();
-                // Register everything
-                registerInstance(instance);
+                // Null check
+                if (instance == null) {
+                    throw new NullPointerException("[Techy] Cannot register null object to the game");
+                }
+                // Normal register
+                if (instance instanceof IForgeRegistryEntry) {
+                    GameRegistry.register((IForgeRegistryEntry) instance);
+                }
+                // Register instance loaders
+                loadInstanceLoaders(instance);
                 // Loop through the class' fields
                 for (Field field : targetClass.getFields()) {
                     // Allow access to field
@@ -188,7 +205,7 @@ public class ObjectLoader {
      * {@link #scanForAnnotations(ASMDataTable, ModContainer)}.
      * @param instance The instance to register
      */
-    private static void registerInstance(Object instance) {
+    private static void loadInstanceLoaders(Object instance) {
         // Loop through instance loaders
         for (Map.Entry<Class, InstanceLoader[]> entry : getInstanceLoadersMap().entrySet()) {
             // Make sure that the array of interfaces the instance has contains the interface
