@@ -29,6 +29,7 @@ public class ItemBase extends Item {
     public ItemBase(String regName) {
         setRegistryName(regName);
         setUnlocalizedName(Techy.MODID + ":" + regName);
+        setCreativeTab(Techy.TAB_TECHY);
     }
 
     @Override
@@ -65,6 +66,7 @@ public class ItemBase extends Item {
             }
         } else if (this instanceof IHasGUI) {
             playerIn.openGui(Techy.instance, ((IHasGUI) this).getGUIID(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+            return EnumActionResult.SUCCESS;
         }
         return super.onItemUse(stack, playerIn, worldIn, pos, hand, hitSide, hitX, hitY, hitZ);
     }

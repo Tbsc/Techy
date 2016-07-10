@@ -17,11 +17,14 @@
 
 package tbsc.techy.common;
 
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import tbsc.techy.common.item.ItemWrench;
 import tbsc.techy.common.proxy.IProxy;
 
 /**
@@ -60,6 +63,15 @@ public class Techy {
      */
     @SidedProxy(clientSide = CLIENT_PROXY, serverSide = SERVER_PROXY)
     public static IProxy proxy;
+
+    public static CreativeTabs TAB_TECHY = new CreativeTabs("techy") {
+
+        @Override
+        public Item getTabIconItem() {
+            return ItemWrench.instance;
+        }
+
+    };
 
     /**
      * PreInit, gets called on pre init stage of loading and registring items, blocks, tile entities

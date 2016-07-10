@@ -1,8 +1,7 @@
 ### Misc ###
 
 ## Creative Tabs ##
-itemGroup.techy.items=Techy: Items
-itemGroup.techy.blocks=Techy: Blocks
+itemGroup.techy=Techy
 
 ## JEI ##
 techy.jei.furnace=Powered Furnace
