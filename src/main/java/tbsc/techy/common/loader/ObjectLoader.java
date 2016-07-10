@@ -45,7 +45,7 @@ import java.util.Set;
  */
 public class ObjectLoader {
 
-    private static Map<Class, InstanceLoader[]> instanceLoaders = new LinkedHashMap<>();
+    private static Map<Class<?>, InstanceLoader[]> instanceLoaders = new LinkedHashMap<>();
 
     static {
         registerInstanceLoader(IHasItemBlock.class, instance -> {
@@ -79,7 +79,7 @@ public class ObjectLoader {
      * Key is the interface class and value is an array of instance loaders.
      * @return Map of instance loaders
      */
-    public static Map<Class, InstanceLoader[]> getInstanceLoadersMap() {
+    public static Map<Class<?>, InstanceLoader[]> getInstanceLoadersMap() {
         return instanceLoaders;
     }
 
@@ -207,9 +207,9 @@ public class ObjectLoader {
      */
     private static void loadInstanceLoaders(Object instance) {
         // Loop through instance loaders
-        for (Map.Entry<Class, InstanceLoader[]> entry : getInstanceLoadersMap().entrySet()) {
-            // Make sure that the array of interfaces the instance has contains the interface
-            if (ArrayUtils.contains(instance.getClass().getInterfaces(), entry.getKey())) {
+        for (Map.Entry<Class<?>, InstanceLoader[]> entry : getInstanceLoadersMap().entrySet()) {
+            // Make sure that the instance's class implements the interface
+            if (entry.getKey().isAssignableFrom(instance.getClass())) {
                 // Loop through the array of loaders
                 for (InstanceLoader loader : entry.getValue()) {
                     // Run the instance loader
