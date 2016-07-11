@@ -1,11 +1,14 @@
 package tbsc.techy.api.capability.wrench;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.apache.commons.lang3.ArrayUtils;
+import tbsc.techy.api.capability.TechyCapabilities;
 import tbsc.techy.api.capability.dismantle.ITechyDismantleable;
 import tbsc.techy.api.wrench.Result;
 
@@ -53,7 +56,9 @@ public class TechyWrench implements ITechyWrench {
      */
     @Override
     public boolean canDismantle(ItemStack wrench, EntityLivingBase entity, BlockPos target) {
-        return entity.worldObj.isBlockLoaded(target) && entity.worldObj.getBlockState(target).getBlock() instanceof ITechyDismantleable;
+        IBlockState state = entity.worldObj.getBlockState(target);
+        // Make sure block is loaded, support capabilities, and has the dismantleable capability
+        return (entity.worldObj.isBlockLoaded(target) && state.getBlock() instanceof ICapabilityProvider) && ((ICapabilityProvider) state.getBlock()).hasCapability(TechyCapabilities.CAPABILITY_DISMANTLEABLE, null);
     }
 
     /**
@@ -66,7 +71,8 @@ public class TechyWrench implements ITechyWrench {
     @Override
     public Result dismantle(ItemStack wrench, EntityLivingBase entity, BlockPos target) {
         World world = entity.worldObj;
-        ITechyDismantleable dismantle = (ITechyDismantleable) world.getBlockState(target).getBlock();
+        IBlockState state = entity.worldObj.getBlockState(target);
+        ITechyDismantleable dismantle = ((ICapabilityProvider) state.getBlock()).getCapability(TechyCapabilities.CAPABILITY_DISMANTLEABLE, null);
         return dismantle.dismantle(entity, world, target);
     }
 
