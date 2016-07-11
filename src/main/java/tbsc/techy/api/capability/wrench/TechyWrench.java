@@ -67,7 +67,7 @@ public class TechyWrench implements ITechyWrench {
     public Result dismantle(ItemStack wrench, EntityLivingBase entity, BlockPos target) {
         World world = entity.worldObj;
         ITechyDismantleable dismantle = (ITechyDismantleable) world.getBlockState(target).getBlock();
-        return dismantle.dismantle(entity, world, target, false).getResult();
+        return dismantle.dismantle(entity, world, target);
     }
 
 }
