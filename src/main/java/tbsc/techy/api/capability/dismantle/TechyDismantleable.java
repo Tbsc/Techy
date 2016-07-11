@@ -40,6 +40,7 @@ public class TechyDismantleable implements ITechyDismantleable {
     public Result dismantle(EntityLivingBase dismantler, World world, BlockPos target) {
         IBlockState blockState = world.getBlockState(target);
         blockState.getBlock().breakBlock(world, target, blockState);
+        world.destroyBlock(target, true);
         return Result.SUCCESS;
     }
 
