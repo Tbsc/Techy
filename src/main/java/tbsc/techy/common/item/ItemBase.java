@@ -11,8 +11,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import tbsc.techy.api.capability.TechyCapabilities;
-import tbsc.techy.api.loader.IHasCustomModel;
 import tbsc.techy.api.capability.wrench.ITechyWrench;
+import tbsc.techy.api.loader.IHasCustomModel;
 import tbsc.techy.api.wrench.Result;
 import tbsc.techy.common.Techy;
 
@@ -43,15 +43,18 @@ public class ItemBase extends Item implements IHasCustomModel {
             ITechyWrench wrench = stack.getCapability(TechyCapabilities.CAPABILITY_WRENCH, null);
             // Check if sneaking
             if (playerIn.isSneaking()) {
-                // Check if can dismantle
-                if (wrench.canDismantle(stack, playerIn, pos)) {
-                    // Dismantle
-                    if (wrench.dismantle(stack, playerIn, pos) == Result.SUCCESS) {
-                        // Return success if succeeded
-                        return EnumActionResult.SUCCESS;
-                    } else {
-                        // Return fail is failed
-                        return EnumActionResult.FAIL;
+                // Break only on server, and the server will update client of change
+                if (!worldIn.isRemote) {
+                    // Check if can dismantle
+                    if (wrench.canDismantle(stack, playerIn, pos)) {
+                        // Dismantle
+                        if (wrench.dismantle(stack, playerIn, pos) == Result.SUCCESS) {
+                            // Return success if succeeded
+                            return EnumActionResult.SUCCESS;
+                        } else {
+                            // Return fail is failed
+                            return EnumActionResult.FAIL;
+                        }
                     }
                 }
             } else {
