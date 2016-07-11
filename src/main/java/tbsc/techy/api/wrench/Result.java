@@ -8,6 +8,36 @@ package tbsc.techy.api.wrench;
  */
 public enum Result {
 
-    SUCCESS, FAIL
+    SUCCESS(true), FAIL(false);
+
+    private final boolean value;
+
+    Result(boolean value) {
+        this.value = value;
+    }
+
+    /**
+     * Basically, if succeeded, then true. If failed, false.
+     * @return The value of the result.
+     */
+    public boolean getValue() {
+        return value;
+    }
+
+    /**
+     * Has it succeeded.
+     * @return Is the result positive
+     */
+    public boolean hasSucceeded() {
+        return value;
+    }
+
+    /**
+     * Has it failed.
+     * @return Is the result negative.
+     */
+    public boolean hasFailed() {
+        return !value;
+    }
 
 }

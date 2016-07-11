@@ -1,11 +1,13 @@
-package tbsc.techy.api.wrench;
+package tbsc.techy.api.capability.dismantle;
 
 import cofh.api.block.IDismantleable;
+import com.google.common.collect.Lists;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import tbsc.techy.api.wrench.Result;
 
 import java.util.ArrayList;
 
@@ -19,18 +21,19 @@ public interface ITechyDismantleable extends IDismantleable {
 
     /**
      * Default implementation of CoFH's IDismantleable.
-     * Calls {@link #dismantle(EntityLivingBase, World, BlockPos, boolean)}.
+     * Calls {@link #dismantle(EntityLivingBase, World, BlockPos)}.
      * @param player The player
      * @param world The world
      * @param x X position
      * @param y Y position
      * @param z Z position
-     * @param returnDrops Should return drops to the player's inventory
-     * @return Block's drops
+     * @param returnDrops Should return drops to the player's inventory, ignored
+     * @return Empty list
      */
     @Override
     default ArrayList<ItemStack> dismantleBlock(EntityPlayer player, World world, int x, int y, int z, boolean returnDrops) {
-        return dismantle(player, world, new BlockPos(x, y, z), returnDrops).getDrops();
+        dismantle(player, world, new BlockPos(x, y, z));
+        return Lists.newArrayList();
     }
 
     /**
@@ -64,27 +67,8 @@ public interface ITechyDismantleable extends IDismantleable {
      * @param dismantler The entity dismantling
      * @param world The world instance
      * @param target The block to dismantle
-     * @param returnDrops Should return drops to the player's inventory
-     * @return Is the dismantle successful, and what dropped
+     * @return Is the dismantle successful
      */
-    DismantleResult dismantle(EntityLivingBase dismantler, World world, BlockPos target, boolean returnDrops);
-
-    class DismantleResult {
-
-        private final ArrayList<ItemStack> drops;
-        private final Result result;
-
-        public DismantleResult(ArrayList<ItemStack> drops, Result result) {
-            this.drops = drops;
-            this.result = result;
-        }
-
-        public ArrayList<ItemStack> getDrops() { return drops; }
-
-        public Result getResult() {
-            return result;
-        }
-
-    }
+    Result dismantle(EntityLivingBase dismantler, World world, BlockPos target);
 
 }

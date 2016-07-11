@@ -1,5 +1,6 @@
 package tbsc.techy.common.item;
 
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -8,8 +9,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import tbsc.techy.api.iface.IHasGUI;
-import tbsc.techy.api.wrench.ITechyWrench;
+import net.minecraftforge.client.model.ModelLoader;
+import tbsc.techy.api.capability.TechyCapabilities;
+import tbsc.techy.api.loader.IHasCustomModel;
+import tbsc.techy.api.capability.wrench.ITechyWrench;
 import tbsc.techy.api.wrench.Result;
 import tbsc.techy.common.Techy;
 
@@ -19,7 +22,7 @@ import tbsc.techy.common.Techy;
  *
  * Created by tbsc on 09/07/2016.
  */
-public class ItemBase extends Item {
+public class ItemBase extends Item implements IHasCustomModel {
 
     /**
      * Unlike previous versions of Techy, constructors are now public because that way creation
@@ -34,10 +37,10 @@ public class ItemBase extends Item {
 
     @Override
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing hitSide, float hitX, float hitY, float hitZ) {
-        // If any subclasses are wrenches, try to dismantle/rotate
-        if (this instanceof ITechyWrench) {
-            // Get wrench instance
-            ITechyWrench wrench = (ITechyWrench) this;
+        // If item has wrench capability
+        if (stack.hasCapability(TechyCapabilities.CAPABILITY_WRENCH, null)) {
+            // Get wrench capability
+            ITechyWrench wrench = stack.getCapability(TechyCapabilities.CAPABILITY_WRENCH, null);
             // Check if sneaking
             if (playerIn.isSneaking()) {
                 // Check if can dismantle
@@ -64,11 +67,16 @@ public class ItemBase extends Item {
                     }
                 }
             }
-        } else if (this instanceof IHasGUI) {
-            playerIn.openGui(Techy.instance, ((IHasGUI) this).getGUIID(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+        } else if (stack.hasCapability(TechyCapabilities.CAPABILITY_GUI, null)) { // Has GUI
+            playerIn.openGui(Techy.instance, stack.getCapability(TechyCapabilities.CAPABILITY_GUI, null).getGUIID(), worldIn, pos.getX(), pos.getY(), pos.getZ());
             return EnumActionResult.SUCCESS;
         }
         return super.onItemUse(stack, playerIn, worldIn, pos, hand, hitSide, hitX, hitY, hitZ);
+    }
+
+    @Override
+    public void loadCustomModel() {
+        ModelLoader.setCustomModelResourceLocation(this, 0, new ModelResourceLocation(getRegistryName(), "inventory"));
     }
 
 }
