@@ -7,8 +7,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import tbsc.techy.api.capability.TechyCapabilities;
 import tbsc.techy.api.loader.IHasCustomModel;
 import tbsc.techy.api.loader.IHasItemBlock;
+import tbsc.techy.client.gui.handler.TechyGUIHandler;
 import tbsc.techy.common.Techy;
 
 /**
@@ -23,6 +25,11 @@ public abstract class BlockBase extends Block implements ICapabilityProvider, IH
         setRegistryName(regName);
         setUnlocalizedName(Techy.MODID + ":" + regName);
         setCreativeTab(Techy.TAB_TECHY);
+
+        // If has GUI, register the GUI
+        if (hasCapability(TechyCapabilities.CAPABILITY_GUI, null)) {
+            TechyGUIHandler.registerGUI(getCapability(TechyCapabilities.CAPABILITY_GUI, null));
+        }
     }
 
     // Rendering
