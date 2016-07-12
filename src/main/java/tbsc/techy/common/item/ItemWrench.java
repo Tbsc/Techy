@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
  *
  * Created by tbsc on 10/07/2016.
  */
-public class ItemWrench extends ItemBase {
+public class ItemWrench extends ItemTechyBase {
 
     @Register.Instance
     public static ItemWrench instance = new ItemWrench();

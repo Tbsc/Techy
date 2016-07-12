@@ -22,14 +22,14 @@ import tbsc.techy.common.Techy;
  *
  * Created by tbsc on 09/07/2016.
  */
-public class ItemBase extends Item implements IHasCustomModel {
+public class ItemTechyBase extends Item implements IHasCustomModel {
 
     /**
      * Unlike previous versions of Techy, constructors are now public because that way creation
      * of items can be done without having to create a class for adding a simple item.
      * @param regName The registry name that will be assigned to the item.
      */
-    public ItemBase(String regName) {
+    public ItemTechyBase(String regName) {
         setRegistryName(regName);
         setUnlocalizedName(Techy.MODID + ":" + regName);
         setCreativeTab(Techy.TAB_TECHY);

@@ -18,9 +18,9 @@ import tbsc.techy.common.Techy;
  *
  * Created by tbsc on 10/07/2016.
  */
-public abstract class BlockBase extends Block implements ICapabilityProvider, IHasItemBlock, IHasCustomModel {
+public abstract class BlockTechyBase extends Block implements ICapabilityProvider, IHasItemBlock, IHasCustomModel {
 
-    public BlockBase(String regName, Material materialIn) {
+    public BlockTechyBase(String regName, Material materialIn) {
         super(materialIn);
         setRegistryName(regName);
         setUnlocalizedName(Techy.MODID + ":" + regName);
