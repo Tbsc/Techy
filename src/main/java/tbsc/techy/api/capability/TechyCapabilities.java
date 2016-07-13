@@ -38,6 +38,7 @@ public class TechyCapabilities {
 
             @Override
             public NBTBase writeNBT(Capability<IHasGUI> capability, IHasGUI instance, EnumFacing side) {
+                // No need to serialize Gui/Container instances
                 return new NBTTagInt(instance.getGUIID());
             }
 
