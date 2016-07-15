@@ -1,18 +1,18 @@
 /*
  * Copyright © 2016 Tbsc
  *
- * Butter is free software: you can redistribute it and/or modify
+ * Techy is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
  *
- * Butter is distributed in the hope that it will be useful,
+ * Techy is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
- * License along with Butter.  If not, see <http://www.gnu.org/licenses/>.
+ * License along with Techy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package tbsc.techy.common.loader;
@@ -51,7 +51,6 @@ public class ObjectLoader {
         registerInstanceLoader(IHasItemBlock.class, instance -> {
             // Make sure it is a block
             if (instance instanceof Block) {
-                FMLLog.fine("[Techy] Registering %s item block", ((Block) instance).getRegistryName());
                 // Register the ItemBlock
                 GameRegistry.register(((IHasItemBlock) instance).getItemBlock(), ((Block) instance).getRegistryName());
             }
@@ -59,18 +58,15 @@ public class ObjectLoader {
         registerInstanceLoader(IHasCustomModel.class, instance -> {
             // Run only if this is called on the client
             if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
-                FMLLog.fine("[Techy] Running on client side, able to load custom model for instance %s", instance);
                 // Load custom model
                 ((IHasCustomModel) instance).loadCustomModel();
             }
         });
         registerInstanceLoader(IHasTileEntity.class, instance -> {
-            // Run only if this is called on the client
-            if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
-                FMLLog.fine("[Techy] Running on client side, able to load custom model for instance %s", instance);
-                // Load custom model
-                ((IHasCustomModel) instance).loadCustomModel();
-            }
+            // Get IHasTileEntity
+            IHasTileEntity instanceTile = (IHasTileEntity) instance;
+            // Register tile
+            GameRegistry.registerTileEntity(instanceTile.getTileClass(), instanceTile.getTileIdentifier());
         });
     }
 
