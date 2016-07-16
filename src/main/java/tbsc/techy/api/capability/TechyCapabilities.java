@@ -18,15 +18,12 @@
 package tbsc.techy.api.capability;
 
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import tbsc.techy.api.capability.dismantle.ITechyDismantleable;
 import tbsc.techy.api.capability.dismantle.TechyDismantleable;
-import tbsc.techy.api.capability.gui.HasGUI;
-import tbsc.techy.api.capability.gui.IHasGUI;
 import tbsc.techy.api.capability.wrench.ITechyWrench;
 import tbsc.techy.api.capability.wrench.TechyWrench;
 import tbsc.techy.common.loader.ObjectLoader;
@@ -40,9 +37,6 @@ import tbsc.techy.common.loader.ObjectLoader;
  */
 public class TechyCapabilities {
 
-    @CapabilityInject(IHasGUI.class)
-    public static Capability<IHasGUI> CAPABILITY_GUI = null;
-
     @CapabilityInject(ITechyWrench.class)
     public static Capability<ITechyWrench> CAPABILITY_WRENCH = null;
 
@@ -50,22 +44,6 @@ public class TechyCapabilities {
     public static Capability<ITechyDismantleable> CAPABILITY_DISMANTLEABLE = null;
 
     public static void register() {
-        // GUI capability
-        CapabilityManager.INSTANCE.register(IHasGUI.class, new Capability.IStorage<IHasGUI>() {
-
-            @Override
-            public NBTBase writeNBT(Capability<IHasGUI> capability, IHasGUI instance, EnumFacing side) {
-                // No need to serialize Gui/Container instances
-                return new NBTTagInt(instance.getGUIID());
-            }
-
-            @Override
-            public void readNBT(Capability<IHasGUI> capability, IHasGUI instance, EnumFacing side, NBTBase nbt) {
-                if (instance instanceof IHasGUI.Modifiable)
-                    ((IHasGUI.Modifiable) instance).setGUIID(((NBTTagInt) nbt).getInt()); // Lots of casting, eh?
-            }
-
-        }, HasGUI::new);
         // Wrench capability
         CapabilityManager.INSTANCE.register(ITechyWrench.class, new Capability.IStorage<ITechyWrench>() {
 

@@ -1,3 +1,20 @@
+/*
+ * Copyright © 2016 Tbsc
+ *
+ * Techy is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * Techy is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with Techy.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package tbsc.techy.common.block;
 
 import net.minecraft.block.Block;
@@ -6,11 +23,8 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.client.model.ModelLoader;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import tbsc.techy.api.capability.TechyCapabilities;
 import tbsc.techy.api.loader.IHasCustomModel;
 import tbsc.techy.api.loader.IHasItemBlock;
-import tbsc.techy.client.gui.handler.TechyGUIHandler;
 import tbsc.techy.common.Techy;
 
 /**
@@ -18,18 +32,13 @@ import tbsc.techy.common.Techy;
  *
  * Created by tbsc on 10/07/2016.
  */
-public abstract class BlockTechyBase extends Block implements ICapabilityProvider, IHasItemBlock, IHasCustomModel {
+public abstract class BlockTechyBase extends Block implements IHasItemBlock, IHasCustomModel {
 
     public BlockTechyBase(String regName, Material materialIn) {
         super(materialIn);
         setRegistryName(regName);
         setUnlocalizedName(Techy.MODID + ":" + regName);
         setCreativeTab(Techy.TAB_TECHY);
-
-        // If has GUI, register the GUI
-        if (hasCapability(TechyCapabilities.CAPABILITY_GUI, null)) {
-            TechyGUIHandler.registerGUI(getCapability(TechyCapabilities.CAPABILITY_GUI, null));
-        }
     }
 
     // Rendering

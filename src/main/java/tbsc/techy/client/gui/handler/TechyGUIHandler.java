@@ -1,10 +1,27 @@
+/*
+ * Copyright © 2016 Tbsc
+ *
+ * Techy is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ *
+ * Techy is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with Techy.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package tbsc.techy.client.gui.handler;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
-import tbsc.techy.api.capability.gui.IHasGUI;
+import tbsc.techy.api.iface.IHasGUI;
 
 import java.util.HashMap;
 
@@ -15,13 +32,18 @@ import java.util.HashMap;
  *
  * Created by tbsc on 11/07/2016.
  */
-public class TechyGUIHandler implements IGuiHandler {
+public enum TechyGUIHandler implements IGuiHandler {
+
+    /**
+     * This class is an enum, to allow for creating an instance just by defining a type.
+     */
+    INSTANCE;
 
     /**
      * Registry map. Contains information about Techy's GUIs, like what GUI will be shown
      * when opening some ID.
      */
-    private static HashMap<Integer, IHasGUI> registryMap = new HashMap<>();
+    private final HashMap<Integer, IHasGUI> registryMap = new HashMap<>();
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
@@ -33,8 +55,8 @@ public class TechyGUIHandler implements IGuiHandler {
         return registryMap.get(ID).getGUI(player, world, new BlockPos(x, y, z));
     }
 
-    public static void registerGUI(IHasGUI cap) {
-        registryMap.put(cap.getGUIID(), cap);
+    public void registerGUI(IHasGUI gui) {
+        registryMap.put(gui.getGUIID(), gui);
     }
 
 }

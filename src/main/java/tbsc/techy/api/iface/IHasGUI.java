@@ -15,7 +15,7 @@
  * License along with Techy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package tbsc.techy.api.capability.gui;
+package tbsc.techy.api.iface;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -56,16 +56,6 @@ public interface IHasGUI {
      * @return Instance of the GUI, based on parameters.
      */
     GuiScreen getGUI(EntityPlayer player, World world, BlockPos pos);
-
-    interface Modifiable {
-
-        /**
-         * Sets the GUI ID.
-         * @param guiID The GUI ID to set
-         */
-        void setGUIID(int guiID);
-
-    }
 
 }
 

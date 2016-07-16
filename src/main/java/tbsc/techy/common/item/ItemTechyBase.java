@@ -29,8 +29,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import tbsc.techy.api.capability.TechyCapabilities;
 import tbsc.techy.api.capability.wrench.ITechyWrench;
+import tbsc.techy.api.iface.IHasGUI;
 import tbsc.techy.api.loader.IHasCustomModel;
 import tbsc.techy.api.wrench.Result;
+import tbsc.techy.client.gui.handler.TechyGUIHandler;
 import tbsc.techy.common.Techy;
 
 /**
@@ -50,6 +52,10 @@ public class ItemTechyBase extends Item implements IHasCustomModel {
         setRegistryName(regName);
         setUnlocalizedName(Techy.MODID + ":" + regName);
         setCreativeTab(Techy.TAB_TECHY);
+
+        if (this instanceof IHasGUI) {
+            TechyGUIHandler.INSTANCE.registerGUI(((IHasGUI) this));
+        }
     }
 
     @Override
@@ -87,8 +93,8 @@ public class ItemTechyBase extends Item implements IHasCustomModel {
                     }
                 }
             }
-        } else if (stack.hasCapability(TechyCapabilities.CAPABILITY_GUI, null)) { // Has GUI
-            playerIn.openGui(Techy.instance, stack.getCapability(TechyCapabilities.CAPABILITY_GUI, null).getGUIID(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+        } else if (this instanceof IHasGUI) { // Has GUI
+            playerIn.openGui(Techy.instance, ((IHasGUI) this).getGUIID(), worldIn, pos.getX(), pos.getY(), pos.getZ());
             return EnumActionResult.SUCCESS;
         }
         return super.onItemUse(stack, playerIn, worldIn, pos, hand, hitSide, hitX, hitY, hitZ);
