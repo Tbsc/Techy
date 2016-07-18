@@ -38,7 +38,7 @@ public class Techy {
      * Basic data
      */
     public static final String MODID = "Techy";
-    public static final String VERSION = "1.9.4-2.0.0.0";
+    public static final String VERSION = "1.10.2-2.0.0.0";
     public static final String DEPENDENCIES = "required-after:Forge@[" // (taken from AE2) require forge
             + net.minecraftforge.common.ForgeVersion.majorVersion + '.' // majorVersion
             + net.minecraftforge.common.ForgeVersion.minorVersion + '.' // minorVersion
