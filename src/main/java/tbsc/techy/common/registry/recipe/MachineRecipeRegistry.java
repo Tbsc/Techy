@@ -21,6 +21,7 @@ import tbsc.techy.api.registry.recipe.IRecipeInput;
 import tbsc.techy.api.registry.recipe.IRecipeRegistry;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Default implementation of {@link IRecipeRegistry} that can be used for anything that holds
@@ -30,13 +31,27 @@ import java.util.LinkedHashMap;
  */
 public class MachineRecipeRegistry<I extends IRecipeInput, O> implements IRecipeRegistry<I, O> {
 
-    public LinkedHashMap<I, O> recipeMap = new LinkedHashMap<>();
+    /**
+     * Map for the recipes.
+     * Decided to use a linked hash map because then the order is kept.
+     */
+    public Map<I, O> recipeMap = new LinkedHashMap<>();
 
+    /**
+     * Checks if the input given exists in the recipe map
+     * @param input The input to check for
+     * @return recipe map contains input
+     */
     @Override
     public boolean hasOutput(I input) {
         return recipeMap.containsKey(input);
     }
 
+    /**
+     * Returns the value of the input given, without checking. Null if doesn't exist.
+     * @param input The input to search for
+     * @return Output for input, or null
+     */
     @Override
     public O getOutput(I input) {
         return recipeMap.get(input);
