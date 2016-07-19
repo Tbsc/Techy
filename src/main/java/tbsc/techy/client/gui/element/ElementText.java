@@ -19,6 +19,7 @@ package tbsc.techy.client.gui.element;
 
 import net.minecraft.client.gui.FontRenderer;
 import tbsc.techy.api.client.gui.element.IGuiElement;
+import tbsc.techy.client.gui.GuiTechyBase;
 
 import java.awt.*;
 
@@ -28,16 +29,18 @@ import java.awt.*;
  *
  * Created by tbsc on 18/07/2016.
  */
-public class ElementText implements IGuiElement {
+public class ElementText<T extends GuiTechyBase> implements IGuiElement {
 
+    protected T gui;
     public String text;
-    public int xPos, yPos;
+    protected int xPos, yPos;
     public FontRenderer fontRendererObj;
 
-    public ElementText(String text, int xPos, int yPos, FontRenderer fontRendererObj) {
+    public ElementText(T gui, String text, int xPos, int yPos, FontRenderer fontRendererObj) {
+        this.gui = gui;
         this.text = text;
-        this.xPos = xPos;
-        this.yPos = yPos;
+        this.xPos = offsetX(gui, xPos);
+        this.yPos = offsetY(gui, yPos);
         this.fontRendererObj = fontRendererObj;
     }
 
