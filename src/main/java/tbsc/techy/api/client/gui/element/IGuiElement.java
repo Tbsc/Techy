@@ -19,7 +19,6 @@ package tbsc.techy.api.client.gui.element;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
-import tbsc.techy.client.gui.GuiTechyBase;
 
 /**
  * Interface for basic elements.
@@ -115,28 +114,6 @@ public interface IGuiElement {
      */
     default void bindTexture(ResourceLocation texture) {
         Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-    }
-
-    /**
-     * Offsets the X position given to be inside the GUI, and not in the start of the screen.
-     * @param gui The GUI to find position for
-     * @param xPos The position to offset
-     * @param <T> The type of the GUI
-     * @return X pos, after offsetting
-     */
-    default <T extends GuiTechyBase> int offsetX(T gui, int xPos) {
-        return ((gui.width - gui.getXSize()) / 2) + xPos;
-    }
-
-    /**
-     * Offsets the Y position given to be inside the GUI, and not in the start of the screen.
-     * @param gui The GUI to find position for
-     * @param yPos The position to offset
-     * @param <T> The type of the GUI
-     * @return Y pos, after offsetting
-     */
-    default <T extends GuiTechyBase> int offsetY(T gui, int yPos) {
-        return ((gui.height - gui.getYSize()) / 2) + yPos;
     }
 
 }

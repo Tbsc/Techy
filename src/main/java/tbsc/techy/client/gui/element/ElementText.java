@@ -39,8 +39,8 @@ public class ElementText<T extends GuiTechyBase> implements IGuiElement {
     public ElementText(T gui, String text, int xPos, int yPos, FontRenderer fontRendererObj) {
         this.gui = gui;
         this.text = text;
-        this.xPos = offsetX(gui, xPos);
-        this.yPos = offsetY(gui, yPos);
+        this.xPos = xPos;
+        this.yPos = yPos;
         this.fontRendererObj = fontRendererObj;
     }
 
