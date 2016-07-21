@@ -22,6 +22,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * To be implemented on blocks/items using capabilities, and that lets the base class know
@@ -55,6 +57,7 @@ public interface IHasGUI {
      * @param pos The position of what opened the GUI (not always the player)
      * @return Instance of the GUI, based on parameters.
      */
+    @SideOnly(Side.CLIENT)
     GuiScreen getGUI(EntityPlayer player, World world, BlockPos pos);
 
 }
