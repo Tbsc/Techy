@@ -20,8 +20,8 @@ package tbsc.techy.common.proxy;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import tbsc.techy.api.TechyProps;
 import tbsc.techy.client.gui.handler.TechyGUIHandler;
-import tbsc.techy.common.Techy;
 import tbsc.techy.common.loader.ObjectLoader;
 
 /**
@@ -33,8 +33,8 @@ public abstract class CommonProxy implements IProxy {
 
     @Override
     public void preInit(FMLPreInitializationEvent event) {
-        ObjectLoader.scanForAnnotations(event.getAsmData(), FMLCommonHandler.instance().findContainerFor(Techy.instance));
-        NetworkRegistry.INSTANCE.registerGuiHandler(Techy.instance, TechyGUIHandler.INSTANCE);
+        ObjectLoader.scanForAnnotations(event.getAsmData(), FMLCommonHandler.instance().findContainerFor(TechyProps.INSTANCE));
+        NetworkRegistry.INSTANCE.registerGuiHandler(TechyProps.INSTANCE, TechyGUIHandler.INSTANCE);
     }
 
     @Override

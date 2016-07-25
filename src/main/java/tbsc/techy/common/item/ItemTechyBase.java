@@ -27,13 +27,14 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
+import tbsc.techy.api.TechyProps;
 import tbsc.techy.api.capability.TechyCapabilities;
 import tbsc.techy.api.capability.wrench.ITechyWrench;
 import tbsc.techy.api.iface.IHasGUI;
 import tbsc.techy.api.loader.IHasCustomModel;
 import tbsc.techy.api.wrench.Result;
 import tbsc.techy.client.gui.handler.TechyGUIHandler;
-import tbsc.techy.common.Techy;
+import tbsc.techy.common.InternalProps;
 
 /**
  * Base class for any Techy items. Contains a few base utilities for easing creation
@@ -50,8 +51,8 @@ public class ItemTechyBase extends Item implements IHasCustomModel {
      */
     public ItemTechyBase(String regName) {
         setRegistryName(regName);
-        setUnlocalizedName(Techy.MODID + ":" + regName);
-        setCreativeTab(Techy.TAB_TECHY);
+        setUnlocalizedName(TechyProps.MODID + ":" + regName);
+        setCreativeTab(InternalProps.TAB_TECHY);
 
         if (this instanceof IHasGUI) {
             TechyGUIHandler.INSTANCE.registerGUI(((IHasGUI) this));
@@ -94,7 +95,7 @@ public class ItemTechyBase extends Item implements IHasCustomModel {
                 }
             }
         } else if (this instanceof IHasGUI) { // Has GUI
-            playerIn.openGui(Techy.instance, ((IHasGUI) this).getGUIID(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+            playerIn.openGui(TechyProps.INSTANCE, ((IHasGUI) this).getGUIID(), worldIn, pos.getX(), pos.getY(), pos.getZ());
             return EnumActionResult.SUCCESS;
         }
         return super.onItemUse(stack, playerIn, worldIn, pos, hand, hitSide, hitX, hitY, hitZ);

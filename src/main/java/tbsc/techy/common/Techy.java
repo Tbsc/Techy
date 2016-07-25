@@ -17,61 +17,17 @@
 
 package tbsc.techy.common;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
-import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
-import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import tbsc.techy.common.item.ItemWrench;
-import tbsc.techy.common.proxy.IProxy;
+import tbsc.techy.api.TechyProps;
 
 /**
  * Main mod class.
  * Most of the data is here (such as modid).
  */
-@Mod(modid = Techy.MODID, version = Techy.VERSION, dependencies = Techy.DEPENDENCIES)
+@Mod(modid = TechyProps.MODID, version = TechyProps.VERSION, dependencies = TechyProps.DEPENDENCIES)
 public class Techy {
-
-    /**
-     * Basic data
-     */
-    public static final String MODID = "Techy";
-    public static final String VERSION = "1.10.2-2.0.0.0";
-    public static final String DEPENDENCIES = "required-after:Forge@[" // (taken from AE2) require forge
-            + net.minecraftforge.common.ForgeVersion.majorVersion + '.' // majorVersion
-            + net.minecraftforge.common.ForgeVersion.minorVersion + '.' // minorVersion
-            + net.minecraftforge.common.ForgeVersion.revisionVersion + '.' // revisionVersion
-            + net.minecraftforge.common.ForgeVersion.buildVersion + ",)"; // buildVersion
-    public static final String CLIENT_PROXY = "tbsc.techy.client.proxy.ClientProxy";
-    public static final String SERVER_PROXY = "tbsc.techy.common.proxy.ServerProxy";
-
-    /**
-     * Instance of this class
-     */
-    @Mod.Instance(MODID)
-    public static Techy instance;
-
-    /**
-     * Network wrapper, used to send and register packets.
-     */
-    public static SimpleNetworkWrapper network;
-
-    /**
-     * Proxy
-     */
-    @SidedProxy(clientSide = CLIENT_PROXY, serverSide = SERVER_PROXY)
-    public static IProxy proxy;
-
-    public static CreativeTabs TAB_TECHY = new CreativeTabs("techy") {
-
-        @Override
-        public Item getTabIconItem() {
-            return ItemWrench.instance;
-        }
-
-    };
 
     /**
      * PreInit, gets called on pre init stage of loading and registring items, blocks, tile entities
@@ -80,7 +36,7 @@ public class Techy {
      */
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        proxy.preInit(event);
+        InternalProps.PROXY.preInit(event);
     }
 
     /**
@@ -89,7 +45,7 @@ public class Techy {
      */
     @EventHandler
     public void init(FMLInitializationEvent event) {
-        proxy.init(event);
+        InternalProps.PROXY.init(event);
     }
 
     /**
@@ -99,7 +55,7 @@ public class Techy {
      */
     @EventHandler
     public void serverLoad(FMLServerStartingEvent event) {
-        proxy.serverLoad(event);
+        InternalProps.PROXY.serverLoad(event);
     }
 
     /**
@@ -110,7 +66,7 @@ public class Techy {
      */
     @EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        proxy.postInit(event);
+        InternalProps.PROXY.postInit(event);
     }
 
     /**
@@ -119,7 +75,7 @@ public class Techy {
      */
     @EventHandler
     public void imcMessage(FMLInterModComms.IMCEvent event) {
-        proxy.imcMessageReceived(event);
+        InternalProps.PROXY.imcMessageReceived(event);
     }
 
 }

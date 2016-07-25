@@ -23,9 +23,10 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraftforge.client.model.ModelLoader;
+import tbsc.techy.api.TechyProps;
 import tbsc.techy.api.loader.IHasCustomModel;
 import tbsc.techy.api.loader.IHasItemBlock;
-import tbsc.techy.common.Techy;
+import tbsc.techy.common.InternalProps;
 
 /**
  * Base class for blocks. To allow for advanced functionality, use capabilities.
@@ -37,8 +38,8 @@ public abstract class BlockTechyBase extends Block implements IHasItemBlock, IHa
     public BlockTechyBase(String regName, Material materialIn) {
         super(materialIn);
         setRegistryName(regName);
-        setUnlocalizedName(Techy.MODID + ":" + regName);
-        setCreativeTab(Techy.TAB_TECHY);
+        setUnlocalizedName(TechyProps.MODID + ":" + regName);
+        setCreativeTab(InternalProps.TAB_TECHY);
     }
 
     // Rendering
