@@ -74,6 +74,25 @@ public interface IGuiElement {
      */
     void elementMiddleClicked(int mouseX, int mouseY, boolean isReleased);
 
+    /**
+     * Gets called when the mouse scroller is scrolled on the element
+     * @param mouseX Mouse X position
+     * @param mouseY Mouse Y position
+     * @return Should prevent from super method call
+     */
+    boolean elementMouseScrolled(int mouseX, int mouseY, int wheelMovement);
+
+    /**
+     * Gets called when a keyboard button is pressed.
+     * @param charEntered The charactter entered due to the button press
+     * @param keyCode The key code of the button pressed
+     * @param pointerOnElement Is the pointer currently on the element
+     * @param mouseX Mouse X position
+     * @param mouseY Mouse Y position
+     * @return Should prevent from super method call (handling stuff like pressing the exit button)
+     */
+    boolean elementKeyPressed(char charEntered, int keyCode, boolean pointerOnElement, int mouseX, int mouseY);
+
     // Position methods
 
     /**

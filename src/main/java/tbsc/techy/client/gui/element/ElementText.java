@@ -18,6 +18,7 @@
 package tbsc.techy.client.gui.element;
 
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraftforge.fml.common.FMLLog;
 import tbsc.techy.api.client.gui.element.IGuiElement;
 import tbsc.techy.client.gui.GuiTechyBase;
 
@@ -67,6 +68,19 @@ public class ElementText<T extends GuiTechyBase> implements IGuiElement {
     @Override
     public void elementMiddleClicked(int mouseX, int mouseY, boolean isReleased) {
         // NO-OP
+    }
+
+    @Override
+    public boolean elementMouseScrolled(int mouseX, int mouseY, int wheelMovement) {
+        // NO-OP
+        return false;
+    }
+
+    @Override
+    public boolean elementKeyPressed(char charEntered, int keyCode, boolean pointerOnElement, int mouseX, int mouseY) {
+        // NO-OP
+        FMLLog.info("key pressed %s, keycode %s", charEntered, keyCode);
+        return false;
     }
 
     @Override
