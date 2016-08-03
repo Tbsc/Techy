@@ -17,16 +17,10 @@
 
 package tbsc.techy.api.capability.dismantle;
 
-import cofh.api.block.IDismantleable;
-import com.google.common.collect.Lists;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import tbsc.techy.api.wrench.Result;
-
-import java.util.ArrayList;
 
 /**
  * This interface should be implemented on anything that can be dismantled. Note that not only
@@ -34,39 +28,7 @@ import java.util.ArrayList;
  *
  * Created by tbsc on 09/07/2016.
  */
-public interface ITechyDismantleable extends IDismantleable {
-
-    /**
-     * Default implementation of CoFH's IDismantleable.
-     * Calls {@link #dismantle(EntityLivingBase, World, BlockPos)}.
-     * @param player The player
-     * @param world The world
-     * @param x X position
-     * @param y Y position
-     * @param z Z position
-     * @param returnDrops Should return drops to the player's inventory, ignored
-     * @return Empty list
-     */
-    @Override
-    default ArrayList<ItemStack> dismantleBlock(EntityPlayer player, World world, int x, int y, int z, boolean returnDrops) {
-        dismantle(player, world, new BlockPos(x, y, z));
-        return Lists.newArrayList();
-    }
-
-    /**
-     * Default implementation of CoFH's IDismantleable.
-     * Calls {@link #isDismantleable(EntityLivingBase, World, BlockPos)}.
-     * @param player The player
-     * @param world The world
-     * @param x X position
-     * @param y Y position
-     * @param z Z position
-     * @return Can dismantle
-     */
-    @Override
-    default boolean canDismantle(EntityPlayer player, World world, int x, int y, int z) {
-        return isDismantleable(player, world, new BlockPos(x, y, z));
-    }
+public interface ITechyDismantleable {
 
     /**
      * Checks if the target can be dismantled.

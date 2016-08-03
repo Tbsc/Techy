@@ -17,7 +17,6 @@
 
 package tbsc.techy.api.capability.wrench;
 
-import cofh.api.item.IToolHammer;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -32,45 +31,7 @@ import tbsc.techy.api.wrench.Result;
  *
  * Created by tbsc on 09/07/2016.
  */
-public interface ITechyWrench extends IToolHammer {
-
-    /**
-     * Default implementation of the CoFH tool hammer API, for Techy wrenches.
-     * Just calls the Techy methods.
-     * @param item
-     *            The itemstack for the tool. Not required to match equipped item (e.g., multi-tools that contain other tools)
-     * @param user
-     *            The entity using the tool
-     * @param x
-     *            X location of the block/tile
-     * @param y
-     *            Y location of the block/tile
-     * @param z
-     *            Z location of the block/tile
-     * @return Is the tool usable
-     */
-    @Override
-    default boolean isUsable(ItemStack item, EntityLivingBase user, int x, int y, int z) {
-        return canDismantle(item, user, new BlockPos(x, y, z));
-    }
-
-    /**
-     * Default implementation of the CoFH tool hammer API, for Techy wrenches.
-     * @param item
-     *            The ItemStack for the tool. Not required to match equipped item (e.g., multi-tools that contain other tools)
-     * @param user
-     *            The entity using the tool
-     * @param x
-     *            X location of the block/tile
-     * @param y
-     *            Y location of the block/tile
-     * @param z
-     *            Z location of the block/tile
-     */
-    @Override
-    default void toolUsed(ItemStack item, EntityLivingBase user, int x, int y, int z) {
-        dismantle(item, user, new BlockPos(x, y, z));
-    }
+public interface ITechyWrench {
 
     /**
      * Checks if the entity holding the wrench can rotate the target at the position given, using the item.
