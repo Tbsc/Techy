@@ -23,8 +23,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import tbsc.techy.api.capability.TechyCapabilities;
-import tbsc.techy.api.capability.wrench.ITechyWrench;
-import tbsc.techy.api.capability.wrench.TechyWrench;
+import tbsc.techy.api.wrench.ITechyWrench;
+import tbsc.techy.api.wrench.TechyWrench;
 import tbsc.techy.common.loader.annotation.Register;
 
 import javax.annotation.Nullable;

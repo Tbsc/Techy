@@ -29,7 +29,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
 import tbsc.techy.api.TechyProps;
 import tbsc.techy.api.capability.TechyCapabilities;
-import tbsc.techy.api.capability.wrench.ITechyWrench;
+import tbsc.techy.api.wrench.ITechyWrench;
 import tbsc.techy.api.iface.IHasGUI;
 import tbsc.techy.api.loader.IHasCustomModel;
 import tbsc.techy.api.wrench.Result;

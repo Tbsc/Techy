@@ -15,7 +15,7 @@
  * License along with Techy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package tbsc.techy.api.capability.dismantle;
+package tbsc.techy.api.dismantle;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

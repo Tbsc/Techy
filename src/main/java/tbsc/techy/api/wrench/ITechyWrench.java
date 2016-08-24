@@ -15,13 +15,12 @@
  * License along with Techy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package tbsc.techy.api.capability.wrench;
+package tbsc.techy.api.wrench;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import tbsc.techy.api.wrench.Result;
 
 /**
  * Item interface, marks items as wrenches.

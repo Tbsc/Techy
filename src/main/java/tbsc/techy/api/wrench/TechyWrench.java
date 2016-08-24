@@ -15,7 +15,7 @@
  * License along with Techy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package tbsc.techy.api.capability.wrench;
+package tbsc.techy.api.wrench;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -26,8 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import org.apache.commons.lang3.ArrayUtils;
 import tbsc.techy.api.capability.TechyCapabilities;
-import tbsc.techy.api.capability.dismantle.ITechyDismantleable;
-import tbsc.techy.api.wrench.Result;
+import tbsc.techy.api.dismantle.ITechyDismantleable;
 
 /**
  * Default implementation of the Techy wrench capability interface, {@link ITechyWrench}.
