@@ -2,8 +2,6 @@ package tbsc.techy.api.operation;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.INBTSerializable;
-import tbsc.techy.api.registry.recipe.IRecipeInput;
-import tbsc.techy.api.registry.recipe.IRecipeOutput;
 
 /**
  * Basic interface for operations. Try not to implement this directly; use {@link OperatorBuilder} to
@@ -11,7 +9,7 @@ import tbsc.techy.api.registry.recipe.IRecipeOutput;
  *
  * Created by tbsc on 24/07/2016.
  */
-public interface IOperator<I extends IRecipeInput, O extends IRecipeOutput> extends INBTSerializable<NBTTagCompound> {
+public interface IOperator extends INBTSerializable<NBTTagCompound> {
 
     /**
      * This method is the operation update method.
@@ -57,7 +55,7 @@ public interface IOperator<I extends IRecipeInput, O extends IRecipeOutput> exte
     /**
      * Implementation of {@link IOperator} that allows for modifying some values of the interface.
      */
-    interface Modifiable<I extends IRecipeInput, O extends IRecipeOutput> extends IOperator<I, O> {
+    interface Modifiable extends IOperator {
 
         /**
          * Sets the current progress.
