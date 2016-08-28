@@ -15,51 +15,49 @@
  * License along with Techy.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package tbsc.techy.common.registry.recipe;
+package tbsc.techy.api.registry.recipe.impl.in;
 
+import net.minecraft.item.ItemStack;
 import tbsc.techy.api.registry.recipe.IRecipeInput;
 
 /**
- * Ore dictionary recipe input.
- * You create an instance of this class either using {@link #OreRecipeInput(String)} or
- * {@link #of(String)}. The string value should be the ore dictionary name that should be
- * acceptable as input.
- * All recipes are immutable, so the input field is final.
+ * Created as a wrapper for recipe inputs, to allow support for ore dictionary inputs.
+ * All recipes are immutable, so input is final.
  *
  * Created by tbsc on 5/5/16.
  */
-public class OreRecipeInput<T extends String> implements IRecipeInput {
+public class StackRecipeInput<T extends ItemStack> implements IRecipeInput {
 
     /**
-     * {@link String} field, stores the input value.
+     * {@link ItemStack} field, stores the input value.
      * Recipes are immutable, so this field is final.
      */
     protected final T input;
 
     /**
-     * Constructor for ore recipe.
-     * @param input The ore name input
+     * Constructor for item stack recipe.
+     * @param input The input stack
      */
-    public OreRecipeInput(T input) {
+    public StackRecipeInput(T input) {
         this.input = input;
     }
 
     /**
      * Util method for creating an instance of this class.
-     * @param oreName The ore name to set
-     * @return Instance of this class with the ore name as value.
+     * @param data The input stack
+     * @return Instance with the input stack set
      */
-    public static OreRecipeInput<String> of(String oreName) {
-        return new OreRecipeInput<>(oreName);
+    public static StackRecipeInput<ItemStack> of(ItemStack data) {
+        return new StackRecipeInput<>(data);
     }
 
     /**
-     * Returns the input value. Usually this can be anything, but in this context
-     * it is always a string.
-     * @return ore name input
+     * Returns the input of this recipe. In this context, always an item stack
+     * @return Input item stack
      */
     @Override
-    public T getInput() {
+    public T getObject() {
         return input;
     }
+
 }

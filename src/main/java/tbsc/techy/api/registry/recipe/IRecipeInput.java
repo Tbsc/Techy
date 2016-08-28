@@ -18,12 +18,10 @@
 package tbsc.techy.api.registry.recipe;
 
 /**
- * Interface for recipe input to implement
+ * Interface to mark recipe objects as inputs.
  *
  * Created by tbsc on 5/5/16.
  */
-public interface IRecipeInput<T> {
-
-    T getInput();
+public interface IRecipeInput<T> extends IRecipeObject<T> {
 
 }

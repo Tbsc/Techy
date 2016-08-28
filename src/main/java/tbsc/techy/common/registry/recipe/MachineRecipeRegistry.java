@@ -18,6 +18,7 @@
 package tbsc.techy.common.registry.recipe;
 
 import tbsc.techy.api.registry.recipe.IRecipeInput;
+import tbsc.techy.api.registry.recipe.IRecipeOutput;
 import tbsc.techy.api.registry.recipe.IRecipeRegistry;
 
 import java.util.LinkedHashMap;
@@ -29,7 +30,7 @@ import java.util.Map;
  *
  * Created by tbsc on 15/07/2016.
  */
-public class MachineRecipeRegistry<I extends IRecipeInput, O> implements IRecipeRegistry<I, O> {
+public class MachineRecipeRegistry<I extends IRecipeInput, O extends IRecipeOutput> implements IRecipeRegistry<I, O> {
 
     /**
      * Map for the recipes.
@@ -55,6 +56,23 @@ public class MachineRecipeRegistry<I extends IRecipeInput, O> implements IRecipe
     @Override
     public O getOutput(I input) {
         return recipeMap.get(input);
+    }
+
+    // TODO finish registry
+
+    @Override
+    public int getEnergyUsage(I input) {
+        return 0;
+    }
+
+    @Override
+    public int getOperationTime(I input) {
+        return 0;
+    }
+
+    @Override
+    public void addRecipe(I input, O output, int energyUsage, int operationTime) {
+
     }
 
 }

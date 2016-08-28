@@ -24,7 +24,9 @@ package tbsc.techy.api.registry.recipe;
  *
  * Created by tbsc on 15/07/2016.
  */
-public interface IRecipeRegistry<I extends IRecipeInput, O> {
+public interface IRecipeRegistry<I extends IRecipeInput, O extends IRecipeOutput> {
+
+    // Get methods
 
     /**
      * Checks if the input given is a valid recipe.
@@ -41,5 +43,31 @@ public interface IRecipeRegistry<I extends IRecipeInput, O> {
      * @return The output for the input given
      */
     O getOutput(I input);
+
+    /**
+     * Returns the amount of energy that needs to be consumed upon doing this recipe.
+     * @param input The input to search for
+     * @return The energy amount consumed
+     */
+    int getEnergyUsage(I input);
+
+    /**
+     * Returns the total amount of time in ticks that recipes with this input need to take.
+     * @param input The input
+     * @return The time for operation in ticks
+     */
+    int getOperationTime(I input);
+
+    // Add methods
+
+    /**
+     * Adds a recipe to the recipe registry. How this will be stored is to be determined by the
+     * implementation chosen.
+     * @param input The input of the recipe
+     * @param output The output of the recipe
+     * @param energyUsage The amount of energy used in the recipe
+     * @param operationTime The amount of time the recipe takes
+     */
+    void addRecipe(I input, O output, int energyUsage, int operationTime);
 
 }
