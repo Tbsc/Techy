@@ -18,14 +18,17 @@
 package tbsc.techy.api.capability;
 
 import net.minecraft.nbt.NBTBase;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.CapabilityManager;
-import tbsc.techy.api.capability.dismantle.ITechyDismantleable;
-import tbsc.techy.api.capability.dismantle.TechyDismantleable;
-import tbsc.techy.api.capability.wrench.ITechyWrench;
-import tbsc.techy.api.capability.wrench.TechyWrench;
+import tbsc.techy.api.dismantle.ITechyDismantleable;
+import tbsc.techy.api.dismantle.TechyDismantleable;
+import tbsc.techy.api.operation.EmptyOperator;
+import tbsc.techy.api.operation.IOperator;
+import tbsc.techy.api.wrench.ITechyWrench;
+import tbsc.techy.api.wrench.TechyWrench;
 import tbsc.techy.common.loader.ObjectLoader;
 
 /**
@@ -42,6 +45,9 @@ public class TechyCapabilities {
 
     @CapabilityInject(ITechyDismantleable.class)
     public static Capability<ITechyDismantleable> CAPABILITY_DISMANTLEABLE = null;
+
+    @CapabilityInject(IOperator.class)
+    public static Capability<IOperator> CAPABILITY_OPERATOR = null;
 
     public static void register() {
         // Wrench capability
@@ -72,6 +78,22 @@ public class TechyCapabilities {
             }
 
         }, TechyDismantleable::new);
+        // Operator capability
+        CapabilityManager.INSTANCE.register(IOperator.class, new Capability.IStorage<IOperator>() {
+
+            @Override
+            public NBTBase writeNBT(Capability<IOperator> capability, IOperator instance, EnumFacing side) {
+                return instance.serializeNBT();
+            }
+
+            @Override
+            @SuppressWarnings("unchecked")
+            public void readNBT(Capability<IOperator> capability, IOperator instance, EnumFacing side, NBTBase nbt) {
+                // suppressing "unchecked" warnings because IOperator directly extends INBTSerializable
+                instance.deserializeNBT((NBTTagCompound) nbt);
+            }
+
+        }, EmptyOperator::new);
     }
 
 }
