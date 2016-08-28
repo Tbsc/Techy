@@ -1,2 +1,5 @@
 language: java
+install:
+- chmod +x gradlew
+- ./gradlew setupDecompWorkspace
 script: ./gradlew build
