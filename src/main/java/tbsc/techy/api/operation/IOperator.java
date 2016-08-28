@@ -15,7 +15,7 @@ public interface IOperator extends INBTSerializable<NBTTagCompound> {
      * This method is the operation update method.
      * It automatically does everything that needs to be done every tick for the operation to work.
      */
-    void updateOperation();
+    boolean updateOperation();
 
     /**
      * Finishes the operation. This will be called the the progress is finished.
