@@ -54,36 +54,6 @@ def parseConfig(File config) {
     }
 }
 
-repositories {
-    maven {
-        url = 'https://unascribed.com/maven/releases'
-    }
-}
-
-jar {
-    classifier = 'slim'
-}
-
-shadowJar {
-    classifier = ''
-    relocate 'com.unascribed.lambdanetwork', "tbsc.techy.repackage.com.unascribed.lambdanetwork"
-}
-
-reobf {
-    shadowJar { mappingType = 'SEARGE' }
-}
-
-tasks.build.dependsOn reobfShadowJar
-
-artifacts {
-    archives shadowJar
-}
-
-dependencies {
-    compile 'com.unascribed:lambdanetwork:1.0.0'
-    shadow 'com.unascribed:lambdanetwork:1.0.0'
-}
-
 processResources
 {
     // this will ensure that this task is redone when the versions change.

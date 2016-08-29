@@ -17,7 +17,6 @@
 
 package tbsc.techy.common.proxy;
 
-import com.unascribed.lambdanetwork.LambdaNetwork;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
@@ -32,15 +31,10 @@ import tbsc.techy.common.loader.ObjectLoader;
  */
 public abstract class CommonProxy implements IProxy {
 
-    public static LambdaNetwork network;
-
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         ObjectLoader.scanForAnnotations(event.getAsmData(), FMLCommonHandler.instance().findContainerFor(TechyProps.INSTANCE));
         NetworkRegistry.INSTANCE.registerGuiHandler(TechyProps.INSTANCE, TechyGUIHandler.INSTANCE);
-        network = LambdaNetwork.builder()
-                .channel("Techy")
-                .build();
     }
 
     @Override
