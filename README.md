@@ -1,4 +1,7 @@
 # Techy
+
+[![Build Status](https://travis-ci.org/Tbsc/Techy.svg?branch=develop)](https://travis-ci.org/Tbsc/Techy)
+
 Tech mod for 1.9.4+
 
 This rewrite will make the mod behave differently, but I'm working to make the rewrite backwards-compatible. Meaning that a world created with Techy v1.x.x will load fine on Techy v2.x.x.x. That doesn't necessarily mean that works in the opposite way.
