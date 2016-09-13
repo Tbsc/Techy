@@ -1,7 +1,7 @@
 # Techy
 Tech mod for 1.9.4+
 
-**As of September 2016, not maintained. If someone wants to take over the mod, notify me (I'd much prefer if you could message me on [Reddit](https://reddit.com/u/Tbsc_), if you can't then message me on GitHub).
+**As of September 2016, not maintained. If someone wants to take over the mod, notify me (I'd much prefer if you could message me on [Reddit](https://reddit.com/u/Tbsc_), if you can't then message me on GitHub).**
 
 -----
 
